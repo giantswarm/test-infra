@@ -1,0 +1,122 @@
+# Copyright 2019 The Kubernetes Authors All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: crier
+  namespace: prow
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: prow
+  name: crier
+rules:
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - "prowjobs"
+    verbs:
+      - "get"
+      - "watch"
+      - "list"
+      - "patch"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: nightly
+  name: crier
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+      - "events"
+    verbs:
+      - "get"
+      - "list"
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: crier-namespaced
+  namespace: prow
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: crier
+subjects:
+  - kind: ServiceAccount
+    name: crier
+    namespace: prow
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: crier-namespaced
+  namespace: nightly
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: crier
+subjects:
+  - kind: ServiceAccount
+    name: crier
+    namespace: prow
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: prow
+  name: crier
+  labels:
+    app: crier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crier
+  template:
+    metadata:
+      labels:
+        app: crier
+    spec:
+      serviceAccountName: crier
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: crier
+          image: gcr.io/k8s-prow/crier:v20200526-c96f7e37b
+          args:
+            - --github-workers=5
+            - --config-path=/etc/config/configs.yaml
+            - --github-endpoint=http://ghproxy
+            - --github-endpoint=https://api.github.com
+            - --github-token-path=/etc/github/oauth
+          volumeMounts:
+            - name: configs
+              mountPath: /etc/config
+              readOnly: true
+            - name: oauth
+              mountPath: /etc/github
+              readOnly: true
+      volumes:
+        - name: configs
+          configMap:
+            name: configs
+        - name: oauth
+          secret:
+            secretName: oauth-token
