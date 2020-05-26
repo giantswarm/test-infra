@@ -3,3 +3,9 @@ log_level: debug
 pod_namespace: nightly
 
 prowjob_namespace: prow
+
+# Report job status for presubmit and postsubmit
+github_reporter:
+  job_types_to_report:
+    - presubmit
+    - postsubmit
