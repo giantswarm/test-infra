@@ -1,4 +1,4 @@
-# Giantswarm Release Workflow & Testing Infrastructure
+# Giant Swarm Release Workflow & Testing Infrastructure
 
 ## Prow
 
@@ -37,6 +37,10 @@ Listing the deployments we are currently using.
 #### Tide
 
 > Automatically retest PRs that meet the criteria ("tide comes in") and automatically merge them when they have up-to-date passing test results.
+
+#### Crier
+
+> Rports your prowjobs on their status changes.
 
 ### Setup
 
