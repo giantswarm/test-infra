@@ -1,4 +1,4 @@
-log_level: debug
+log_level: info
 
 pod_namespace: nightly
 
@@ -9,3 +9,10 @@ github_reporter:
   job_types_to_report:
     - presubmit
     - postsubmit
+
+periodics:
+  - name: hello-world-job
+    interval: 15m
+    spec:
+      containers:
+        - image: hello-world:latest
