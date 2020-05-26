@@ -86,3 +86,7 @@ This assumes that you are in the `prow` directory and that you can reach your wo
 make plugins
 make configs
 ```
+
+## Reference
+
+* How to write [`ProwJobs`](https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md)
