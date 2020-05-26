@@ -1,0 +1,177 @@
+# Copyright 2018 The Kubernetes Authors All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  namespace: prow
+  name: "deck"
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: prow
+  name: "deck"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: "deck"
+subjects:
+  - kind: ServiceAccount
+    name: "deck"
+    namespace: prow
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: nightly
+  name: "deck"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: "deck"
+subjects:
+  - kind: ServiceAccount
+    name: "deck"
+    namespace: prow
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: prow
+  name: "deck"
+rules:
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - get
+      - list
+      - watch
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: nightly
+  name: "deck"
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods/log
+    verbs:
+      - get
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deck
+  namespace: prow
+spec:
+  selector:
+    app: deck
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: prow
+  name: deck
+  labels:
+    app: deck
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: prow.g8s.gaia.eu-central-1.aws.gigantic.io
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: deck
+              servicePort: 80
+          - path: /hook
+            backend:
+              serviceName: hook
+              servicePort: 8888
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deck
+  labels:
+    app: deck
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: deck
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: deck
+    spec:
+      serviceAccountName: "deck"
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: deck
+          image: gcr.io/k8s-prow/deck:v20200518-8da074ad4
+          args:
+            - --tide-url=http://tide/
+            - --hook-url=http://hook:8888/plugin-help
+            - --config-path=/etc/config/configs.yaml
+            - --github-endpoint=http://ghproxy
+            - --github-endpoint=https://api.github.com
+            - --github-token-path=/etc/github/oauth
+            - --job-config-path=/etc/config/configs.yaml
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: oauth
+              mountPath: /etc/github
+              readOnly: true
+            - name: configs
+              mountPath: /etc/config
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 3
+            timeoutSeconds: 600
+      volumes:
+        - name: oauth
+          secret:
+            secretName: oauth-token
+        - name: configs
+          configMap:
+            name: configs

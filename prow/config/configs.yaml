@@ -1,0 +1,5 @@
+log_level: debug
+
+pod_namespace: nightly
+
+prowjob_namespace: prow
