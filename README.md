@@ -30,6 +30,14 @@ Listing the deployments we are currently using.
 
 > Start prow jobs.
 
+#### ghProxy
+
+> Designed to reduce API token usage by allowing many components to share a single ghCache.
+
+#### Tide
+
+> Automatically retest PRs that meet the criteria ("tide comes in") and automatically merge them when they have up-to-date passing test results.
+
 ### Setup
 
 This assumes that you are in the `prow` directory and that you can reach your working Kubernetes cluster.
@@ -51,7 +59,7 @@ This assumes that you are in the `prow` directory and that you can reach your wo
 3. Deploy prow
 
     ```bash
-      make prow
+    make prow
     ```
 
 4. Setup the hook
