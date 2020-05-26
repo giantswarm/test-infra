@@ -86,6 +86,7 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
+      protocol: TCP
   type: ClusterIP
 ---
 apiVersion: extensions/v1beta1
@@ -103,7 +104,7 @@ spec:
     - host: prow.g8s.gaia.eu-central-1.aws.gigantic.io
       http:
         paths:
-          - path: /*
+          - path: /
             backend:
               serviceName: deck
               servicePort: 80
