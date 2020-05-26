@@ -33,7 +33,9 @@ rules:
       - get
       - create
       - list
+      - watch
       - update
+      - patch
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
@@ -62,6 +64,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: "plank"
+    namespace: prow
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -103,6 +106,9 @@ spec:
           args:
             - --dry-run=false
             - --config-path=/etc/config/configs.yaml
+            - --github-endpoint=http://ghproxy
+            - --github-endpoint=https://api.github.com
+            - --github-token-path=/etc/github/oauth
           volumeMounts:
             - name: oauth
               mountPath: /etc/github
