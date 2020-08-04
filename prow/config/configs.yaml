@@ -18,3 +18,11 @@ periodics:
     spec:
       containers:
         - image: hello-world:latest
+
+presubmits:
+  giantswarm/releases:
+  - name: dummy
+    always_run: false
+    spec:
+      containers:
+        - image: hello-world:latest
