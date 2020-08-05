@@ -10,15 +10,6 @@ github_reporter:
     - presubmit
     - postsubmit
 
-## Jobs can be defined in here or also pushed in a separate configmap
-##
-periodics:
-  - name: hello-world-job
-    interval: 15m
-    spec:
-      containers:
-        - image: hello-world:latest
-
 presubmits:
   giantswarm/releases:
   - name: dummy
