@@ -27,6 +27,7 @@ presubmits:
       containers:
         - image: hello-world:latest
   - name: cis
+    agent: tekton-pipeline
     max_concurrency: 3
     always_run: false
     skip_report: false
