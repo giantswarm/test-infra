@@ -26,3 +26,15 @@ presubmits:
     spec:
       containers:
         - image: hello-world:latest
+  - name: cis
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: pipeline-cis
+      resources:
+      - name: releases
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
