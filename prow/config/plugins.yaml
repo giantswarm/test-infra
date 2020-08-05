@@ -1,4 +1,12 @@
 plugins:
   giantswarm:
+  - config-updater
   - dog
   - trigger
+
+config_updater:
+  maps:
+    prow/config/configs.yaml:
+      name: configs
+    prow/config/plugins.yaml:
+      name: plugins
