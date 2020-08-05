@@ -1,0 +1,4 @@
+plugins:
+  giantswarm:
+  - dog
+  - trigger
