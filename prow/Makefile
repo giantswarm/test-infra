@@ -13,10 +13,10 @@ prow: namespace cluster/oauth-token.yaml cluster/hmac-token.yaml cluster/*.yaml
 	kubectl apply -f cluster
 
 plugins: config/plugins.yaml
-	kubectl create configmap plugins --from-file=plugins.yaml=config/plugins.yaml --dry-run=client -o yaml | kubectl replace configmap plugins -f -
+	kubectl create configmap plugins --from-file=plugins.yaml=config/plugins.yaml --dry-run=client -o yaml | kubectl apply -f -
 
 configs: config/configs.yaml
-	kubectl create configmap configs --from-file=configs.yaml=config/configs.yaml --dry-run=client -o yaml | kubectl replace configmap configs -f -
+	kubectl create configmap configs --from-file=configs.yaml=config/configs.yaml --dry-run=client -o yaml | kubectl apply -f -
 
 clean:
 	rm -f cluster/oauth-token.yaml
