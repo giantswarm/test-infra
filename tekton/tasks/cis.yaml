@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: cis
+  namespace: nightly
+spec:
+  steps:
+  - name: run-tests
+    image: busybox
+    command: ["echo"]
+    args:
+      - "run-tests"

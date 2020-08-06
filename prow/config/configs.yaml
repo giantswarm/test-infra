@@ -24,8 +24,9 @@ presubmits:
     skip_report: false
     pipeline_run_spec:
       pipelineRef:
-        name: pipeline-cis
+        name: cis
       resources:
       - name: releases
         resourceRef:
           name: PROW_IMPLICIT_GIT_REF
+    trigger: "(?m)^/test cis$"

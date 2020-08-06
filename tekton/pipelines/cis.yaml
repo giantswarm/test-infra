@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: cis
+  namespace: nightly
+spec:
+  resources:
+  - name: releases
+    type: git
+  tasks:
+  - name: create-cluster
+    taskRef:
+      name: create-cluster
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
+    params:
+    - name: wait_cluster_ready
+    - name: release_version
+
+  - name: run-tests
+    runAfter: [create-cluster]
+    taskRef:
+      name: cis
+
+  - name: cleanup
+    runAfter: [run-tests]
+    taskRef:
+      name: cleanup
