@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: create-cluster
+spec:
+  inputs:
+    resources:
+    - name: releases
+      type: git
+    params:
+    - name: wait_cluster_ready
+      description: should the task wait for the cluster to be ready
+      defaultValue: "true"
+    - name: release_version
+      description: release version from which to create the cluster
+      default: ""
+  steps:
+  - name: create-cluster
+    # This needs to become the image that has gsctl and standup commands
+    image: busybox
+    command: ["echo"]
+    args:
+    - "create"
+    - "wait_cluster_ready"
+    - ${inputs.params.wait_cluster_ready}
+    - "release_version"
+    - ${inputs.params.release_version}

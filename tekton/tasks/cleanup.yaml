@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: cleanup
+spec:
+  steps:
+  - name: cleanup
+    # This needs to become the image that has gsctl and standup commands
+    image: busybox
+    command: ["echo"]
+    args:
+    - "cleanup"
