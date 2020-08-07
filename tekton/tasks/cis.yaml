@@ -4,9 +4,13 @@ metadata:
   name: cis
   namespace: nightly
 spec:
+  workspaces:
+    - name: cluster
+      description: a folder containing a cluster kubeconfig
   steps:
-  - name: run-tests
-    image: busybox
-    command: ["echo"]
-    args:
-      - "run-tests"
+    - name: run-tests
+      image: quay.io/giantswarm/conformance-tests
+      script: |
+        #! /bin/bash
+        run-sonobuoy-tests cis
+
