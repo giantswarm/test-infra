@@ -4,9 +4,19 @@ metadata:
   name: cis
   namespace: nightly
 spec:
+  volumes:
+  - name: cluster
+    secret:
+      secretName: cluster
   steps:
   - name: run-tests
-    image: busybox
-    command: ["echo"]
-    args:
-      - "run-tests"
+    image: quay.io/giantswarm/conformance-tests
+    volumeMounts:
+    - mountPath: /cluster
+      name: cluster
+    env:
+      - name: "KUBECONFIG_PATH"
+        value: "/cluster/kubeconfig"
+    script: |
+      #! /bin/sh
+      run-sonobuoy-tests cis
