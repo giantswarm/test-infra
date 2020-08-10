@@ -5,8 +5,8 @@ metadata:
   namespace: nightly
 spec:
   resources:
-    - name: releases
-      type: git
+  - name: releases
+    type: git
   tasks:
   - name: create-cluster
     taskRef:
