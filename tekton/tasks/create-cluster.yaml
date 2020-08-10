@@ -8,9 +8,6 @@ spec:
     inputs:
     - name: releases
       type: git
-  workspaces:
-    - name: cluster
-      description: a folder where to write the kubeconfig of the newly created cluster
   params:
   - name: wait_cluster_ready
     description: should the task wait for the cluster to be ready

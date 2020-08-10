@@ -4,13 +4,19 @@ metadata:
   name: cis
   namespace: nightly
 spec:
-  workspaces:
-    - name: cluster
-      description: a folder containing a cluster kubeconfig
+  volumes:
+  - name: cluster
+    secret:
+      secretName: cluster
   steps:
     - name: run-tests
       image: quay.io/giantswarm/conformance-tests
+      volumeMounts:
+      - mountPath: /cluster
+        name: cluster
+      env:
+        - name: "KUBECONFIG_PATH"
+          value: "/cluster/kubeconfig"
       script: |
-        #! /bin/bash
+        #! /bin/sh
         run-sonobuoy-tests cis
-

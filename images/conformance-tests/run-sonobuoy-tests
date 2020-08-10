@@ -1,48 +1,49 @@
-#! /bin/bash
+#! /bin/sh
 
-kubeconfig_path=$(workspaces.cluster.path)/kubeconfig
-ssh_user="${SSH_USER:-"bot-conformance-tests@giantswarmo.io"}"
+kubeconfig_path="${KUBECONFIG_PATH:-"/cluster/kubeconfig"}"
 
 function log {
-	echo [$(date -u +%FT%TZ)] "$@"
+  echo "[$(date -u +%FT%TZ)]" "$@"
 }
 
 function run_cis {
-	log "Running cis"
-	sonobuoy run --kubeconfig $kubeconfig_path --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml \
-											--plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml \
-											--plugin-env kube-bench-master.KUBERNETES_VERSION=1.16 --plugin-env kube-bench-node.KUBERNETES_VERSION=1.16 \
-											--wait
+  log "Running cis"
+  sonobuoy run  \
+    --kubeconfig "$kubeconfig_path" \
+    --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml \
+    --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml \
+    --plugin-env kube-bench-master.KUBERNETES_VERSION=1.16 --plugin-env kube-bench-node.KUBERNETES_VERSION=1.16 \
+    --wait
 }
 
 function run_cncf {
-	log "Running cncf"
-  sonobuoy run --kubeconfig $kubeconfig_path --mode=certified-conformance --wait
+  log "Running cncf"
+  sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
 case "$1" in
-	cis)
-			run_cis
-			;;
-	cncf)
-			run_cncf
-			;;
-	*)
-			log "Unknown test mode: $1"
-			exit 1
-			;;
+  cis)
+    run_cis
+    ;;
+  cncf)
+    run_cncf
+    ;;
+  *)
+    log "Unknown test mode: $1"
+    exit 1
+    ;;
 esac
 
 
-sonobuoy status --kubeconfig $kubeconfig_path
+sonobuoy status --kubeconfig "$kubeconfig_path"
 
-outfile=$(sonobuoy retrieve --kubeconfig $kubeconfig_path)
+outfile=$(sonobuoy retrieve --kubeconfig "$kubeconfig_path")
 
 log "Results summary"
-sonobuoy results $outfile
+sonobuoy results "$outfile"
 
 log "Detailed results"
-sonobuoy results $outfile --mode detailed | jq .
+sonobuoy results "$outfile" --mode detailed | jq .
 
 log "Deleting sonobuoy resources"
-sonobuoy delete --kubeconfig $kubeconfig_path  --all || true
+sonobuoy delete --kubeconfig "$kubeconfig_path"  --all || true

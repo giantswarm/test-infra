@@ -7,15 +7,10 @@ spec:
   resources:
     - name: releases
       type: git
-  workspaces:
-    - name: cluster
   tasks:
   - name: create-cluster
     taskRef:
       name: create-cluster
-    workspaces:
-      - name: cluster
-        workspace: cluster
     resources:
       inputs:
       - name: releases
@@ -30,9 +25,6 @@ spec:
     runAfter: [create-cluster]
     taskRef:
       name: cis
-    workspaces:
-      - name: cluster
-        workspace: cluster
 
   - name: cleanup
     runAfter: [run-tests]
