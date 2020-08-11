@@ -110,10 +110,6 @@ spec:
             backend:
               serviceName: deck
               servicePort: 80
-          - path: /hook
-            backend:
-              serviceName: hook
-              servicePort: 8888
   tls:
     - hosts:
         - prow.g8s.gaia.eu-central-1.aws.gigantic.io
@@ -147,6 +143,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deck
+  namespace: prow
   labels:
     app: deck
 spec:
@@ -173,6 +170,7 @@ spec:
             - --tide-url=http://tide/
             - --hook-url=http://hook:8888/plugin-help
             - --config-path=/etc/config/configs.yaml
+            - --plugin-config=/etc/plugins/plugins.yaml
             - --github-endpoint=http://ghproxy
             - --github-endpoint=https://api.github.com
             - --github-token-path=/etc/github/oauth
@@ -185,6 +183,9 @@ spec:
               readOnly: true
             - name: configs
               mountPath: /etc/config
+              readOnly: true
+            - name: plugins
+              mountPath: /etc/plugins
               readOnly: true
           livenessProbe:
             httpGet:
@@ -206,3 +207,6 @@ spec:
         - name: configs
           configMap:
             name: configs
+        - name: plugins
+          configMap:
+            name: plugins

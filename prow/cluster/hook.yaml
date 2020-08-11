@@ -85,6 +85,9 @@ spec:
           args:
             - --dry-run=false
             - --config-path=/etc/config/configs.yaml
+            - --github-token-path=/etc/github/oauth
+            - --github-endpoint=http://ghproxy
+            - --github-endpoint=https://api.github.com
           ports:
             - name: http
               containerPort: 8888
@@ -140,3 +143,24 @@ spec:
     - port: 8888
       targetPort: 8888
   type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: prow
+  name: hook
+  labels:
+    app: hook
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: prow.g8s.gaia.eu-central-1.aws.gigantic.io
+      http:
+        paths:
+          - path: /hook
+            backend:
+              serviceName: hook
+              servicePort: 8888
+---
