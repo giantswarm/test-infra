@@ -31,3 +31,17 @@ presubmits:
           name: PROW_IMPLICIT_GIT_REF
     trigger: "/test cis"
     rerun_command: "/test cis"
+  - name: cncf
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: cncf
+      resources:
+      - name: releases
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+    trigger: "/test cncf"
+    rerun_command: "/test cncf"
