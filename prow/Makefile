@@ -4,7 +4,7 @@ namespace:
 	kubectl apply -f cluster/namespace.yaml
 
 cluster/oauth-token.yaml: oauth
-	kubectl create secret generic --dry-run=client -o yaml -n prow oauth-token --from-file=$< >> $@
+	kubectl -n prow create secret generic --dry-run=client -o yaml oauth-token --from-file=$< >> $@
 
 cluster/hmac-token.yaml: hmac
 	kubectl -n prow create secret generic --dry-run=client -o yaml -n prow hmac-token --from-file=$< >> $@
