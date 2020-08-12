@@ -39,6 +39,7 @@ presubmits:
     pipeline_run_spec:
       pipelineRef:
         name: cncf
+      timeout: 5h0m0s
       resources:
       - name: releases
         resourceRef:
