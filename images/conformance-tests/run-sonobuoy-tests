@@ -1,4 +1,5 @@
 #! /bin/sh
+set -e
 
 kubeconfig_path="${KUBECONFIG_PATH:-"/cluster/kubeconfig"}"
 
@@ -20,6 +21,13 @@ function run_cncf {
   log "Running cncf"
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
+
+function cleanup {
+  log "Deleting sonobuoy resources"
+  sonobuoy delete --kubeconfig "$kubeconfig_path"  --all || true
+}
+
+trap cleanup EXIT
 
 case "$1" in
   cis)
@@ -44,6 +52,3 @@ sonobuoy results "$outfile"
 
 log "Detailed results"
 sonobuoy results "$outfile" --mode detailed | jq .
-
-log "Deleting sonobuoy resources"
-sonobuoy delete --kubeconfig "$kubeconfig_path"  --all || true
