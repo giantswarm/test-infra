@@ -446,8 +446,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     kubernetes.io/tls-acme: "true"
-    # nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start
-    # nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
+    nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start
+    nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 spec:
   rules:
     - host: tekton.g8s.gaia.eu-central-1.aws.gigantic.io
@@ -457,3 +457,31 @@ spec:
             backend:
               serviceName: tekton-dashboard
               servicePort: 9097
+  tls:
+    - hosts:
+        - tekton.g8s.gaia.eu-central-1.aws.gigantic.io
+      secretName: tekton-dashboard
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tekton-dashboard-oauth2-proxy
+  ## Oauth2 is deployed under monitoring and it is required
+  ## that the Ingress is in the same ns of the Service
+  ##
+  namespace: monitoring
+  labels:
+    app: tekton-dashboard
+spec:
+  rules:
+    - host: tekton.g8s.gaia.eu-central-1.aws.gigantic.io
+      http:
+        paths:
+          - path: /oauth2
+            backend:
+              serviceName: oauth2-proxy
+              servicePort: 4180
+  tls:
+    - hosts:
+        - tekton.g8s.gaia.eu-central-1.aws.gigantic.io
+      secretName: tekton-dashboard
