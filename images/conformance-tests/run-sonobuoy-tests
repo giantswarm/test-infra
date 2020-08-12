@@ -27,7 +27,7 @@ function cleanup {
   sonobuoy delete --kubeconfig "$kubeconfig_path"  --all --wait || true
 }
 
-trap cleanup EXIT
+trap cleanup INT TERM EXIT
 
 case "$1" in
   cis)
