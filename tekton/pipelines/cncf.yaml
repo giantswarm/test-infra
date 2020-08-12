@@ -23,6 +23,7 @@ spec:
 
   - name: run-tests
     runAfter: [create-cluster]
+    timeout: 2h0m0s
     taskRef:
       name: cncf
 
