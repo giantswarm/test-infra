@@ -46,4 +46,4 @@ log "Detailed results"
 sonobuoy results "$outfile" --mode detailed | jq .
 
 log "Deleting sonobuoy resources"
-sonobuoy delete --kubeconfig "$kubeconfig_path"  --all || true
+sonobuoy delete --kubeconfig "$kubeconfig_path"  --wait --all || true
