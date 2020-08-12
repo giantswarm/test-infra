@@ -4,7 +4,7 @@ metadata:
   name: cncf
   namespace: nightly
 spec:
-  timeout: 2h0m0s
+  timeout: 5h0m0s
   resources:
   - name: releases
     type: git
