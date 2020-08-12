@@ -4,10 +4,34 @@ metadata:
   name: cleanup
   namespace: nightly
 spec:
+  resources:
+    inputs:
+    - name: gs-token-secret
+      type: string
+      default: gs-token-secret
+  workspaces:
+  - name: cluster
+    description: The folder where to get the kubeconfig from
   steps:
-  - name: cleanup
-    # This needs to become the image that has gsctl and standup commands
-    image: busybox
-    command: ["echo"]
+  - name: get-cluster-id
+    image: mikefarah/yq
     args:
-    - "cleanup"
+    - ".clusters[0].name"
+    - "kubeconfig"
+    - ">"
+    - $(workspaces.cluster.path)/cluster_id
+  - name: cleanup
+    image: quay.io/giantswarm/standup
+    env:
+    - name: TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: $(params.gs-token-secret)
+          key: token
+    command: ["cleanup"]
+    args:
+    - "--in-cluster"
+    - "--token"
+    - "$TOKEN"
+    - "--cluster"
+    - "$(cat $(workspaces.cluster.path)/cluster_id"

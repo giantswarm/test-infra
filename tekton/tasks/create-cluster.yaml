@@ -8,21 +8,28 @@ spec:
     inputs:
     - name: releases
       type: git
-  params:
-  - name: wait_cluster_ready
-    description: should the task wait for the cluster to be ready
-    default: "true"
-  - name: release_version
-    description: release version from which to create the cluster
-    default: "v12.1.0"
+    - name: gs-token-secret
+      type: string
+      default: gs-token-secret
+  workspaces:
+  - name: cluster
+    description: The folder where to put the kubeconfig of the newly created cluster
   steps:
   - name: create-cluster
     # This needs to become the image that has gsctl and standup commands
-    image: busybox
-    command: ["echo"]
+    image: quay.io/giantswarm/standup
+    env:
+    - name: TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: $(params.gs-token-secret)
+          key: token
+    command: ["create"]
     args:
-    - "create"
-    - "wait_cluster_ready"
-    - ${inputs.params.wait_cluster_ready}
-    - "release_version"
-    - ${inputs.params.release_version}
+    - "--in-cluster"
+    - "--token"
+    - "$TOKEN"
+    - "--provider"
+    - "aws"
+    - "--output"
+    - $(workspaces.cluster.path)/kubeconfig

@@ -8,6 +8,9 @@ spec:
   - name: cluster
     secret:
       secretName: cluster
+  workspaces:
+  - name: cluster
+    description: The folder where to get the kubeconfig from
   steps:
   - name: run-tests
     image: quay.io/giantswarm/conformance-tests
@@ -16,7 +19,7 @@ spec:
       name: cluster
     env:
       - name: "KUBECONFIG_PATH"
-        value: "/cluster/kubeconfig"
+        value: $(workspaces.cluster.path)/kubeconfig
     script: |
       #! /bin/sh
       run-sonobuoy-tests cncf
