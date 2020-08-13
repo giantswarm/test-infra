@@ -436,6 +436,12 @@ subjects:
     name: tekton-dashboard
     namespace: tekton-pipelines
 ---
+#
+#
+# The ingresses below are not part of the normal tekton release.
+# If updating the Tekton release, keep these intact.
+#
+#
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
