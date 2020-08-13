@@ -26,8 +26,8 @@ spec:
         secretKeyRef:
           name: $(params.gs-token-secret)
           key: token
-    command: ["cleanup"]
     args:
+    - "cleanup"
     - "--in-cluster"
     - "--token"
     - "$TOKEN"

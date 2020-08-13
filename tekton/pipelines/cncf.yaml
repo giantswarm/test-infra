@@ -20,11 +20,6 @@ spec:
       inputs:
       - name: releases
         resource: releases
-    params:
-    - name: wait_cluster_ready
-      value: "true"
-    - name: release_version
-      value: "v12.1.0"
 
   - name: run-tests
     runAfter: [create-cluster]

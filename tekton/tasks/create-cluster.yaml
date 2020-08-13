@@ -24,12 +24,16 @@ spec:
         secretKeyRef:
           name: $(params.gs-token-secret)
           key: token
-    command: ["create"]
     args:
+    - "create"
     - "--in-cluster"
     - "--token"
     - "$TOKEN"
     - "--provider"
     - "aws"
+    - "--endpoint"
+    - "gaia"
+    - "--releases"
+    - "/workspace/releases"
     - "--output"
     - $(workspaces.cluster.path)/kubeconfig
