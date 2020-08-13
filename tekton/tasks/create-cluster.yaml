@@ -8,12 +8,12 @@ spec:
     inputs:
     - name: releases
       type: git
-    - name: gs-token-secret
-      type: string
-      default: gs-token-secret
   workspaces:
   - name: cluster
     description: The folder where to put the kubeconfig of the newly created cluster
+  params:
+  - name: gs-token-secret
+    default: gs-token-secret
   steps:
   - name: create-cluster
     # This needs to become the image that has gsctl and standup commands

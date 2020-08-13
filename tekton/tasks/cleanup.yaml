@@ -4,14 +4,12 @@ metadata:
   name: cleanup
   namespace: nightly
 spec:
-  resources:
-    inputs:
-    - name: gs-token-secret
-      type: string
-      default: gs-token-secret
   workspaces:
   - name: cluster
     description: The folder where to get the kubeconfig from
+  params:
+  - name: gs-token-secret
+    default: gs-token-secret
   steps:
   - name: get-cluster-id
     image: mikefarah/yq
