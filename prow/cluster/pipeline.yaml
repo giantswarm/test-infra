@@ -56,7 +56,7 @@ spec:
       serviceAccountName: pipeline
       containers:
       - name: pipeline
-        image: gcr.io/k8s-prow/pipeline:v20200804-711fa0e9c5
+        image: gcr.io/k8s-prow/pipeline:v20200813-535fb53bd1
         args:
         - --config=/etc/config/configs.yaml
         volumeMounts:
