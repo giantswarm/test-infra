@@ -33,6 +33,8 @@ spec:
     - "aws"
     - "--endpoint"
     - "gaia"
+    - "--release"
+    - "13.0.0"
     - "--releases"
     - "/workspace/releases"
     - "--output"

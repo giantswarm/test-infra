@@ -25,6 +25,7 @@ presubmits:
     pipeline_run_spec:
       pipelineRef:
         name: cis
+      serviceAccountName: releases
       resources:
       - name: releases
         resourceRef:
@@ -34,7 +35,7 @@ presubmits:
         volumeClaimTemplate:
           spec:
             accessModes:
-            - ReadWriteMany
+            - ReadWriteOnce
             resources:
               requests:
                 storage: 10Mi
@@ -48,6 +49,7 @@ presubmits:
     pipeline_run_spec:
       pipelineRef:
         name: cncf
+      serviceAccountName: releases
       timeout: 5h0m0s
       resources:
       - name: releases
