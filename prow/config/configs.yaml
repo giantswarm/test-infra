@@ -10,6 +10,11 @@ github_reporter:
     - presubmit
     - postsubmit
 
+deck:
+  external_agent_logs:
+  - agent: tekton-pipeline
+    url_template: 'http://tkn/{{.Spec.Job}}/{{.Status.BuildID}}/consoleText'
+
 presubmits:
   giantswarm/releases:
   - name: dummy
