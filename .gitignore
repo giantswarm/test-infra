@@ -4,3 +4,5 @@ prow/oauth
 prow/cluster/*token.yaml
 .DS_Store
 .idea
+log-aggregator
+!log-aggregator/

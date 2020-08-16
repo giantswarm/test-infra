@@ -12,8 +12,8 @@ github_reporter:
 
 deck:
   external_agent_logs:
-  - agent: tekton-pipeline
-    url_template: 'http://tkn/{{.Spec.Job}}/{{.Status.BuildID}}/consoleText'
+    - agent: tekton-pipeline
+      url_template: 'http://log-aggregator/{{.ObjectMeta.Name}}'
 
 presubmits:
   giantswarm/releases:
