@@ -30,7 +30,7 @@ spec:
     - "cleanup"
     - "--in-cluster"
     - "--endpoint"
-    - "https://api.g8s.gaia.eu-central-1.aws.gigantic.io"
+    - "http://api-service.giantswarm.svc.cluster.local:8000"
     - "--token"
     - "${TOKEN}"
     - "--cluster"
