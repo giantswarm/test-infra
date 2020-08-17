@@ -29,7 +29,9 @@ spec:
     args:
     - "cleanup"
     - "--in-cluster"
+    - "--endpoint"
+    - "https://api.g8s.gaia.eu-central-1.aws.gigantic.io"
     - "--token"
-    - "$TOKEN"
+    - "${TOKEN}"
     - "--cluster"
     - "$(cat $(workspaces.cluster.path)/cluster_id"
