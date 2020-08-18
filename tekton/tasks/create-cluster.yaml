@@ -16,7 +16,6 @@ spec:
     default: gs-token-secret
   steps:
   - name: create-cluster
-    # This needs to become the image that has gsctl and standup commands
     image: quay.io/giantswarm/standup
     env:
     - name: TOKEN
