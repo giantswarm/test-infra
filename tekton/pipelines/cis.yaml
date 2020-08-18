@@ -33,6 +33,6 @@ spec:
     runAfter: [run-tests]
     taskRef:
       name: cleanup
-    workspaces:
-    - name: cluster
-      workspace: cluster
+    params:
+    - name: cluster-id
+      value: "$(tasks.create-cluster.results.cluster-id)"

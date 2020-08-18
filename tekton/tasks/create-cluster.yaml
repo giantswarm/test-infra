@@ -14,6 +14,9 @@ spec:
   params:
   - name: gs-token-secret
     default: gs-token-secret
+  results:
+  - name: cluster-id
+    description: The cluster id of the newly created cluster
   steps:
   - name: chown-releases
     command:
@@ -42,7 +45,17 @@ spec:
     - "aws"
     - "--endpoint"
     - "http://api-service.giantswarm.svc.cluster.local:8000"
+    - "--release"
+    - "13.0.0"
     - "--releases"
     - "/workspace/releases"
     - "--output"
     - $(workspaces.cluster.path)/kubeconfig
+
+  - name: expose-cluster-id
+    image: mikefarah/yq:3.3.2
+    args:
+    - ".clusters[0].name"
+    - "kubeconfig"
+    - ">"
+    - $(results.cluster-id.path)
