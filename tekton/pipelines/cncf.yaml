@@ -7,6 +7,9 @@ spec:
   resources:
   - name: releases
     type: git
+    params:
+      - name: depth
+        value: 0
   workspaces:
   - name: cluster
   tasks:
