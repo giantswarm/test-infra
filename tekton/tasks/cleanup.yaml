@@ -4,10 +4,33 @@ metadata:
   name: cleanup
   namespace: nightly
 spec:
+  params:
+  - name: gs-token-secret
+    default: gs-token-secret
+  - name: cluster-id
+    default: ""
   steps:
+  - name: get-cluster-id
+    image: mikefarah/yq
+    args:
+    - ".clusters[0].name"
+    - "kubeconfig"
+    - ">"
+    - $(workspaces.cluster.path)/cluster_id
   - name: cleanup
-    # This needs to become the image that has gsctl and standup commands
-    image: busybox
-    command: ["echo"]
+    image: quay.io/giantswarm/standup
+    env:
+    - name: TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: $(params.gs-token-secret)
+          key: token
     args:
     - "cleanup"
+    - "--in-cluster"
+    - "--endpoint"
+    - "http://api-service.giantswarm.svc.cluster.local:8000"
+    - "--token"
+    - "${TOKEN}"
+    - "--cluster"
+    - $(params.cluster-id)

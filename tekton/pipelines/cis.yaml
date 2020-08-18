@@ -7,29 +7,32 @@ spec:
   resources:
   - name: releases
     type: git
-    params:
-      - name: depth
-        value: 0
+  workspaces:
+    - name: cluster
   tasks:
   - name: create-cluster
     taskRef:
       name: create-cluster
+    workspaces:
+    - name: cluster
+      workspace: cluster
     resources:
       inputs:
       - name: releases
         resource: releases
-    params:
-    - name: wait_cluster_ready
-      value: "true"
-    - name: release_version
-      value: "v12.1.0"
 
   - name: run-tests
     runAfter: [create-cluster]
     taskRef:
       name: cis
+    workspaces:
+    - name: cluster
+      workspace: cluster
 
   - name: cleanup
     runAfter: [run-tests]
     taskRef:
       name: cleanup
+    params:
+    - name: cluster-id
+      value: "$(tasks.create-cluster.results.cluster-id)"

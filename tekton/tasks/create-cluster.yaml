@@ -8,21 +8,54 @@ spec:
     inputs:
     - name: releases
       type: git
+  workspaces:
+  - name: cluster
+    description: The folder where to put the kubeconfig of the newly created cluster
   params:
-  - name: wait_cluster_ready
-    description: should the task wait for the cluster to be ready
-    default: "true"
-  - name: release_version
-    description: release version from which to create the cluster
-    default: "v12.1.0"
+  - name: gs-token-secret
+    default: gs-token-secret
+  results:
+  - name: cluster-id
+    description: The cluster id of the newly created cluster
   steps:
+  - name: chown-releases
+    command:
+    - chown
+    - -R
+    - 1000:1000
+    - /workspace/releases
+    image: quay.io/giantswarm/standup
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
   - name: create-cluster
-    # This needs to become the image that has gsctl and standup commands
-    image: busybox
-    command: ["echo"]
+    image: quay.io/giantswarm/standup
+    env:
+    - name: TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: $(params.gs-token-secret)
+          key: token
     args:
     - "create"
-    - "wait_cluster_ready"
-    - ${inputs.params.wait_cluster_ready}
-    - "release_version"
-    - ${inputs.params.release_version}
+    - "--in-cluster"
+    - "--token"
+    - "${TOKEN}"
+    - "--provider"
+    - "aws"
+    - "--endpoint"
+    - "http://api-service.giantswarm.svc.cluster.local:8000"
+    - "--release"
+    - "13.0.0"
+    - "--releases"
+    - "/workspace/releases"
+    - "--output"
+    - $(workspaces.cluster.path)/kubeconfig
+
+  - name: expose-cluster-id
+    image: mikefarah/yq:3.3.2
+    args:
+    - ".clusters[0].name"
+    - "kubeconfig"
+    - ">"
+    - $(results.cluster-id.path)
