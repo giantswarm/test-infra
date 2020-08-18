@@ -41,7 +41,7 @@ spec:
     - "--provider"
     - "aws"
     - "--endpoint"
-    - "https://api.g8s.gaia.eu-central-1.aws.gigantic.io"
+    - "http://api-service.giantswarm.svc.cluster.local:8000"
     - "--releases"
     - "/workspace/releases"
     - "--output"
