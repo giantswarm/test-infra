@@ -11,13 +11,6 @@ spec:
   - name: cluster
     description: Cluster information is stored here.
   steps:
-  - name: get-cluster-id
-    image: mikefarah/yq
-    args:
-    - ".clusters[0].name"
-    - "kubeconfig"
-    - ">"
-    - $(workspaces.cluster.path)/cluster-id
   - name: cleanup
     image: quay.io/giantswarm/standup
     env:
@@ -32,6 +25,6 @@ spec:
     - "--endpoint"
     - "http://api-service.giantswarm.svc.cluster.local:8000"
     - "--token"
-    - "${TOKEN}"
+    - "$(TOKEN)"
     - "--cluster"
     - "cat $(workspaces.cluster.path)/cluster-id"
