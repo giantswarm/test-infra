@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: cis
@@ -10,7 +10,7 @@ spec:
       secretName: cluster
   workspaces:
   - name: cluster
-    description: The folder where to get the kubeconfig from
+    description: Cluster information is stored here.
   steps:
   - name: run-tests
     image: quay.io/giantswarm/conformance-tests

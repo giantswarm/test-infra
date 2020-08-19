@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: cncf
@@ -30,10 +30,10 @@ spec:
     - name: cluster
       workspace: cluster
 
+  finally:
   - name: cleanup
-    runAfter: [run-tests]
     taskRef:
       name: cleanup
-    params:
-    - name: cluster-id
-      value: "$(tasks.create-cluster.results.cluster-id)"
+    workspaces:
+    - name: cluster
+      workspace: cluster
