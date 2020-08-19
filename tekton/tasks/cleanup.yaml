@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: cleanup
@@ -7,8 +7,9 @@ spec:
   params:
   - name: gs-token-secret
     default: gs-token-secret
-  - name: cluster-id
-    default: ""
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
   steps:
   - name: get-cluster-id
     image: mikefarah/yq
@@ -16,7 +17,7 @@ spec:
     - ".clusters[0].name"
     - "kubeconfig"
     - ">"
-    - $(workspaces.cluster.path)/cluster_id
+    - $(workspaces.cluster.path)/cluster-id
   - name: cleanup
     image: quay.io/giantswarm/standup
     env:
@@ -33,4 +34,4 @@ spec:
     - "--token"
     - "${TOKEN}"
     - "--cluster"
-    - $(params.cluster-id)
+    - "cat $(workspaces.cluster.path)/cluster-id"

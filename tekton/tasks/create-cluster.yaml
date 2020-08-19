@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: create-cluster
@@ -10,13 +10,10 @@ spec:
       type: git
   workspaces:
   - name: cluster
-    description: The folder where to put the kubeconfig of the newly created cluster
+    description: Cluster information is stored here.
   params:
   - name: gs-token-secret
     default: gs-token-secret
-  results:
-  - name: cluster-id
-    description: The cluster id of the newly created cluster
   steps:
   - name: chown-releases
     command:
@@ -58,4 +55,4 @@ spec:
     - ".clusters[0].name"
     - "kubeconfig"
     - ">"
-    - $(results.cluster-id.path)
+    - $(workspaces.cluster.path)/cluster-id
