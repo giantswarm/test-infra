@@ -19,12 +19,10 @@ spec:
         secretKeyRef:
           name: $(params.gs-token-secret)
           key: token
-    args:
-    - "cleanup"
-    - "--in-cluster"
-    - "--endpoint"
-    - "http://api-service.giantswarm.svc.cluster.local:8000"
-    - "--token"
-    - "$(TOKEN)"
-    - "--cluster"
-    - "cat $(workspaces.cluster.path)/cluster-id"
+    script: |
+      #! /bin/sh
+      standup cleanup \
+      --in-cluster \
+      --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
+      --token ${TOKEN} \
+      --cluster $(cat $(workspaces.cluster.path)/cluster-id)

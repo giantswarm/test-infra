@@ -33,18 +33,13 @@ spec:
         secretKeyRef:
           name: $(params.gs-token-secret)
           key: token
-    args:
-    - "create"
-    - "--in-cluster"
-    - "--token"
-    - "$(TOKEN)"
-    - "--provider"
-    - "aws"
-    - "--endpoint"
-    - "http://api-service.giantswarm.svc.cluster.local:8000"
-    - "--releases"
-    - "/workspace/releases"
-    - "--output-kubeconfig"
-    - $(workspaces.cluster.path)/kubeconfig
-    - "--output-cluster-id"
-    - $(workspaces.cluster.path)/cluster-id
+    script: |
+      #! /bin/sh
+      standup create \
+      --in-cluster \
+      --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
+      --token ${TOKEN} \
+      --provider aws \
+      --releases /workspace/releases \
+      --output-kubeconfig $(workspaces.cluster.path)/kubeconfig \
+      --output-cluster-id $(workspaces.cluster.path)/cluster-id
