@@ -17,11 +17,6 @@ deck:
 
 presubmits:
   giantswarm/releases:
-  - name: dummy
-    always_run: false
-    spec:
-      containers:
-        - image: hello-world:latest
   - name: cis
     agent: tekton-pipeline
     max_concurrency: 3
@@ -71,3 +66,27 @@ presubmits:
                 storage: 10Mi
     trigger: "/test cncf"
     rerun_command: "/test cncf"
+  - name: aws
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: aws
+      serviceAccountName: releases
+      resources:
+        - name: releases
+          resourceRef:
+            name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test aws"
+    rerun_command: "/test aws"

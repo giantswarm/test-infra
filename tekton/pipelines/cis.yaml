@@ -21,8 +21,16 @@ spec:
       - name: releases
         resource: releases
 
-  - name: run-tests
+  - name: wait-for-ready
     runAfter: [create-cluster]
+    taskRef:
+      name: wait-for-ready
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: run-tests
+    runAfter: [wait-for-ready]
     taskRef:
       name: cis
     workspaces:

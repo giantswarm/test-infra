@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: wait-for-ready
+  namespace: nightly
+spec:
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: wait-for-ready
+    image: quay.io/giantswarm/standup
+    script: |
+      #! /bin/sh
+      standup wait \
+      --kubeconfig $(workspaces.cluster.path)/kubeconfig

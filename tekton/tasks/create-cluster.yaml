@@ -39,7 +39,6 @@ spec:
       --in-cluster \
       --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
       --token ${TOKEN} \
-      --provider aws \
       --releases /workspace/releases \
       --output-kubeconfig $(workspaces.cluster.path)/kubeconfig \
       --output-cluster-id $(workspaces.cluster.path)/cluster-id

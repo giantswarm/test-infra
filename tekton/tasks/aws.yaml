@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: aws
+  namespace: nightly
+spec:
+  volumes:
+  - name: cluster
+    secret:
+      secretName: cluster
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: run-tests
+    image: quay.io/giantswarm/awscnfm:12.1.1-0355b626b09832de8f5407b19bc7f6e53c810705
+    volumeMounts:
+    - mountPath: /cluster
+      name: cluster
+    env:
+      - name: "AWSCNFM_KUBECONFIG"
+        value: $(workspaces.cluster.path)/kubeconfig
+    script: |
+      #! /bin/sh
+      awscnfm version
