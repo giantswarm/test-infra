@@ -22,6 +22,11 @@ function run_cncf {
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
+function logs {
+  log "Sonobuoy logs"
+  sonobuoy logs --kubeconfig "$kubeconfig_path"
+}
+
 function cleanup {
   if [ $? != 0 ]; then
     log "Sonobuoy logs"
