@@ -22,17 +22,16 @@ function run_cncf {
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
-function logs {
-  log "Sonobuoy logs"
-  sonobuoy logs --kubeconfig "$kubeconfig_path"
-}
-
 function cleanup {
+  if [ $? != 0 ]; then
+    log "Sonobuoy logs"
+    sonobuoy logs --kubeconfig "$kubeconfig_path"
+  fi
+
   log "Deleting sonobuoy resources"
   sonobuoy delete --kubeconfig "$kubeconfig_path"  --all --wait || true
 }
 
-trap logs ERR
 trap cleanup INT TERM EXIT
 
 case "$1" in
