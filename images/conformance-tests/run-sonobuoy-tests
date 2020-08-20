@@ -15,6 +15,10 @@ function run_cis {
     --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml \
     --plugin-env kube-bench-master.KUBERNETES_VERSION=1.16 --plugin-env kube-bench-node.KUBERNETES_VERSION=1.16 \
     --wait
+
+  if [ $? != 0 ]; then
+    sonobuoy logs --kubeconfig "$kubeconfig_path"
+  fi
 }
 
 function run_cncf {
