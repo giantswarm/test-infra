@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: cncf
+  name: aws
   namespace: nightly
 spec:
   resources:
@@ -21,19 +21,10 @@ spec:
       - name: releases
         resource: releases
 
-  - name: wait-for-ready
+  - name: run-tests
     runAfter: [create-cluster]
     taskRef:
-      name: wait-for-ready
-    workspaces:
-      - name: cluster
-        workspace: cluster
-
-  - name: run-tests
-    runAfter: [wait-for-ready]
-    timeout: 5h0m0s
-    taskRef:
-      name: cncf
+      name: aws
     workspaces:
     - name: cluster
       workspace: cluster

@@ -26,7 +26,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-cluster
-    image: quay.io/giantswarm/standup
+    image: quay.io/giantswarm/standup:0.0.0-618c5f601d6f9ee6153172458b87f4c8a1eec576
     env:
     - name: TOKEN
       valueFrom:
@@ -39,7 +39,6 @@ spec:
       --in-cluster \
       --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
       --token ${TOKEN} \
-      --provider aws \
       --releases /workspace/releases \
       --output-kubeconfig $(workspaces.cluster.path)/kubeconfig \
       --output-cluster-id $(workspaces.cluster.path)/cluster-id
