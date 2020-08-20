@@ -15,10 +15,6 @@ function run_cis {
     --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml \
     --plugin-env kube-bench-master.KUBERNETES_VERSION=1.16 --plugin-env kube-bench-node.KUBERNETES_VERSION=1.16 \
     --wait
-
-  if [ $? != 0 ]; then
-    sonobuoy logs --kubeconfig "$kubeconfig_path"
-  fi
 }
 
 function run_cncf {
@@ -26,11 +22,17 @@ function run_cncf {
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
+function logs {
+  log "Sonobuoy logs"
+  sonobuoy logs --kubeconfig "$kubeconfig_path"
+}
+
 function cleanup {
   log "Deleting sonobuoy resources"
   sonobuoy delete --kubeconfig "$kubeconfig_path"  --all --wait || true
 }
 
+trap logs ERR
 trap cleanup INT TERM EXIT
 
 case "$1" in
