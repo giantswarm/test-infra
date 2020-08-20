@@ -3,10 +3,10 @@ SHELL := /bin/bash
 namespace:
 	kubectl apply -f cluster/namespace.yaml
 
-prow/cluster/oauth-token.yaml: oauth
+cluster/oauth-token.yaml: oauth
 	kubectl -n prow create secret generic --dry-run -o yaml oauth-token --from-file=$< >> $@
 
-prow/cluster/hmac-token.yaml: hmac
+cluster/hmac-token.yaml: hmac
 	kubectl -n prow create secret generic --dry-run -o yaml -n prow hmac-token --from-file=$< >> $@
 
 prow: namespace cluster/oauth-token.yaml cluster/hmac-token.yaml cluster/*.yaml

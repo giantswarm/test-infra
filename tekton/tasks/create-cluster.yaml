@@ -26,7 +26,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-cluster
-    image: quay.io/giantswarm/standup:0.0.0-618c5f601d6f9ee6153172458b87f4c8a1eec576
+    image: quay.io/giantswarm/standup
     env:
     - name: TOKEN
       valueFrom:
