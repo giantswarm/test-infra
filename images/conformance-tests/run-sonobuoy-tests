@@ -51,4 +51,4 @@ log "Results summary"
 sonobuoy results "$outfile"
 
 log "Detailed results"
-sonobuoy results "$outfile" --mode detailed | jq .
+sonobuoy results "$outfile" --mode detailed
