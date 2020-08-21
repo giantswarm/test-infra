@@ -1,0 +1,60 @@
+version: 2.1
+
+orbs:
+  architect: giantswarm/architect@0.11.0
+
+jobs:
+  build:
+    docker:
+      - image: quay.io/giantswarm/architect
+    steps:
+      - checkout
+      - run:
+          name: Install kustomize
+          command: |
+            CGO_ENABLED=0 go install sigs.k8s.io/kustomize/kustomize/v3
+      - run:
+          name: Install releaseNotesURLTransformer kustomize plugin
+          command: |
+            CGO_ENABLED=0 go get github.com/giantswarm/kustomize-plugin-releasenotesurlannotationtransformer@v0.2.0
+            mkdir -p "$PLUGIN_PATH"
+            cp /go/bin/kustomize-plugin-releasenotesurlannotationtransformer "$PLUGIN_PATH/releaseNotesURLAnnotationTransformer"
+          environment:
+            PLUGIN_PATH: "./kustomize/plugin/giantswarm.io/v1/releasenotesurlannotationtransformer"
+      - run:
+          name: Kustomize helm charts
+          command: |
+            export XDG_CONFIG_HOME=$(pwd)
+            for i in aws azure kvm; do mkdir -p helm/releases-$i/templates; kustomize build --enable_alpha_plugins ./$i > helm/releases-$i/templates/releases.yaml; done
+      - persist_to_workspace:
+          root: .
+          paths:
+            - helm
+
+workflows:
+  workflow:
+    jobs:
+      - validate
+      - build
+      - architect/push-to-app-catalog:
+          name: push-releases-kvm-to-releases-catalog
+          app_catalog: releases-catalog
+          app_catalog_test: releases-test-catalog
+          attach_workspace: true
+          chart: releases-kvm
+          on_tag: false
+          requires:
+            - build
+            - validate
+      - architect/push-to-app-collection:
+          name: push-releases-to-kvm-app-collection
+          app_catalog: releases
+          app_name: releases-kvm
+          app_collection_repo: kvm-app-collection
+          unique: "true"
+          requires:
+            - push-releases-kvm-to-releases-catalog
+          filters:
+            # Trigger the job on merge to master.
+            branches:
+              only: master

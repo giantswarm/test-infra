@@ -122,4 +122,4 @@ spec:
             secretName: oauth-token
         - name: configs
           configMap:
-            name: configs
+            name: prowconfig
