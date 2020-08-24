@@ -16,15 +16,15 @@ resources:
 - cluster/prowplugins.yaml
 - cluster/crd.yaml
 - cluster/crier.yaml
-#- cluster/deck.yaml
-#- cluster/ghproxy.yaml
-#- cluster/hook.yaml
-#- cluster/horologium.yaml
-#- cluster/namespace.yaml
-#- cluster/needs-rebase.yaml
-#- cluster/nightly.yaml
-#- cluster/pipeline.yaml
-#- cluster/plank.yaml
-#- cluster/sinker.yaml
-#- cluster/tide.yaml
+- cluster/deck.yaml
+- cluster/ghproxy.yaml
+- cluster/hook.yaml
+- cluster/horologium.yaml
+- cluster/namespace.yaml
+- cluster/needs-rebase.yaml
+- cluster/nightly.yaml
+- cluster/pipeline.yaml
+- cluster/plank.yaml
+- cluster/sinker.yaml
+- cluster/tide.yaml
 
