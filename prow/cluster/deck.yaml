@@ -19,22 +19,6 @@ metadata:
   namespace: prow
   name: "deck"
 ---
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
-metadata:
-  labels:
-    app: deck
-  name: prow-deck
-  namespace: prow
-spec:
-  dnsNames:
-  - prow.g8s.gaia.eu-central-1.aws.gigantic.io
-  issuerRef:
-    group: cert-manager.io
-    kind: ClusterIssuer
-    name: letsencrypt-giantswarm
-  secretName: prow-deck
----
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
