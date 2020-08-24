@@ -10,6 +10,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install kustomize
+          command: |
+            CGO_ENABLED=0 go install sigs.k8s.io/kustomize/kustomize/v3
+      - run:
           name: Kustomize helm charts
           command: |
             for i in prow tekton; do mkdir -p helm/test-infra/templates; kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
