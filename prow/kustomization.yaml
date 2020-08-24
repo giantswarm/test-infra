@@ -3,12 +3,12 @@ kind: Kustomization
 configMapGenerator:
 - name: prowconfig
   namespace: prow
-  behavior: replace
+  behavior: merge
   files:
   - configs.yaml
 - name: prowplugins
   namespace: prow
-  behavior: replace
+  behavior: merge
   files:
   - plugins.yaml
 resources:
