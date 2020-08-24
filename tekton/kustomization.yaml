@@ -4,3 +4,4 @@ resources:
 - dashboard
 - pipelines
 - tasks
+- tekton.yaml
