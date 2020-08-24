@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Kustomize helm charts
           command: |
-            for i in prow tekton; do mkdir -p helm/test-infra/templates; kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
+            for i in prow tekton; do mkdir -p helm/test-infra/templates; ./kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
       - persist_to_workspace:
           root: .
           paths:
