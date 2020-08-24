@@ -14,7 +14,6 @@ configMapGenerator:
 resources:
 - cluster/prowconfig.yaml
 - cluster/prowplugins.yaml
-- cluster/crd.yaml
 - cluster/crier.yaml
 - cluster/deck.yaml
 - cluster/ghproxy.yaml
