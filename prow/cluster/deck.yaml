@@ -125,6 +125,8 @@ metadata:
   namespace: monitoring
   labels:
     app: deck
+  annotations:
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: prow.g8s.gaia.eu-central-1.aws.gigantic.io

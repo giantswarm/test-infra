@@ -433,6 +433,8 @@ metadata:
   namespace: monitoring
   labels:
     app: tekton-dashboard
+  annotations:
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: tekton.g8s.gaia.eu-central-1.aws.gigantic.io
