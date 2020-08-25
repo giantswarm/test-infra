@@ -6,13 +6,15 @@ orbs:
 jobs:
   build:
     docker:
-      - image: quay.io/giantswarm/architect
+      - image: quay.io/giantswarm/architect:2.1.6
     steps:
       - checkout
       - run:
           name: Install kustomize
           command: |
-            curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+            curl -s -O -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.8.1/kustomize_v3.8.1_linux_amd64.tar.gz
+            tar xzf ./kustomize_v*_*_amd64.tar.gz
+            ./kustomize version
       - run:
           name: Kustomize helm charts
           command: |
