@@ -91,9 +91,9 @@ make configs
 
 Generated secrets are stored in the LastPass of our organization.
 
-- Access credentials for [Tityos Bot](https://github.com/tityosbot)
-- Github OAuth Secret
-- Random Github webhooks token
+- Access credentials for [Tityos Bot](https://github.com/tityosbot) (secret named `hmac-token` in `prow` namespace)
+- Github OAuth Secret (secret named `oauth-token` in `prow` namespace)
+- Random Github webhooks token (secret names `webhook-certs` in `tekton-pipelines` namespace)
 
 ## Reference
 
