@@ -25,7 +25,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: nightly
+  name: releases
 subjects:
   - kind: ServiceAccount
     name: releases
