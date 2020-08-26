@@ -56,4 +56,4 @@ log "Results summary"
 sonobuoy results "$outfile"
 
 log "Detailed results"
-sonobuoy results "$outfile" --mode detailed
+sonobuoy results "$outfile" --mode detailed | jq -R 'fromjson?'
