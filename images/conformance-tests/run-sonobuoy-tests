@@ -3,11 +3,11 @@ set -e
 
 kubeconfig_path="${KUBECONFIG_PATH:-"/cluster/kubeconfig"}"
 
-function log {
+log() {
   echo "[$(date -u +%FT%TZ)]" "$@"
 }
 
-function run_cis {
+run_cis() {
   log "Running cis"
   sonobuoy run  \
     --kubeconfig "$kubeconfig_path" \
@@ -17,12 +17,32 @@ function run_cis {
     --wait
 }
 
-function run_cncf {
+run_cncf() {
   log "Running cncf"
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
-function cleanup {
+print_results() {
+  log "Status"
+  sonobuoy status --kubeconfig "$kubeconfig_path"
+
+  outfile=$(sonobuoy retrieve --kubeconfig "$kubeconfig_path")
+
+  log "Results summary"
+  sonobuoy results "$outfile"
+
+  log "Detailed results"
+  sonobuoy results "$outfile" --mode detailed | jq -R 'fromjson? | select(.status)'
+}
+
+check_if_failed() {
+  if sonobuoy status --kubeconfig "$kubeconfig_path" | grep failed > /dev/null; then
+    log "Tests failed"
+    exit 1
+  fi
+}
+
+cleanup() {
   if [ $? != 0 ]; then
     log "Sonobuoy logs"
     sonobuoy logs --kubeconfig "$kubeconfig_path"
@@ -37,23 +57,15 @@ trap cleanup INT TERM EXIT
 case "$1" in
   cis)
     run_cis
+    print_results
     ;;
   cncf)
     run_cncf
+    print_results
+    check_if_failed
     ;;
   *)
     log "Unknown test mode: $1"
     exit 1
     ;;
 esac
-
-
-sonobuoy status --kubeconfig "$kubeconfig_path"
-
-outfile=$(sonobuoy retrieve --kubeconfig "$kubeconfig_path")
-
-log "Results summary"
-sonobuoy results "$outfile"
-
-log "Detailed results"
-sonobuoy results "$outfile" --mode detailed
