@@ -22,6 +22,13 @@ function run_cncf {
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
+function check_if_failed {
+  if sonobuoy status --kubeconfig "$kubeconfig_path" | grep failed > /dev/null; then
+    log "Tests failed"
+    exit 1
+  fi
+}
+
 function cleanup {
   if [ $? != 0 ]; then
     log "Sonobuoy logs"
@@ -40,6 +47,7 @@ case "$1" in
     ;;
   cncf)
     run_cncf
+    check_if_failed
     ;;
   *)
     log "Unknown test mode: $1"
