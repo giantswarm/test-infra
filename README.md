@@ -47,12 +47,11 @@ There are some steps to be taken outside of Kubernetes to set up Prow.
 This assumes that you are in the `prow` directory and that you can reach your working Kubernetes cluster.
 
 1. Create a bot account (we have our own [tityos](https://github.com/tityosbot)).
+  - Grant it **owner** level access to the GitHub organisations on which prow will operate on.
 
-  1.1. Grant it **owner** level access to the GitHub organisations on which prow will operate on.
+  - Generate a [personal access token](https://github.com/settings/tokens) for the bot with full `repo` scope and `admin:org`, `admin:repo_hook`, and `admin:org_hook` too (in case you want prow to operate at organisation level).
 
-  1.2. Generate a [personal access token](https://github.com/settings/tokens) for the bot with full `repo` scope and `admin:org`, `admin:repo_hook`, and `admin:org_hook` too (in case you want prow to operate at organisation level).
-
-  1.3 Save such OAuth token to `prow/oauth` file.
+  - Save such OAuth token to `prow/oauth` file.
 
 2. Create a token for GitHub webhooks.
 
@@ -63,17 +62,15 @@ This assumes that you are in the `prow` directory and that you can reach your wo
 3. Setup the hook
   > This should be done after Prow is installed in the cluster!
 
-  3.1. Install the `add-hook` tool
+  - Install the `add-hook` tool
+    ```bash
+    go get -u k8s.io/test-infra/experiment/add-hook
+    ```
 
-  ```bash
-  go get -u k8s.io/test-infra/experiment/add-hook
-  ```
-
-  3.2. Attach it to the organisation using `--repo` flag (or to a precise repo using `MY_ORG/MY_REPO` convention)
-
-  ```bash
-  add-hook --hmac-path=path/to/hmac/secret --github-token-path=path/to/oauth/secret --hook-url http://an.ip.addr.ess/hook --repo MY_ORG --confirm=true
-  ```
+  - Attach it to the organisation using `--repo` flag (or to a precise repo using `MY_ORG/MY_REPO` convention)
+    ```bash
+    add-hook --hmac-path=path/to/hmac/secret --github-token-path=path/to/oauth/secret --hook-url http://an.ip.addr.ess/hook --repo MY_ORG --confirm=true
+    ```
 
 ### Kubernetes Deployment
 
