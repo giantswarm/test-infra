@@ -123,4 +123,4 @@ spec:
       volumes:
         - name: configs
           configMap:
-            name: configs
+            name: prowconfig

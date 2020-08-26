@@ -1,0 +1,6 @@
+plugins:
+  giantswarm/test-infra:
+  - config-updater
+  giantswarm:
+  - dog
+  - trigger
