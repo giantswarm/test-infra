@@ -22,6 +22,19 @@ run_cncf() {
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
+results() {
+  log "Status"
+  sonobuoy status --kubeconfig "$kubeconfig_path"
+
+  outfile=$(sonobuoy retrieve --kubeconfig "$kubeconfig_path")
+
+  log "Results summary"
+  sonobuoy results "$outfile"
+
+  log "Detailed results"
+  sonobuoy results "$outfile" --mode detailed | jq -R 'fromjson? | select(.status)'
+}
+
 check_if_failed() {
   if sonobuoy status --kubeconfig "$kubeconfig_path" | grep failed > /dev/null; then
     log "Tests failed"
@@ -44,9 +57,11 @@ trap cleanup INT TERM EXIT
 case "$1" in
   cis)
     run_cis
+    results
     ;;
   cncf)
     run_cncf
+    results
     check_if_failed
     ;;
   *)
@@ -54,14 +69,3 @@ case "$1" in
     exit 1
     ;;
 esac
-
-
-sonobuoy status --kubeconfig "$kubeconfig_path"
-
-outfile=$(sonobuoy retrieve --kubeconfig "$kubeconfig_path")
-
-log "Results summary"
-sonobuoy results "$outfile"
-
-log "Detailed results"
-sonobuoy results "$outfile" --mode detailed | jq -R 'fromjson? | select(.status)'
