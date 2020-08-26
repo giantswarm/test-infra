@@ -1,0 +1,53 @@
+version: 2.1
+
+orbs:
+  architect: giantswarm/architect@0.11.0
+
+jobs:
+  build:
+    docker:
+      - image: quay.io/giantswarm/architect:2.1.6
+    steps:
+      - checkout
+      - run:
+          name: Install kustomize
+          command: |
+            curl -s -O -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.8.1/kustomize_v3.8.1_linux_amd64.tar.gz
+            tar xzf ./kustomize_v*_*_amd64.tar.gz
+            ./kustomize version
+      - run:
+          name: Kustomize helm charts
+          command: |
+            for i in prow tekton; do mkdir -p helm/test-infra/templates; ./kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
+      - persist_to_workspace:
+          root: .
+          paths:
+            - helm
+
+workflows:
+  workflow:
+    jobs:
+      - build
+      - architect/push-to-app-catalog:
+          name: push-to-app-catalog
+          context: architect
+          app_catalog: "control-plane-catalog"
+          app_catalog_test: "control-plane-test-catalog"
+          attach_workspace: true
+          chart: test-infra
+          on_tag: false
+          requires:
+            - build
+      - architect/push-to-app-collection:
+          name: push-to-conformance-app-collection
+          context: architect
+          app_name: test-infra
+          app_collection_repo: "conformance-app-collection"
+          unique: "true"
+          requires:
+            - push-to-app-catalog
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/

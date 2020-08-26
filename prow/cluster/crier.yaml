@@ -116,7 +116,7 @@ spec:
       volumes:
         - name: configs
           configMap:
-            name: configs
+            name: prowconfig
         - name: oauth
           secret:
             secretName: oauth-token
