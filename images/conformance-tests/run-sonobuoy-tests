@@ -22,7 +22,7 @@ run_cncf() {
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
 }
 
-results() {
+print_results() {
   log "Status"
   sonobuoy status --kubeconfig "$kubeconfig_path"
 
@@ -57,11 +57,11 @@ trap cleanup INT TERM EXIT
 case "$1" in
   cis)
     run_cis
-    results
+    print_results
     ;;
   cncf)
     run_cncf
-    results
+    print_results
     check_if_failed
     ;;
   *)
