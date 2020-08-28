@@ -11,7 +11,7 @@ to.
 An example of a configuration:
 ```yaml
   - name: cis # Name of the prow command.
-    agent: tekton-pipeline # Should always be tekton-pipeline-
+    agent: tekton-pipeline # Should always be tekton-pipeline
     max_concurrency: 3 # Number of jobs running concurrently at max.
     always_run: false # If this should run on every commit.
     skip_report: false # If the bot should report in the PR.
