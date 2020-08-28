@@ -20,7 +20,7 @@ metadata:
   namespace: nightly # This namespace should stay unchanged.
 spec:
   workspaces:
-  - name: cluster # Workspace supplied be the pipeline, keep naming.
+  - name: cluster # Workspace supplied by the pipeline. Must use the same name.
     description: Cluster information is stored here.
   steps:
   - name: run-tests # One or many steps can be listed here.
