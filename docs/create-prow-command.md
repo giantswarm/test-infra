@@ -3,7 +3,7 @@
 A Prow command is the interface which allows us to trigger a job
 from Github with a command ( e.g. a Github comment with `/test cis`).
 
-Currently the configuration for these commands lives in `prow/configs.yaml`.
+Currently, the configuration for these commands lives in `prow/configs.yaml`.
 We should always use presubmit hooks on the `giantswarm/releases` repository
 for now. This can be specified differently but there is currently no reason
 to.
