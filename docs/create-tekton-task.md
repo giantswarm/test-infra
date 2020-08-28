@@ -1,4 +1,4 @@
-# Creating a Tekton tasks
+# Creating a Tekton task
 
 Tasks are the smallest piece of our test infra puzzle.
 They are meant for individual conformance test suite executions
