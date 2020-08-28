@@ -45,7 +45,7 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: run-tests # Here the individual test suits can be listed.
+  - name: run-tests # Here the individual test suites can be listed.
     runAfter: [wait-for-ready]
     taskRef:
       name: cis # The cis task is run here as a test suite.
