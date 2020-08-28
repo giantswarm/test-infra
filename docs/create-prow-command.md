@@ -8,7 +8,7 @@ We should always use presubmit hooks on the `giantswarm/releases` repository
 for now. This can be specified differently but there is currently no reason
 to.
 
-And example of a configuration:
+An example of a configuration:
 ```yaml
   - name: cis # Name of the prow command.
     agent: tekton-pipeline # Should always be tekton-pipeline-
