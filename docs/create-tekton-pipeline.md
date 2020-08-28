@@ -8,6 +8,9 @@ follow conventions for workspaces and naming.
 
 All pipelines have to be in the `tekton/pipelines` folder.
 
+You can discover the upstream docs on Tekton pipelines here:
+https://tekton.dev/docs/pipelines/pipelines/
+
 And example pipeline can look like this:
 
 ```yaml

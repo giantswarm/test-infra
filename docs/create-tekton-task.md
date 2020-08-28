@@ -6,6 +6,11 @@ which are supplied either from upstream or internal teams.
 This is where you can check the created cluster for conformity
 and get the different `kubeconfig` for example as inputs.
 
+All tasks have to be in the `tekton/tasks` folder.
+
+You can discover the upstream docs on Tekton tasks here:
+https://tekton.dev/docs/pipelines/tasks/
+
 An example can look like this:
 ```yaml
 apiVersion: tekton.dev/v1beta1
