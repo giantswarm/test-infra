@@ -11,7 +11,7 @@ All pipelines have to be in the `tekton/pipelines` folder.
 You can discover the upstream docs on Tekton pipelines here:
 https://tekton.dev/docs/pipelines/pipelines/
 
-And example pipeline can look like this:
+An example pipeline might look like this:
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
