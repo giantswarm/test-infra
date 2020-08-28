@@ -1,6 +1,6 @@
 # test-infra docs
 
-We collect user facing documentation specific to our `test-infra` setup here.
+We collect user-facing documentation specific to our `test-infra` setup here.
 
 ## Index
 
