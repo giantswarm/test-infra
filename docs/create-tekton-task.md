@@ -11,7 +11,7 @@ All tasks have to be in the `tekton/tasks` folder.
 You can discover the upstream docs on Tekton tasks here:
 https://tekton.dev/docs/pipelines/tasks/
 
-An example can look like this:
+An example task might look like this:
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task
