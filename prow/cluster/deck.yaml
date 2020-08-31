@@ -122,7 +122,7 @@ metadata:
   ## Oauth2 is deployed under monitoring and it is required
   ## that the Ingress is in the same ns of the Service
   ##
-  namespace: monitoring
+  namespace: test-infra
   labels:
     app: deck
   annotations:
