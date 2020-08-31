@@ -17,7 +17,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: cis # Task name which can be chosen freely.
-  namespace: test-infra # This namespace should stay unchanged.
+  namespace: test-workloads # This namespace should stay unchanged.
 spec:
   workspaces:
   - name: cluster # Workspace supplied by the pipeline. Must use the same name.
