@@ -10,6 +10,8 @@ spec:
   params:
   - name: prow-job-id
     description: ID of the prow job of this task
+  - name: s3-bucket-name
+    default: automated-test-results.giantswarm.io
   - name: s3-bucket-credentials-secret
     default: s3-bucket-credentials-secret
   - name: file-to-upload
@@ -35,9 +37,6 @@ spec:
             key: secret-access-key
     script: |
       #! /bin/sh
-      # Upload the file to the bucket
-      aws s3 cp "$(params.file-to-upload)" s3://automated-test-results.giantswarm.io/"$(params.prow-job-id)"/"$(params.file-to-upload)"
-      # Create a link that expires in one week
-      # Have in mind that this includes $AWS_ACCESS_KEY_ID in the URL
-      file_link=$(aws s3 presign "$(params.file-to-upload)" s3://automated-test-results.giantswarm.io/"$(params.prow-job-id)"/"$(params.file-to-upload)" --expires-in 604800)
+      aws s3 cp "$(params.file-to-upload)" s3://$(params.s3-bucket-name)/"$(params.prow-job-id)"/"$(params.file-to-upload)"
+      file_link="https://s3.console.aws.amazon.com/s3/object/$(params.s3-bucket-name)/$(params.prow-job-id)/$(params.file-to-upload)"
       echo "You can download the results in the next week here: ${file_link}"
