@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-dashboard
   name: tekton-dashboard
-  namespace: tekton-pipelines
+  namespace: test-infra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -205,7 +205,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: tekton-dashboard
-  namespace: tekton-pipelines
+  namespace: test-infra
 ---
 apiVersion: v1
 kind: Service
@@ -220,7 +220,7 @@ metadata:
     dashboard.tekton.dev/release: v0.8.2
     version: v0.8.2
   name: tekton-dashboard
-  namespace: tekton-pipelines
+  namespace: test-infra
 spec:
   ports:
   - name: http
@@ -246,7 +246,7 @@ metadata:
     dashboard.tekton.dev/release: v0.8.2
     version: v0.8.2
   name: tekton-dashboard
-  namespace: tekton-pipelines
+  namespace: test-infra
 spec:
   replicas: 1
   selector:
@@ -311,7 +311,7 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-dashboard
   name: tekton-dashboard-pipelines
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -319,7 +319,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: tekton-dashboard
-    namespace: tekton-pipelines
+    namespace: test-infra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -329,7 +329,7 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-dashboard
   name: tekton-dashboard-dashboard
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -337,7 +337,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: tekton-dashboard
-    namespace: tekton-pipelines
+    namespace: test-infra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -347,7 +347,7 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-dashboard
   name: tekton-dashboard-triggers
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -355,7 +355,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: tekton-dashboard
-    namespace: tekton-pipelines
+    namespace: test-infra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -372,7 +372,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: tekton-dashboard
-    namespace: tekton-pipelines
+    namespace: test-infra
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -389,7 +389,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: tekton-dashboard
-    namespace: tekton-pipelines
+    namespace: test-infra
 ---
 #
 #
@@ -400,7 +400,7 @@ subjects:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: tekton-pipelines
+  namespace: test-infra
   name: tekton-dashboard
   labels:
     app: tekton-dashboard
@@ -430,7 +430,7 @@ metadata:
   ## Oauth2 is deployed under monitoring and it is required
   ## that the Ingress is in the same ns of the Service
   ##
-  namespace: monitoring
+  namespace: test-infra
   labels:
     app: tekton-dashboard
   annotations:

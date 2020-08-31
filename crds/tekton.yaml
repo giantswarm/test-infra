@@ -58,7 +58,7 @@ spec:
     webhookClientConfig:
       service:
         name: tekton-pipelines-webhook
-        namespace: tekton-pipelines
+        namespace: test-infra
 
 ---
 # Copyright 2019 The Tekton Authors
@@ -199,7 +199,7 @@ spec:
     webhookClientConfig:
       service:
         name: tekton-pipelines-webhook
-        namespace: tekton-pipelines
+        namespace: test-infra
 
 ---
 # Copyright 2019 The Tekton Authors
@@ -278,7 +278,7 @@ spec:
     webhookClientConfig:
       service:
         name: tekton-pipelines-webhook
-        namespace: tekton-pipelines
+        namespace: test-infra
 
 ---
 # Copyright 2019 The Tekton Authors
@@ -390,7 +390,7 @@ spec:
     webhookClientConfig:
       service:
         name: tekton-pipelines-webhook
-        namespace: tekton-pipelines
+        namespace: test-infra
 
 ---
 # Copyright 2019 The Tekton Authors
@@ -453,7 +453,7 @@ spec:
     webhookClientConfig:
       service:
         name: tekton-pipelines-webhook
-        namespace: tekton-pipelines
+        namespace: test-infra
 
 ---
 # Copyright 2019 The Tekton Authors
@@ -532,4 +532,4 @@ spec:
     webhookClientConfig:
       service:
         name: tekton-pipelines-webhook
-        namespace: tekton-pipelines
+        namespace: test-infra
