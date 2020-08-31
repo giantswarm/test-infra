@@ -411,7 +411,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 spec:
   rules:
-    - host: tekton.g8s.gaia.eu-central-1.aws.gigantic.io
+    - host: tekton.{{ .baseDomain }}
       http:
         paths:
           - path: /
@@ -420,7 +420,7 @@ spec:
               servicePort: 9097
   tls:
     - hosts:
-        - tekton.g8s.gaia.eu-central-1.aws.gigantic.io
+        - tekton.{{ .baseDomain }}
       secretName: tekton-dashboard
 ---
 apiVersion: extensions/v1beta1
@@ -437,7 +437,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: tekton.g8s.gaia.eu-central-1.aws.gigantic.io
+    - host: tekton.{{ .baseDomain }}
       http:
         paths:
           - path: /oauth2
@@ -446,5 +446,5 @@ spec:
               servicePort: 4180
   tls:
     - hosts:
-        - tekton.g8s.gaia.eu-central-1.aws.gigantic.io
+        - tekton.{{ .baseDomain }}
       secretName: tekton-dashboard
