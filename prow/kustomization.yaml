@@ -19,7 +19,6 @@ resources:
 - cluster/ghproxy.yaml
 - cluster/hook.yaml
 - cluster/horologium.yaml
-- cluster/namespace.yaml
 - cluster/needs-rebase.yaml
 - cluster/test-workloads.yaml
 - cluster/pipeline.yaml
