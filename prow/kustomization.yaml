@@ -21,7 +21,7 @@ resources:
 - cluster/horologium.yaml
 - cluster/namespace.yaml
 - cluster/needs-rebase.yaml
-- cluster/test.yaml
+- cluster/test-workloads.yaml
 - cluster/pipeline.yaml
 - cluster/plank.yaml
 - cluster/sinker.yaml
