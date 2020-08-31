@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: cleanup
-  namespace: nightly
+  namespace: test
 spec:
   params:
   - name: gs-token-secret

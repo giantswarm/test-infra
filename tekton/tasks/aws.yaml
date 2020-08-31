@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: aws
-  namespace: nightly
+  namespace: test
 spec:
   volumes:
   - name: cluster

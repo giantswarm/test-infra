@@ -2,12 +2,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 configMapGenerator:
 - name: prowconfig
-  namespace: prow
+  namespace: test-infra
   behavior: merge
   files:
   - configs.yaml
 - name: prowplugins
-  namespace: prow
+  namespace: test-infra
   behavior: merge
   files:
   - plugins.yaml
@@ -21,7 +21,7 @@ resources:
 - cluster/horologium.yaml
 - cluster/namespace.yaml
 - cluster/needs-rebase.yaml
-- cluster/nightly.yaml
+- cluster/test.yaml
 - cluster/pipeline.yaml
 - cluster/plank.yaml
 - cluster/sinker.yaml

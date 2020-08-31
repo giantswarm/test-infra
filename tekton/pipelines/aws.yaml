@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: aws
-  namespace: nightly
+  namespace: test
 spec:
   resources:
   - name: releases

@@ -17,12 +17,12 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   name: crier
-  namespace: prow
+  namespace: test-infra
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: prow
+  namespace: test-infra
   name: crier
 rules:
   - apiGroups:
@@ -38,7 +38,7 @@ rules:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: nightly
+  namespace: test
   name: crier
 rules:
   - apiGroups:
@@ -54,7 +54,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: crier-namespaced
-  namespace: prow
+  namespace: test-infra
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -62,13 +62,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: crier
-    namespace: prow
+    namespace: test-infra
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: crier-namespaced
-  namespace: nightly
+  namespace: test
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -76,12 +76,12 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: crier
-    namespace: prow
+    namespace: test-infra
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: prow
+  namespace: test-infra
   name: crier
   labels:
     app: crier

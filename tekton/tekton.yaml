@@ -212,7 +212,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
@@ -232,7 +232,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
@@ -275,7 +275,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
@@ -285,7 +285,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
@@ -317,7 +317,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   kind: ClusterRole
   name: tekton-pipelines-controller-cluster-access
@@ -334,7 +334,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   kind: ClusterRole
   name: tekton-pipelines-leader-election
@@ -355,7 +355,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   kind: ClusterRole
   name: tekton-pipelines-controller-tenant-access
@@ -372,7 +372,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   kind: ClusterRole
   name: tekton-pipelines-webhook-cluster-access
@@ -389,7 +389,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   kind: ClusterRole
   name: tekton-pipelines-leader-election
@@ -414,7 +414,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: default
@@ -422,7 +422,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   kind: Role
   name: tekton-pipelines-controller
@@ -432,7 +432,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
@@ -440,7 +440,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   kind: Role
   name: tekton-pipelines-webhook
@@ -466,7 +466,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: webhook-certs
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
@@ -489,7 +489,7 @@ webhooks:
   clientConfig:
     service:
       name: tekton-pipelines-webhook
-      namespace: tekton-pipelines
+      namespace: test-infra
   failurePolicy: Fail
   sideEffects: None
   name: validation.webhook.pipeline.tekton.dev
@@ -509,7 +509,7 @@ webhooks:
   clientConfig:
     service:
       name: tekton-pipelines-webhook
-      namespace: tekton-pipelines
+      namespace: test-infra
   failurePolicy: Fail
   sideEffects: None
   name: webhook.pipeline.tekton.dev
@@ -529,7 +529,7 @@ webhooks:
   clientConfig:
     service:
       name: tekton-pipelines-webhook
-      namespace: tekton-pipelines
+      namespace: test-infra
   failurePolicy: Fail
   sideEffects: None
   name: config.webhook.pipeline.tekton.dev
@@ -638,7 +638,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-artifact-bucket
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -673,7 +673,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-artifact-pvc
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -703,7 +703,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-defaults
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -753,7 +753,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: feature-flags
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -815,7 +815,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-leader-election
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -845,7 +845,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-logging
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -899,7 +899,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-observability
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
@@ -957,7 +957,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/name: controller
     app.kubernetes.io/component: controller
@@ -1059,7 +1059,7 @@ metadata:
     app: tekton-pipelines-controller
     version: "v0.15.2"
   name: tekton-pipelines-controller
-  namespace: tekton-pipelines
+  namespace: test-infra
 spec:
   ports:
   - name: http-metrics
@@ -1094,7 +1094,7 @@ metadata:
   # config/400-webhook-service.yaml. If you change this name, you must also
   # change the value of WEBHOOK_SERVICE_NAME below.
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
   labels:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
@@ -1180,7 +1180,7 @@ metadata:
     app: tekton-pipelines-webhook
     version: "v0.15.2"
   name: tekton-pipelines-webhook
-  namespace: tekton-pipelines
+  namespace: test-infra
 spec:
   ports:
   - # Define metrics and profiling for them to be accessible within service meshes.
