@@ -11,7 +11,7 @@ for provider in aws azure kvm; do
     opsctl create kubeconfig -i $installation --certificate-common-name-prefix test-infra --ttl 30 > /dev/null
 done
 
-kubectl config view --flatten > $KUBECONFIG.flattened
+kubectl config view --flatten --minify > $KUBECONFIG.flattened
 mv $KUBECONFIG.flattened $KUBECONFIG
 
 kubectl create secret generic standup-kubeconfig --from-file=kubeconfig=$KUBECONFIG --dry-run -o yaml > standup-kubeconfig-secret.yaml
