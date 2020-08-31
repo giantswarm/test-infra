@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: cncf
-  namespace: test
+  namespace: test-workloads
 spec:
   resources:
   - name: releases

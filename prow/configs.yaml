@@ -1,6 +1,6 @@
 log_level: info
 
-pod_namespace: test
+pod_namespace: test-workloads
 
 prowjob_namespace: test-infra
 

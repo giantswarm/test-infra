@@ -1,13 +1,13 @@
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  namespace: test
+  namespace: test-workloads
   name: releases
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: test
+  namespace: test-workloads
   name: releases
 rules:
   - apiGroups:
@@ -20,7 +20,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: test
+  namespace: test-workloads
   name: releases
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -29,4 +29,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: releases
-    namespace: test
+    namespace: test-workloads

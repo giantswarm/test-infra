@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: create-cluster
-  namespace: test
+  namespace: test-workloads
 spec:
   resources:
     inputs:
