@@ -36,7 +36,7 @@ print_results() {
   sonobuoy results "$outfile" --mode detailed | jq -R 'fromjson? | select(.status)'
 
   log "Moving results to ${results_path}"
-  mv $outfile $results_file
+  mv "$outfile" "$results_path"
 }
 
 check_if_failed() {
