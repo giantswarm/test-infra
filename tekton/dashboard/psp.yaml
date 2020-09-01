@@ -1,0 +1,32 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: tekton-dashboard
+  labels:
+    app: tekton-dashboard
+    app.kubernetes.io/component: dashboard
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: dashboard
+    app.kubernetes.io/part-of: tekton-dashboard
+spec:
+  privileged: false
+  runAsUser:
+    rule: MustRunAsNonRoot
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  hostPID: false
+  hostIPC: false
+  hostNetwork: false
+  volumes:
+    - 'secret'
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  readOnlyRootFilesystem: false
