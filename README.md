@@ -120,8 +120,15 @@ Generated secrets are stored in the LastPass of our organization.
 Templates for these secrets can be found in the `secrets` folder.
 
 - Access credentials for [Tityos Bot](https://github.com/tityosbot)
+- Access credentials for a S3 bucket where to upload test results
 - Github OAuth Secret
 - Github webhooks token for Tekton to access Github
+
+## S3 bucket credentials
+
+If you don't have a S3 bucket where to store the test results, run [this]() script. It will create a bucket and
+also IAM role and policy to enable access to it. Don't forget to update the `s3-bucket-credentials` secret with
+the generated credentials.
 
 ## Reference
 
