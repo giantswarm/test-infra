@@ -103,7 +103,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 spec:
   rules:
-    - host: prow.{{ .baseDomain }}
+    - host: prow.{{ .Values.baseDomain }}
       http:
         paths:
           - path: /
@@ -112,7 +112,7 @@ spec:
               servicePort: 80
   tls:
     - hosts:
-        - prow.{{ .baseDomain }}
+        - prow.{{ .Values.baseDomain }}
       secretName: prow-deck
 ---
 apiVersion: extensions/v1beta1
@@ -129,7 +129,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: prow.{{ .baseDomain }}
+    - host: prow.{{ .Values.baseDomain }}
       http:
         paths:
           - path: /oauth2
@@ -138,7 +138,7 @@ spec:
               servicePort: 4180
   tls:
     - hosts:
-        - prow.{{ .baseDomain }}
+        - prow.{{ .Values.baseDomain }}
       secretName: prow-deck
 ---
 apiVersion: apps/v1

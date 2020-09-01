@@ -156,7 +156,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: prow.{{ .baseDomain }}
+    - host: prow.{{ .Values.baseDomain }}
       http:
         paths:
           - path: /hook
