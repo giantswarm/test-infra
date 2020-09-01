@@ -16,13 +16,14 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 BUCKET_NAME="automated-test-results.giantswarm.io"
 IAM_USER_NAME="AutomatedTestsBot"
 IAM_POLICY_NAME="AutomatedTestResultsBucketAccess"
+DEFAULT_REGION="eu-central-1"
 
 echo "Creating bucket..."
 aws s3api create-bucket \
     --profile giantswarm_admin \
     --bucket "$BUCKET_NAME" --acl private \
-    --region eu-central-1 \
-    --create-bucket-configuration LocationConstraint=eu-central-1
+    --region "$DEFAULT_REGION" \
+    --create-bucket-configuration LocationConstraint="$DEFAULT_REGION"
 
 echo "Blocking public access to bucket..."
 aws s3api put-public-access-block \
@@ -56,3 +57,8 @@ aws iam attach-user-policy \
     --profile giantswarm_admin \
     --user-name "$IAM_USER_NAME" \
     --policy-arn "$policy_arn"
+
+echo "Creating access key for user. Use $SCRIPT_DIR/resources/secret-access-key to create the s3-bucket-credentials secret..."
+aws iam create-access-key \
+    --profile giantswarm_admin \
+    --user-name "$IAM_USER_NAME" > "$SCRIPT_DIR/resources/secret-access-key"
