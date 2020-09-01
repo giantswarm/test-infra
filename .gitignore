@@ -2,7 +2,7 @@ prow/*secret
 prow/hmac
 prow/oauth
 prow/cluster/*token.yaml
-scripts/resources/secret-access-key
+scripts/resources/credentials
 .DS_Store
 .idea
 standup-kubeconfig-secret.yaml

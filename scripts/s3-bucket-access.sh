@@ -57,7 +57,7 @@ aws iam attach-user-policy \
     --user-name "$IAM_USER_NAME" \
     --policy-arn "$policy_arn"
 
-echo "Creating access key for user. Use $SCRIPT_DIR/resources/secret-access-key to create the s3-bucket-credentials secret..."
+echo "Creating access key for user. Use $SCRIPT_DIR/resources/credentials to create the s3-bucket-credentials secret..."
 aws iam create-access-key \
     --profile giantswarm_admin \
-    --user-name "$IAM_USER_NAME" > "$SCRIPT_DIR/resources/secret-access-key"
+    --user-name "$IAM_USER_NAME" > "$SCRIPT_DIR/resources/credentials"
