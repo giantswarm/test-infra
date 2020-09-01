@@ -64,6 +64,9 @@ spec:
           volumeMounts:
             - name: cache
               mountPath: /cache
+      securityContext:
+        runAsUser: 1000
+      serviceAccountName: ghproxy
       volumes:
         - name: cache
           persistentVolumeClaim:

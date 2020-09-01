@@ -970,6 +970,10 @@ spec:
         version: "v0.15.2"
     spec:
       serviceAccountName: tekton-pipelines-controller
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65534
+        runAsNonRoot: true
       containers:
       - name: tekton-pipelines-controller
         image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.15.2@sha256:3b9194dbb1ec6282469e1371abb52dce4f462706d08469d29893550f3e2debdf
@@ -1107,6 +1111,10 @@ spec:
         version: "v0.15.2"
     spec:
       serviceAccountName: tekton-pipelines-webhook
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65534
+        runAsNonRoot: true
       containers:
       - name: webhook
         # This is the Go import path for the binary that is containerized
