@@ -16,6 +16,7 @@ resources:
 - cluster/prowplugins.yaml
 - cluster/crier.yaml
 - cluster/deck.yaml
+- cluster/ghproxy-psp.yaml
 - cluster/ghproxy.yaml
 - cluster/hook.yaml
 - cluster/horologium.yaml
