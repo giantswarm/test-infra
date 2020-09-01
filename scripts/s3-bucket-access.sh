@@ -3,7 +3,6 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Make sure your ~/.aws/credentials looks something like this:
-
 # [giantswarm]
 # aws_access_key_id = <key>
 # aws_secret_access_key = <secret>
