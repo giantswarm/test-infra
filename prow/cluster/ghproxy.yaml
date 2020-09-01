@@ -51,6 +51,7 @@ spec:
       labels:
         app: ghproxy
     spec:
+      serviceAccountName: "ghproxy"
       containers:
         - name: ghproxy
           image: gcr.io/k8s-prow/ghproxy:v20200813-535fb53bd1
