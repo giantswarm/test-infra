@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: upload-to-s3-bucket
-  namespace: nightly
+  namespace: test-workloads
 spec:
   workspaces:
   - name: cluster
@@ -39,4 +39,4 @@ spec:
       #! /bin/sh
       aws s3 cp "$(params.file-to-upload)" s3://$(params.s3-bucket-name)/"$(params.prow-job-id)"/"$(params.file-to-upload)"
       file_link="https://s3.console.aws.amazon.com/s3/object/$(params.s3-bucket-name)/$(params.prow-job-id)/$(params.file-to-upload)"
-      echo "You can download the results in the next week here: ${file_link}"
+      echo "You can find the results here: ${file_link}"
