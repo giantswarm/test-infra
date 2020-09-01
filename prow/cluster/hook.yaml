@@ -91,6 +91,7 @@ spec:
           ports:
             - name: http
               containerPort: 8888
+            - containerPort: 8081
           volumeMounts:
             - name: hmac
               mountPath: /etc/webhook
