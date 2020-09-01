@@ -1,8 +1,8 @@
 log_level: info
 
-pod_namespace: nightly
+pod_namespace: test-workloads
 
-prowjob_namespace: prow
+prowjob_namespace: test-infra
 
 # Report job status for presubmit and postsubmit
 github_reporter:

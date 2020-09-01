@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: wait-for-ready
-  namespace: nightly
+  namespace: test-workloads
 spec:
   workspaces:
   - name: cluster

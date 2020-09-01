@@ -18,7 +18,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: cis # Should match the naming scheme of the Prow command.
-  namespace: nightly # Should not change.
+  namespace: test-workloads # Should not change.
 spec:
   resources:
   - name: releases # Ensures we get the git repo of releases.

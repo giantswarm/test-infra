@@ -15,7 +15,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  namespace: prow
+  namespace: test-infra
   labels:
     app: ghproxy
   name: ghproxy
@@ -37,7 +37,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: prow
+  namespace: test-infra
   name: ghproxy
   labels:
     app: ghproxy
@@ -74,7 +74,7 @@ kind: Service
 metadata:
   labels:
     app: ghproxy
-  namespace: prow
+  namespace: test-infra
   name: ghproxy
 spec:
   ports:

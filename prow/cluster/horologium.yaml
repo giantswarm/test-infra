@@ -16,7 +16,7 @@
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: prow
+  namespace: test-infra
   name: "horologium"
 rules:
   - apiGroups:
@@ -30,7 +30,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: prow
+  namespace: test-infra
   name: "horologium"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -43,13 +43,13 @@ subjects:
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  namespace: prow
+  namespace: test-infra
   name: "horologium"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: prow
+  namespace: test-infra
   name: horologium
   labels:
     app: horologium
