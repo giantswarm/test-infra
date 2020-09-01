@@ -126,7 +126,7 @@ Templates for these secrets can be found in the `secrets` folder.
 
 ## S3 bucket credentials
 
-If you don't have a S3 bucket where to store the test results, run [this]() script. It will create a bucket and
+If you don't have a S3 bucket where to store the test results, run [this](scripts/s3-bucket-access.sh) script. It will create a bucket and
 also IAM role and policy to enable access to it. Don't forget to update the `s3-bucket-credentials` secret with
 the generated credentials.
 
