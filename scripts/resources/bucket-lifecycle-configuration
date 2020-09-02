@@ -1,0 +1,17 @@
+{
+    "Rules": [
+        {
+            "Expiration": {
+                "Days": 7
+            },
+            "ID": "Rule for deleting files older than 7 days",
+            "Filter": {
+                "Prefix": ""
+            },
+            "Status": "Enabled",
+            "NoncurrentVersionExpiration": {
+                "NoncurrentDays": 1
+            }
+        }
+    ]
+}

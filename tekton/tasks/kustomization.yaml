@@ -6,4 +6,5 @@ resources:
 - cleanup.yaml
 - cncf.yaml
 - create-cluster.yaml
+- upload-to-s3-bucket.yaml
 - wait-for-ready.yaml

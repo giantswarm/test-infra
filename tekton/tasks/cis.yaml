@@ -13,6 +13,8 @@ spec:
     env:
       - name: "KUBECONFIG_PATH"
         value: $(workspaces.cluster.path)/kubeconfig
+      - name: "RESULTS_PATH"
+        value: $(workspaces.cluster.path)/results
     script: |
       #! /bin/sh
       run-sonobuoy-tests cis

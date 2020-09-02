@@ -1,7 +1,8 @@
 #! /bin/sh
 set -e
 
-kubeconfig_path="${KUBECONFIG_PATH:-"/cluster/kubeconfig"}"
+kubeconfig_path="${KUBECONFIG_PATH:-"/workspace/cluster/kubeconfig"}"
+results_path="${RESULTS_PATH:-"/workspace/cluster/results"}"
 
 log() {
   echo "[$(date -u +%FT%TZ)]" "$@"
@@ -33,6 +34,9 @@ print_results() {
 
   log "Detailed results"
   sonobuoy results "$outfile" --mode detailed | jq -R 'fromjson? | select(.status)'
+
+  log "Moving results to ${results_path}"
+  mv "$outfile" "$results_path"
 }
 
 check_if_failed() {
