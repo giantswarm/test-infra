@@ -41,7 +41,13 @@ kind: PodSecurityPolicy
 metadata:
   name: test-runs
 spec:
+  fsGroup:
+    rule: RunAsAny
   runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
     rule: RunAsAny
   volumes:
   - configMap
