@@ -2,16 +2,6 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-# Make sure your ~/.aws/credentials looks something like this:
-# [giantswarm]
-# aws_access_key_id = <key>
-# aws_secret_access_key = <secret>
-# [giantswarm_admin]
-# role_arn = arn:aws:iam::084190472784:role/GiantSwarmAdmin
-# source_profile = giantswarm
-# mfa_serial = <serial>
-# region = eu-central-1
-
 BUCKET_NAME="automated-test-results.giantswarm.io"
 IAM_USER_NAME="AutomatedTestsBot"
 IAM_POLICY_NAME="AutomatedTestResultsBucketAccess"
