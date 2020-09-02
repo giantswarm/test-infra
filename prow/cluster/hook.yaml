@@ -156,7 +156,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: prow.g8s.gaia.eu-central-1.aws.gigantic.io
+    - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /hook
