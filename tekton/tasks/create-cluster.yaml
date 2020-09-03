@@ -20,11 +20,6 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: chown-releases
-    volumeMounts:
-      - name: endpoints-config
-        mountPath: /etc/endpoints-config
-      - name: kubeconfig
-        mountPath: /etc/kubeconfig
     command:
     - chown
     - -R
@@ -35,12 +30,17 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-cluster
-    image: quay.io/giantswarm/standup:tc-to-cp
+    image: quay.io/giantswarm/standup:connect-tc-to-cp
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
       standup create \
-      --config /etc/endpoints-config/standup-endpoints-config \
-      --kubeconfig /etc/kubeconfig/standup-kubeconfig \
+      --config /etc/endpoints-config/config \
+      --kubeconfig /etc/kubeconfig/kubeconfig \
       --releases /workspace/releases \
       --output-kubeconfig $(workspaces.cluster.path)/kubeconfig \
       --output-cluster-id $(workspaces.cluster.path)/cluster-id
