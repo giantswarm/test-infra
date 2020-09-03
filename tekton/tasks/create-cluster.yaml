@@ -17,10 +17,8 @@ spec:
   steps:
   - name: chown-releases
     command:
-    - chown
-    - -R
-    - 1000:1000
-    - /workspace
+    - sleep
+    - "3600"
     image: quay.io/giantswarm/standup
     securityContext:
       runAsUser: 0
