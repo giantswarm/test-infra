@@ -8,14 +8,21 @@ spec:
     inputs:
     - name: releases
       type: git
+  volumes:
+  - name: endpoints-config
+    secret:
+      secretKeyRef: standup-endpoints-config
+  - name: kubeconfig
+    secret:
+      secretKeyRef: standup-kubeconfig
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
-  params:
-  - name: gs-token-secret
-    default: gs-token-secret
   steps:
   - name: chown-releases
+    volumeMounts:
+      - name: endpoints-config
+      - name: kubeconfig
     command:
     - chown
     - -R
@@ -27,13 +34,6 @@ spec:
       runAsGroup: 0
   - name: create-cluster
     image: quay.io/giantswarm/standup:tc-to-cp
-    volumes:
-    - name: endpoints-config
-      secret:
-        secretKeyRef: standup-endpoints-config
-    - name: kubeconfig
-      secret:
-        secretKeyRef: standup-kubeconfig
     script: |
       #! /bin/sh
       standup create \
