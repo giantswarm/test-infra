@@ -26,19 +26,19 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-cluster
-    image: quay.io/giantswarm/standup
-    env:
-    - name: TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: $(params.gs-token-secret)
-          key: token
+    image: quay.io/giantswarm/standup:tc-to-cp
+    volumes:
+    - name: endpoints-config
+      secret:
+        secretKeyRef: standup-endpoints-config
+    - name: kubeconfig
+      secret:
+        secretKeyRef: standup-kubeconfig
     script: |
       #! /bin/sh
       standup create \
-      --in-cluster \
-      --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
-      --token ${TOKEN} \
+      --config /etc/endpoints-config/standup-endpoints-config \
+      --kubeconfig /etc/kubeconfig/standup-kubeconfig \
       --releases /workspace/releases \
       --output-kubeconfig $(workspaces.cluster.path)/kubeconfig \
       --output-cluster-id $(workspaces.cluster.path)/cluster-id
