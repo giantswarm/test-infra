@@ -43,7 +43,11 @@ metadata:
 spec:
   allowPrivilegeEscalation: false
   fsGroup:
-    rule: RunAsAny
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  # create-cluster task needs root in order to chown
   runAsUser:
     rule: RunAsAny
   seLinux:
@@ -84,7 +88,7 @@ subjects:
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: pvc
+  name: affinity-assistant
 spec:
   allowPrivilegeEscalation: false
   fsGroup:
@@ -93,40 +97,38 @@ spec:
       min: 1
     rule: MustRunAs
   runAsUser:
-    ranges:
-    - max: 65535
-      min: 1000
-    rule: MustRunAs
+    rule: RunAsAny
   seLinux:
     rule: RunAsAny
   supplementalGroups:
-    ranges:
-    - max: 65535
-      min: 1
-    rule: MustRunAs
+    rule: RunAsAny
   volumes:
+  - configMap
   - persistentVolumeClaim
+  - secret
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: pvc-psp
+  name: affinity-assistant-psp
 rules:
 - apiGroups: ['policy']
   resources: ['podsecuritypolicies']
   verbs:     ['use']
   resourceNames:
-  - pvc
+  - affinity-assistant
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: pvc-psp
+  name: affinity-assistant-psp
 roleRef:
   kind: ClusterRole
-  name: pvc-psp
+  name: affinity-assistant-psp
   apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
+  # Cannot change service account of affinity assistant
+  # https://github.com/tektoncd/pipeline/issues/3020
   name: default
   namespace: test-workloads
