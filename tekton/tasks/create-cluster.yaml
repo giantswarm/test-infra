@@ -11,10 +11,10 @@ spec:
   volumes:
   - name: endpoints-config
     secret:
-      secretKeyRef: standup-endpoints-config
+      secretName: standup-endpoints-config
   - name: kubeconfig
     secret:
-      secretKeyRef: standup-kubeconfig
+      secretName: standup-kubeconfig
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
