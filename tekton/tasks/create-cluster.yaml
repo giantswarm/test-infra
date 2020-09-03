@@ -22,7 +22,9 @@ spec:
   - name: chown-releases
     volumeMounts:
       - name: endpoints-config
+        mountPath: /etc/endpoints-config
       - name: kubeconfig
+        mountPath: /etc/kubeconfig
     command:
     - chown
     - -R
