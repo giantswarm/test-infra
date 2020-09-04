@@ -5,4 +5,3 @@ prow/cluster/*token.yaml
 scripts/resources/credentials
 .DS_Store
 .idea
-standup-kubeconfig-secret.yaml
