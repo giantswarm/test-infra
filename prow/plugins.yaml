@@ -4,3 +4,4 @@ plugins:
   giantswarm:
   - dog
   - trigger
+  - pony
