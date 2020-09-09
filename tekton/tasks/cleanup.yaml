@@ -12,7 +12,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/standup
+    image: quay.io/giantswarm/standup:connect-tc-to-cp
     env:
     - name: TOKEN
       valueFrom:
@@ -22,7 +22,7 @@ spec:
     script: |
       #! /bin/sh
       standup cleanup \
-      --in-cluster \
-      --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
-      --token ${TOKEN} \
+      --config /etc/endpoints-config/config \
+      --provider aws \
+      --kubeconfig /etc/kubeconfig/kubeconfig \
       --cluster $(cat $(workspaces.cluster.path)/cluster-id)
