@@ -12,7 +12,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/standup:connect-tc-to-cp
+    image: quay.io/giantswarm/standup
     env:
     - name: TOKEN
       valueFrom:

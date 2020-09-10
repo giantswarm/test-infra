@@ -30,7 +30,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-cluster
-    image: quay.io/giantswarm/standup:connect-tc-to-cp
+    image: quay.io/giantswarm/standup
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
