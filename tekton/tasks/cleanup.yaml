@@ -23,6 +23,6 @@ spec:
       #! /bin/sh
       standup cleanup \
       --config /etc/endpoints-config/config \
-      --provider aws \
       --kubeconfig /etc/kubeconfig/kubeconfig \
       --cluster $(cat $(workspaces.cluster.path)/cluster-id)
+      --provider $(cat $(workspaces.cluster.path)/provider)

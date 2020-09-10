@@ -42,5 +42,4 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig/kubeconfig \
       --releases /workspace/releases \
-      --output-kubeconfig $(workspaces.cluster.path)/kubeconfig \
-      --output-cluster-id $(workspaces.cluster.path)/cluster-id
+      --output $(workspaces.cluster.path)
