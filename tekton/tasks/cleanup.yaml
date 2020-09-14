@@ -16,5 +16,5 @@ spec:
       standup cleanup \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig/kubeconfig \
-      --cluster $(cat $(workspaces.cluster.path)/cluster-id)
+      --cluster $(cat $(workspaces.cluster.path)/cluster-id) \
       --provider $(cat $(workspaces.cluster.path)/provider)
