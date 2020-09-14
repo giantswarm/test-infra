@@ -4,13 +4,24 @@ metadata:
   name: cleanup
   namespace: test-workloads
 spec:
-  params:
+  volumes:
+    - name: endpoints-config
+      secret:
+        secretName: standup-endpoints-config
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
   steps:
   - name: cleanup
     image: quay.io/giantswarm/standup
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
       standup cleanup \

@@ -26,6 +26,7 @@ presubmits:
       pipelineRef:
         name: cis
       serviceAccountName: test-runs
+      timeout: 2h0m0s
       resources:
       - name: releases
         resourceRef:
