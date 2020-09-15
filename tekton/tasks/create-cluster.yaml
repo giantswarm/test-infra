@@ -8,12 +8,16 @@ spec:
     inputs:
     - name: releases
       type: git
+  volumes:
+  - name: endpoints-config
+    secret:
+      secretName: standup-endpoints-config
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
-  params:
-  - name: gs-token-secret
-    default: gs-token-secret
   steps:
   - name: chown-releases
     command:
@@ -27,18 +31,15 @@ spec:
       runAsGroup: 0
   - name: create-cluster
     image: quay.io/giantswarm/standup
-    env:
-    - name: TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: $(params.gs-token-secret)
-          key: token
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
       standup create \
-      --in-cluster \
-      --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
-      --token ${TOKEN} \
+      --config /etc/endpoints-config/config \
+      --kubeconfig /etc/kubeconfig/kubeconfig \
       --releases /workspace/releases \
-      --output-kubeconfig $(workspaces.cluster.path)/kubeconfig \
-      --output-cluster-id $(workspaces.cluster.path)/cluster-id
+      --output $(workspaces.cluster.path)

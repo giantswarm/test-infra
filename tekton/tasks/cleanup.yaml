@@ -4,25 +4,28 @@ metadata:
   name: cleanup
   namespace: test-workloads
 spec:
-  params:
-  - name: gs-token-secret
-    default: gs-token-secret
+  volumes:
+    - name: endpoints-config
+      secret:
+        secretName: standup-endpoints-config
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
   steps:
   - name: cleanup
     image: quay.io/giantswarm/standup
-    env:
-    - name: TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: $(params.gs-token-secret)
-          key: token
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
       standup cleanup \
-      --in-cluster \
-      --endpoint http://api-service.giantswarm.svc.cluster.local:8000 \
-      --token ${TOKEN} \
-      --cluster $(cat $(workspaces.cluster.path)/cluster-id)
+      --config /etc/endpoints-config/config \
+      --kubeconfig /etc/kubeconfig/kubeconfig \
+      --cluster $(cat $(workspaces.cluster.path)/cluster-id) \
+      --provider $(cat $(workspaces.cluster.path)/provider)
