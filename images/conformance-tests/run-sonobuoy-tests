@@ -2,7 +2,7 @@
 set -e
 
 kubeconfig_path="${KUBECONFIG_PATH:-"/workspace/cluster/kubeconfig"}"
-results_path="${RESULTS_PATH:-"/workspace/cluster/results"}"
+results_path="${RESULTS_PATH:-"/workspace/cluster/sonobuoy-results.tar"}"
 
 log() {
   echo "[$(date -u +%FT%TZ)]" "$@"
