@@ -2,8 +2,8 @@
 
 declare -A provider_installations
 provider_installations[aws]=gaia
-provider_installations[azure]=ghost
-provider_installations[kvm]=geckon
+provider_installations[azure]=godsmack
+provider_installations[kvm]=gorgoth
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 KUBECONFIG=temp-kubeconfig
