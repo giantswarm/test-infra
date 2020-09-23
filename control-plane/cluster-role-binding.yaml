@@ -10,6 +10,3 @@ subjects:
   - kind: ServiceAccount
     name: test-infra
     namespace: giantswarm
-  - kind: User
-    name: test-infra
-    apiGroup: rbac.authorization.k8s.io
