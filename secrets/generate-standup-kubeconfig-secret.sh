@@ -14,7 +14,7 @@ function cleanup() {
     rm -rf "$tmp_dir"
 }
 
-# trap cleanup EXIT
+trap cleanup EXIT
 
 for provider in aws azure kvm; do
     installation=${provider_installations[$provider]}
