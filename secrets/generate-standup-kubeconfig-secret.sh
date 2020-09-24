@@ -14,14 +14,14 @@ function cleanup() {
     rm -rf "$tmp_dir"
 }
 
-trap cleanup EXIT
+# trap cleanup EXIT
 
 for provider in aws azure kvm; do
     installation=${provider_installations[$provider]}
     echo "creating $provider kubeconfig for $installation"
 
     # Create a temp kubeconfig for the installation
-    installation_kubeconfig="$tmp_dir/tmp-kubeconfig"
+    installation_kubeconfig="$tmp_dir/tmp-kubeconfig-$installation"
     KUBECONFIG=$installation_kubeconfig opsctl create kubeconfig -i $installation --certificate-common-name-prefix test-infra --ttl 30 > /dev/null
 
     # Get the installation server
@@ -39,9 +39,6 @@ for provider in aws azure kvm; do
 
     # Read service account cert from the secret
     KUBECONFIG=$installation_kubeconfig kubectl -n giantswarm get secret/"$secret_name" -o jsonpath='{.data.ca\.crt}'  | base64 --decode > "$tmp_dir/ca_cert"
-
-    # Remove the temp kubeconfig
-    rm "$installation_kubeconfig"
 
     # Add data from the service account to the result kubeconfig
     touch "$result_kubeconfig"
