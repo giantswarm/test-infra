@@ -26,6 +26,7 @@ spec:
 
   - name: wait-for-ready
     runAfter: [create-cluster]
+    timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
     workspaces:
