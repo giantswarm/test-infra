@@ -16,7 +16,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/standup:0.0.0-282df0cc3537e05bad7268529f7e634839c19c4c
+    image: quay.io/giantswarm/standup:0.0.0-d6d9d6ff846f450693b76a4461cf9529834b09cb
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
