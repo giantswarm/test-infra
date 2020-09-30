@@ -30,7 +30,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-cluster
-    image: quay.io/giantswarm/standup:0.0.0-d6d9d6ff846f450693b76a4461cf9529834b09cb
+    image: quay.io/giantswarm/standup
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
