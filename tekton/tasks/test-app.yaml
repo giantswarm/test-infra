@@ -11,8 +11,9 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
-  - name: cluster2
-    description: The original cluster workspace.
+  # TODO remove this once standup is used for cluster creation
+  - name: tenant-kubeconfig
+    description: Holds kubeconfig of the tenant cluster
   steps:
   - name: app-build-suite
     image: quay.io/geraldpape/abs # TODO use official image
@@ -26,14 +27,14 @@ spec:
       echo "${CHART_DIR}"
       echo "${CHART_NAME}"
 
-      cd $(workspaces.cluster2.path) # TODO check if app_build_suite supports an --output flag
+      cd $(workspaces.cluster.path) # TODO check if app_build_suite supports an --output flag
 
       python -m app_build_suite \
         --chart-dir "${CHART_DIR}" \
         --replace-chart-version-with-git \
         --replace-app-version-with-git
 
-      PACKAGE_PATH=$(find $(workspaces.cluster2.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
+      PACKAGE_PATH=$(find $(workspaces.cluster.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
       echo "${PACKAGE_PATH}"
 
 #  - name: upload-chart

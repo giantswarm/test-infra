@@ -7,9 +7,10 @@ spec:
   resources:
   - name: app-repository
     type: git
+  # TODO: add releases repository resource once standup is used for cluster creation
   workspaces:
   - name: cluster
-  - name: cluster2
+  - name: tenant-kubeconfig # TODO remove this once standup is used for cluster creation
   tasks:
   #- name: create-cluster
   #  taskRef:
@@ -28,8 +29,8 @@ spec:
     taskRef:
       name: wait-for-ready
     workspaces:
-      - name: cluster
-        workspace: cluster
+    - name: cluster
+      workspace: tenant-kubeconfig # TODO use cluster workspace for using kubeconfig from standup
 
   - name: prepare-cluster
     runAfter: [wait-for-ready]
@@ -37,7 +38,7 @@ spec:
       name: app-test-preparation
     workspaces:
     - name: cluster
-      workspace: cluster
+      workspace: tenant-kubeconfig # TODO use cluster workspace for using kubeconfig from standup
 
   - name: test-app
     runAfter: [prepare-cluster]
@@ -50,8 +51,9 @@ spec:
     workspaces:
     - name: cluster
       workspace: cluster
-    - name: cluster2
-      workspace: cluster2
+    # TODO remove this once standup is used for cluster creation
+    - name: tenant-kubeconfig
+      workspace: tenant-kubeconfig
 
   #finally:
   #- name: cleanup
