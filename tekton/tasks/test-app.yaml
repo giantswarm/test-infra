@@ -11,9 +11,6 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
-  # TODO remove this once standup is used for cluster creation
-  - name: tenant-kubeconfig
-    description: Holds kubeconfig of the tenant cluster
   steps:
   - name: app-build-suite
     image: quay.io/geraldpape/abs # TODO use official image
@@ -37,18 +34,26 @@ spec:
       PACKAGE_PATH=$(find $(workspaces.cluster.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
       echo "${PACKAGE_PATH}"
 
-#  - name: upload-chart
-#    image: bitnami/kubectl:1.19.2 # use quay.io/giantswarm/kubectl:1.19.2
-#    script: |
-#      #!/bin/sh
-#
-#      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig port-forward -n giantswarm service/chart-museum 8080:8080 &
-#      KUBECTL_PID=$!
-#      sleep 5
-#
-#      curl --data-binary "@${CHART_FILE_NAME}" http://localhost:8080/api/charts
-#
-#      kill $KUBECTL_PID
+  - name: upload-chart
+    image: bitnami/kubectl:1.19.2 # use quay.io/giantswarm/kubectl:1.19.2
+    script: |
+      #!/bin/sh
+
+      CHART_DIR=$(find $(resources.inputs.app-repository.path)/helm -maxdepth 1 -type d -name "*-app")
+      CHART_NAME=${CHART_DIR##*/}
+      PACKAGE_PATH=$(find $(workspaces.cluster.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
+
+      echo "${CHART_DIR}"
+      echo "${CHART_NAME}"
+      echo "${PACKAGE_PATH}"
+
+      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig port-forward -n giantswarm service/chartmuseum-chartmuseum 8080:8080 &
+      KUBECTL_PID=$!
+      sleep 5
+
+      curl --data-binary "@${CHART_FILE_NAME}" http://localhost:8080/api/charts
+
+      kill $KUBECTL_PID
 #
 #
 #  - name: pytest
