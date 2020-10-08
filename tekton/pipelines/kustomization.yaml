@@ -4,3 +4,4 @@ resources:
 - aws.yaml
 - cis.yaml
 - cncf.yaml
+- test-app.yaml

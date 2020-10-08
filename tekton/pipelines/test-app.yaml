@@ -1,0 +1,62 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: test-app
+  namespace: test-workloads
+spec:
+  resources:
+  - name: app-repository
+    type: git
+  workspaces:
+  - name: cluster
+  - name: cluster2
+  tasks:
+  #- name: create-cluster
+  #  taskRef:
+  #    name: create-cluster
+  #  workspaces:
+  #  - name: cluster
+  #    workspace: cluster
+  #  resources:
+  #    inputs:
+  #    - name: releases
+  #      resource: releases
+
+  - name: wait-for-ready
+    # runAfter: [create-cluster]
+    timeout: 1h0m0s
+    taskRef:
+      name: wait-for-ready
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: prepare-cluster
+    runAfter: [wait-for-ready]
+    taskRef:
+      name: app-test-preparation
+    workspaces:
+    - name: cluster
+      workspace: cluster
+
+  - name: test-app
+    runAfter: [prepare-cluster]
+    taskRef:
+      name: test-app
+    resources:
+      inputs:
+      - name: app-repository
+        resource: app-repository
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    - name: cluster2
+      workspace: cluster2
+
+  #finally:
+  #- name: cleanup
+  #  taskRef:
+  #    name: cleanup
+  #  workspaces:
+  #  - name: cluster
+  #    workspace: cluster

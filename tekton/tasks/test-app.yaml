@@ -1,0 +1,69 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-app
+  namespace: test-workloads
+spec:
+  resources:
+    inputs:
+    - name: app-repository
+      type: git
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  - name: cluster2
+    description: The original cluster workspace.
+  steps:
+  - name: app-build-suite
+    image: quay.io/geraldpape/abs # TODO use official image
+    imagePullPolicy: Always
+    script: |
+      #!/bin/sh
+
+      CHART_DIR=$(find $(resources.inputs.app-repository.path)/helm -maxdepth 1 -type d -name "*-app")
+      CHART_NAME=${CHART_DIR##*/}
+
+      echo "${CHART_DIR}"
+      echo "${CHART_NAME}"
+
+      cd $(workspaces.cluster2.path) # TODO check if app_build_suite supports an --output flag
+
+      python -m app_build_suite \
+        --chart-dir "${CHART_DIR}" \
+        --replace-chart-version-with-git \
+        --replace-app-version-with-git
+
+      PACKAGE_PATH=$(find $(workspaces.cluster2.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
+      echo "${PACKAGE_PATH}"
+
+#  - name: upload-chart
+#    image: bitnami/kubectl:1.19.2 # use quay.io/giantswarm/kubectl:1.19.2
+#    script: |
+#      #!/bin/sh
+#
+#      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig port-forward -n giantswarm service/chart-museum 8080:8080 &
+#      KUBECTL_PID=$!
+#      sleep 5
+#
+#      curl --data-binary "@${CHART_FILE_NAME}" http://localhost:8080/api/charts
+#
+#      kill $KUBECTL_PID
+#
+#
+#  - name: pytest
+#    image: python:3.7-slim
+#    script: |
+#      #!/bin/sh
+#
+#      pip install pipenv
+#
+#      cd /workspace/app-repository/test/kat
+#      pipenv sync
+#      pipenv run pytest --log-cli-level info --full-trace --verbosity=8 . \
+#      --cluster-type existing \
+#      --kube-config /kube.config \
+#      --values-file ../../${config_file} \
+#      --chart-path \"helm/${chart_name}\" \
+#      --chart-version ${CHART_VERSION} \
+#      --log-cli-level info \
+#      --junitxml=../../${test_res_file}"
