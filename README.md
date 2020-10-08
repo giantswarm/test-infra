@@ -132,9 +132,7 @@ and policy to enable access to it. Don't forget to update the `s3-bucket-credent
 
 ## More documentation
 
-
 More documentation can be found in the [`docs`](https://github.com/giantswarm/test-infra/tree/master/docs) directory of this repository.
-
 
 ## Reference
 
