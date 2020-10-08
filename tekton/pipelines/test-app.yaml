@@ -11,7 +11,6 @@ spec:
     type: git
   workspaces:
   - name: cluster
-  - name: tenant-kubeconfig # TODO remove this once standup is used for cluster creation
   tasks:
   - name: create-cluster
     taskRef:
@@ -30,7 +29,7 @@ spec:
         resource: releases
 
   - name: wait-for-ready
-    # runAfter: [create-cluster]
+    runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
