@@ -29,6 +29,9 @@ presubmits:
       - name: app-repository
         resourceRef:
           name: PROW_IMPLICIT_GIT_REF
+      - name: releases
+        resourceRef:
+          name: releases-master
       workspaces:
       - name: cluster
         volumeClaimTemplate:

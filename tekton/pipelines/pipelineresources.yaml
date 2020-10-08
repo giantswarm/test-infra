@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineResource
+metadata:
+  name: releases-master
+  namespace: test-workloads
+spec:
+  type: git
+  params:
+    - name: url
+      value: https://github.com/giantswarm/releases.git
+    - name: revision
+      value: master

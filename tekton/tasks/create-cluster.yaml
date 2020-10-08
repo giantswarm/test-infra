@@ -4,6 +4,10 @@ metadata:
   name: create-cluster
   namespace: test-workloads
 spec:
+  params:
+  - name: create-extra-args
+    type: array
+    description: Extra args to pass to the create command
   resources:
     inputs:
     - name: releases
@@ -42,4 +46,5 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig/kubeconfig \
       --releases /workspace/releases \
-      --output $(workspaces.cluster.path)
+      --output $(workspaces.cluster.path) \
+      $(params.create-extra-args[*])

@@ -7,21 +7,27 @@ spec:
   resources:
   - name: app-repository
     type: git
-  # TODO: add releases repository resource once standup is used for cluster creation
+  - name: releases
+    type: git
   workspaces:
   - name: cluster
   - name: tenant-kubeconfig # TODO remove this once standup is used for cluster creation
   tasks:
-  #- name: create-cluster
-  #  taskRef:
-  #    name: create-cluster
-  #  workspaces:
-  #  - name: cluster
-  #    workspace: cluster
-  #  resources:
-  #    inputs:
-  #    - name: releases
-  #      resource: releases
+  - name: create-cluster
+    taskRef:
+      name: create-cluster
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    params:
+    - name: create-extra-args
+      value:
+        - "--provider aws"
+        - "--release v12.3.0"
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
 
   - name: wait-for-ready
     # runAfter: [create-cluster]
