@@ -35,7 +35,7 @@ spec:
       echo "${PACKAGE_PATH}"
 
   - name: upload-chart
-    image: bitnami/kubectl:1.19.2 # use quay.io/giantswarm/kubectl:1.19.2
+    image: quay.io/giantswarm/kubectl:1.19.2
     script: |
       #!/bin/sh
 
