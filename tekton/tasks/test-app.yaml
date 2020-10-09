@@ -51,7 +51,7 @@ spec:
       KUBECTL_PID=$!
       sleep 5
 
-      curl --data-binary "@${CHART_FILE_NAME}" http://localhost:8080/api/charts
+      curl --data-binary "@${PACKAGE_PATH}" http://localhost:8080/api/charts
 
       kill $KUBECTL_PID
 #
