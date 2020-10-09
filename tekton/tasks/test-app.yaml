@@ -54,22 +54,3 @@ spec:
       curl --data-binary "@${PACKAGE_PATH}" http://localhost:8080/api/charts
 
       kill $KUBECTL_PID
-#
-#
-#  - name: pytest
-#    image: python:3.7-slim
-#    script: |
-#      #!/bin/sh
-#
-#      pip install pipenv
-#
-#      cd /workspace/app-repository/test/kat
-#      pipenv sync
-#      pipenv run pytest --log-cli-level info --full-trace --verbosity=8 . \
-#      --cluster-type existing \
-#      --kube-config /kube.config \
-#      --values-file ../../${config_file} \
-#      --chart-path \"helm/${chart_name}\" \
-#      --chart-version ${CHART_VERSION} \
-#      --log-cli-level info \
-#      --junitxml=../../${test_res_file}"
