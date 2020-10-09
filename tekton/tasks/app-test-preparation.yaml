@@ -10,6 +10,7 @@ spec:
   steps:
   - name: prepare-cluster
     image: quay.io/geraldpape/atc # TODO use official image
+    imagePullPolicy: Always
     script: |
       #!/bin/sh
       apptestctl bootstrap --kubeconfig "$(cat $(workspaces.cluster.path)/kubeconfig)"

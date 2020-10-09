@@ -40,11 +40,11 @@ spec:
         mountPath: /etc/endpoints-config
       - name: kubeconfig
         mountPath: /etc/kubeconfig
-    script: |
-      #! /bin/sh
-      standup create \
-      --config /etc/endpoints-config/config \
-      --kubeconfig /etc/kubeconfig/kubeconfig \
-      --releases /workspace/releases \
-      --output $(workspaces.cluster.path) \
-      $(params.create-extra-args[*])
+    args: [
+      "create",
+      "--config", "/etc/endpoints-config/config",
+      "--kubeconfig", "/etc/kubeconfig/kubeconfig",
+      "--releases", "/workspace/releases",
+      "--output", "$(workspaces.cluster.path)",
+      "$(params.create-extra-args[*])"
+    ]
