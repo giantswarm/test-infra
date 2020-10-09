@@ -29,6 +29,9 @@ presubmits:
       - name: app-repository
         resourceRef:
           name: PROW_IMPLICIT_GIT_REF
+      - name: releases
+        resourceRef:
+          name: releases-master
       workspaces:
       - name: cluster
         volumeClaimTemplate:
@@ -38,13 +41,6 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-      # TODO remove this once standup is used for cluster creation
-      - name: tenant-kubeconfig
-        secret:
-          secretName: tenant-kubeconfig
-          items:
-          - key: kubeconfig
-            path: kubeconfig
     trigger: "/test this"
     rerun_command: "/test this"
   giantswarm/releases:

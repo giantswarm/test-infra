@@ -7,30 +7,35 @@ spec:
   resources:
   - name: app-repository
     type: git
-  # TODO: add releases repository resource once standup is used for cluster creation
+  - name: releases
+    type: git
   workspaces:
   - name: cluster
-  - name: tenant-kubeconfig # TODO remove this once standup is used for cluster creation
   tasks:
-  #- name: create-cluster
-  #  taskRef:
-  #    name: create-cluster
-  #  workspaces:
-  #  - name: cluster
-  #    workspace: cluster
-  #  resources:
-  #    inputs:
-  #    - name: releases
-  #      resource: releases
+  - name: create-cluster
+    taskRef:
+      name: create-cluster
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    params:
+    - name: create-extra-args
+      value:
+        - "--provider aws"
+        - "--release v12.3.0"
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
 
   - name: wait-for-ready
-    # runAfter: [create-cluster]
+    runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
     workspaces:
     - name: cluster
-      workspace: tenant-kubeconfig # TODO use cluster workspace for using kubeconfig from standup
+      workspace: cluster
 
   - name: prepare-cluster
     runAfter: [wait-for-ready]
@@ -38,7 +43,7 @@ spec:
       name: app-test-preparation
     workspaces:
     - name: cluster
-      workspace: tenant-kubeconfig # TODO use cluster workspace for using kubeconfig from standup
+      workspace: cluster
 
   - name: test-app
     runAfter: [prepare-cluster]
@@ -51,14 +56,11 @@ spec:
     workspaces:
     - name: cluster
       workspace: cluster
-    # TODO remove this once standup is used for cluster creation
-    - name: tenant-kubeconfig
-      workspace: tenant-kubeconfig
 
-  #finally:
-  #- name: cleanup
-  #  taskRef:
-  #    name: cleanup
-  #  workspaces:
-  #  - name: cluster
-  #    workspace: cluster
+  finally:
+  - name: cleanup
+    taskRef:
+      name: cleanup
+    workspaces:
+    - name: cluster
+      workspace: cluster
