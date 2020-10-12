@@ -11,10 +11,10 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
+  - name: tenant-kubeconfig
   steps:
   - name: app-build-suite
-    image: quay.io/geraldpape/abs # TODO use official image
-    imagePullPolicy: Always
+    image: quay.io/giantswarm/app-build-suite:0.0.0-bda3e22540a607e47e479210fdaec75ba7c1af91
     script: |
       #!/bin/sh
 
