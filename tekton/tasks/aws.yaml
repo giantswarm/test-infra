@@ -6,13 +6,13 @@ metadata:
 spec:
   workspaces:
   - name: cluster
-    description: Cluster information is stored here.
+    description: Run the aws conformance test plan of the most basic cluster scope in order to cover cluster creation and deletion.
   steps:
   - name: run-tests
-    image: quay.io/giantswarm/awscnfm:12.1.1-0355b626b09832de8f5407b19bc7f6e53c810705
+    image: quay.io/giantswarm/awscnfm:12.1.4-5798a32e3223ab4b8852d8d02583f92d9d0bee74
     env:
-      - name: "AWSCNFM_KUBECONFIG"
+      - name: "AWSCNFM_TENANTCLUSTER_KUBECONFIG"
         value: $(workspaces.cluster.path)/kubeconfig
     script: |
       #! /bin/sh
-      awscnfm version
+      awscnfm cl001 ac000 execute
