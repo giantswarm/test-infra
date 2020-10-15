@@ -10,29 +10,9 @@ spec:
   workspaces:
   - name: cluster
   tasks:
-  - name: create-cluster
-    taskRef:
-      name: create-cluster
-    workspaces:
-    - name: cluster
-      workspace: cluster
-    resources:
-      inputs:
-      - name: releases
-        resource: releases
-
   - name: run-tests
-    runAfter: [create-cluster]
     taskRef:
       name: aws
-    workspaces:
-    - name: cluster
-      workspace: cluster
-
-  finally:
-  - name: cleanup
-    taskRef:
-      name: cleanup
     workspaces:
     - name: cluster
       workspace: cluster
