@@ -9,7 +9,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: prepare-cluster
-    image: quay.io/giantswarm/apptestctl:0.3.1-de5ceccf8a8e08b75af0d6d0a65600d1b21e9036
+    image: quay.io/giantswarm/apptestctl:0.3.1-d3d18b309405ad460e77e230560b7854672a88a4
     script: |
       #!/bin/sh
       apptestctl bootstrap --kubeconfig "$(cat $(workspaces.cluster.path)/kubeconfig)"
