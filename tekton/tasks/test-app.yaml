@@ -1,0 +1,87 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-app
+  namespace: test-workloads
+spec:
+  resources:
+    inputs:
+    - name: app-repository
+      type: git
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  - name: tenant-kubeconfig
+  steps:
+  - name: app-build-suite
+    image: quay.io/giantswarm/app-build-suite:0.0.0-bda3e22540a607e47e479210fdaec75ba7c1af91
+    script: |
+      #!/bin/sh
+
+      CHART_DIR=$(find $(resources.inputs.app-repository.path)/helm -maxdepth 1 -type d -name "*-app")
+      CHART_NAME=${CHART_DIR##*/}
+
+      echo "${CHART_DIR}"
+      echo "${CHART_NAME}"
+
+      cd $(workspaces.cluster.path) # TODO check if app_build_suite supports an --output flag
+
+      python -m app_build_suite \
+        --chart-dir "${CHART_DIR}" \
+        --replace-chart-version-with-git \
+        --replace-app-version-with-git
+
+      PACKAGE_PATH=$(find $(workspaces.cluster.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
+      echo "${PACKAGE_PATH}"
+
+  - name: upload-chart
+    image: quay.io/giantswarm/kubectl:1.19.2
+    script: |
+      #!/bin/sh
+
+      CHART_DIR=$(find $(resources.inputs.app-repository.path)/helm -maxdepth 1 -type d -name "*-app")
+      CHART_NAME=${CHART_DIR##*/}
+      PACKAGE_PATH=$(find $(workspaces.cluster.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
+
+      echo "${CHART_DIR}"
+      echo "${CHART_NAME}"
+      echo "${PACKAGE_PATH}"
+
+      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig -n giantswarm wait --for=condition=Ready pod -l app=chartmuseum
+      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig -n giantswarm port-forward service/chartmuseum-chartmuseum 8080:8080 &
+      KUBECTL_PID=$!
+      sleep 5
+
+      curl --data-binary "@${PACKAGE_PATH}" http://localhost:8080/api/charts
+
+      kill $KUBECTL_PID
+
+  - name: install-app
+    image: quay.io/giantswarm/kubectl:1.19.2
+    script: |
+      #!/bin/sh
+
+      CHART_DIR=$(find $(resources.inputs.app-repository.path)/helm -maxdepth 1 -type d -name "*-app")
+      CHART_NAME=${CHART_DIR##*/}
+
+      PACKAGE_PATH=$(find $(workspaces.cluster.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
+      CHART_VERSION="${PACKAGE_PATH##*/$CHART_NAME-}"
+      CHART_VERSION="${CHART_VERSION%.tgz}"
+
+      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig -n giantswarm create -f - << EOF
+      apiVersion: application.giantswarm.io/v1alpha1
+      kind: App
+      metadata:
+        name: "${CHART_NAME}"
+        namespace: giantswarm
+        labels:
+          app: "${CHART_NAME}"
+          app-operator.giantswarm.io/version: "0.0.0"
+      spec:
+        catalog: chartmuseum
+        version: "${CHART_VERSION}"
+        kubeConfig:
+          inCluster: true
+        name: "${CHART_NAME}"
+        namespace: app-test-ns
+      EOF

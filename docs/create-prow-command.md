@@ -15,7 +15,7 @@ An example of a configuration:
     max_concurrency: 3 # Number of jobs running concurrently at max.
     always_run: false # If this should run on every commit.
     skip_report: false # If the bot should report in the PR.
-    pipeline_run_spec:
+    pipeline_run_spec: # This is the spec of a tekton PipelineRun CR https://tekton.dev/docs/pipelines/pipelineruns/
       pipelineRef:
         name: cis # Name of the Tekton pipeline. In this case the pipeline is in tekton/pipelines/cis.yaml
       serviceAccountName: releases # Should always be releases.

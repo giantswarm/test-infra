@@ -6,7 +6,8 @@ the flow of task executions uniform across different pipelines.
 Pipelines should reuse tasks for cluster creation and cleanup and
 follow conventions for workspaces and naming.
 
-All pipelines have to be in the `tekton/pipelines` folder.
+All pipelines have to be in the `tekton/pipelines` folder and should be
+registered in `tekton/pipelines/kustomization.yaml`.
 
 You can discover the upstream docs on Tekton pipelines here:
 https://tekton.dev/docs/pipelines/pipelines/

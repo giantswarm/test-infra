@@ -6,7 +6,8 @@ which are supplied either from upstream or internal teams.
 This is where you can check the created cluster for conformity
 and get the different `kubeconfig` for example as inputs.
 
-All tasks have to be in the `tekton/tasks` folder.
+All tasks have to be in the `tekton/tasks` folder and should be
+registered in `tekton/tasks/kustomization.yaml`.
 
 You can discover the upstream docs on Tekton tasks here:
 https://tekton.dev/docs/pipelines/tasks/

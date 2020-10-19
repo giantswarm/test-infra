@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: app-test-preparation
+  namespace: test-workloads
+spec:
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: prepare-cluster
+    image: quay.io/giantswarm/apptestctl:0.3.1-d3d18b309405ad460e77e230560b7854672a88a4
+    script: |
+      #!/bin/sh
+      apptestctl bootstrap --kubeconfig "$(cat $(workspaces.cluster.path)/kubeconfig)"
