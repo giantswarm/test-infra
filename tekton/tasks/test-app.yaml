@@ -47,10 +47,41 @@ spec:
       echo "${CHART_NAME}"
       echo "${PACKAGE_PATH}"
 
-      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig port-forward -n giantswarm service/chartmuseum-chartmuseum 8080:8080 &
+      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig -n giantswarm wait --for=condition=Ready pod -l app=chartmuseum
+      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig -n giantswarm port-forward service/chartmuseum-chartmuseum 8080:8080 &
       KUBECTL_PID=$!
       sleep 5
 
       curl --data-binary "@${PACKAGE_PATH}" http://localhost:8080/api/charts
 
       kill $KUBECTL_PID
+
+  - name: install-app
+    image: quay.io/giantswarm/kubectl:1.19.2
+    script: |
+      #!/bin/sh
+
+      CHART_DIR=$(find $(resources.inputs.app-repository.path)/helm -maxdepth 1 -type d -name "*-app")
+      CHART_NAME=${CHART_DIR##*/}
+
+      PACKAGE_PATH=$(find $(workspaces.cluster.path) -maxdepth 1 -type f -name "${CHART_NAME}-0.0.0-*.tgz")
+      CHART_VERSION="${PACKAGE_PATH##*/$CHART_NAME-}"
+      CHART_VERSION="${CHART_VERSION%.tgz}"
+
+      kubectl --kubeconfig $(workspaces.cluster.path)/kubeconfig -n giantswarm create -f - << EOF
+      apiVersion: application.giantswarm.io/v1alpha1
+      kind: App
+      metadata:
+        name: "${CHART_NAME}"
+        namespace: giantswarm
+        labels:
+          app: "${CHART_NAME}"
+          app-operator.giantswarm.io/version: "0.0.0"
+      spec:
+        catalog: chartmuseum
+        version: "${CHART_VERSION}"
+        kubeConfig:
+          inCluster: true
+        name: "${CHART_NAME}"
+        namespace: app-test-ns
+      EOF
