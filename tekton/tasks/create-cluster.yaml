@@ -24,7 +24,7 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      standup create cluster\
+      standup create cluster \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig/kubeconfig \
       --release $(cat $(workspaces.cluster.path)/release-id) \
