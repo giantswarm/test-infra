@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: create-cluster
+  name: create-release
   namespace: test-workloads
 spec:
   resources:
@@ -19,7 +19,17 @@ spec:
   - name: cluster
     description: Cluster information is stored here.
   steps:
-  - name: create-cluster
+  - name: chown-releases
+    command:
+    - chown
+    - -R
+    - 1000:1000
+    - /workspace
+    image: quay.io/giantswarm/standup:1.0.0
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+  - name: create-release
     image: quay.io/giantswarm/standup:1.0.0-c6235d830b1a6f7b7540d9d60d0d1fe666b40709
     volumeMounts:
       - name: endpoints-config
@@ -28,8 +38,8 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      standup create cluster\
+      standup create release \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig/kubeconfig \
-      --release $(cat $(workspaces.cluster.path)/release-id) \
+      --releases /workspace/releases \
       --output $(workspaces.cluster.path)

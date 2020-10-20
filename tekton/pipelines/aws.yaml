@@ -10,7 +10,7 @@ spec:
   workspaces:
   - name: cluster
   tasks:
-  - name: run-tests
+  - name: create-release
     taskRef:
       name: aws
     workspaces:
