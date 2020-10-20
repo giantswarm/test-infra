@@ -4,10 +4,6 @@ metadata:
   name: create-cluster
   namespace: test-workloads
 spec:
-  resources:
-    inputs:
-    - name: releases
-      type: git
   volumes:
   - name: endpoints-config
     secret:
