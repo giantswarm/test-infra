@@ -25,6 +25,7 @@ spec:
         resource: releases
 
   - name: create-cluster
+    runAfter: [create-release]
     taskRef:
       name: create-cluster
     workspaces:
