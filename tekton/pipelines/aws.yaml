@@ -12,7 +12,23 @@ spec:
   tasks:
   - name: create-release
     taskRef:
-      name: aws
+      name: create-release
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
+  - name: upload-to-s3-bucket
+    runAfter: [create-release]
+    taskRef:
+      name: upload-to-s3-bucket
+    params:
+    - name: prow-job-id
+      value: "$(params.PROW_JOB_ID)"
+    - name: file-to-upload
+      value: $(workspaces.cluster.path)/release-id
     workspaces:
     - name: cluster
       workspace: cluster
