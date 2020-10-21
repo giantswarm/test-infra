@@ -4,4 +4,4 @@ metadata:
   name: unused
 spec:
   steps:
-    image: quay.io/giantswarm/standup:1.1.0
+  - image: quay.io/giantswarm/standup:1.1.0
