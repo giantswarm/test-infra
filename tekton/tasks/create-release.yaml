@@ -27,12 +27,12 @@ spec:
     - -R
     - 1000:1000
     - /workspace
-    image: replaced/by/kustomize
+    image: quay.io/giantswarm/standup:1.1.0
     securityContext:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: replaced/by/kustomize
+    image: quay.io/giantswarm/standup:1.1.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config

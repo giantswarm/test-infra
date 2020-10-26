@@ -1,7 +1,0 @@
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: unused
-spec:
-  steps:
-  - image: quay.io/giantswarm/standup:1.1.0
