@@ -3,6 +3,8 @@ kind: Task
 metadata:
   name: cleanup
   namespace: test-workloads
+  labels:
+    app.kubernetes.io/name: "standup"
 spec:
   volumes:
     - name: endpoints-config
@@ -16,7 +18,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/standup:1.0.0
+    image: quay.io/giantswarm/standup:1.1.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
