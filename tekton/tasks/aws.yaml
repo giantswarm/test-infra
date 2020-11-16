@@ -4,15 +4,23 @@ metadata:
   name: aws
   namespace: test-workloads
 spec:
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
   workspaces:
-  - name: cluster
-    description: Run the aws conformance test plan of the most basic cluster scope in order to cover cluster creation and deletion.
+    - name: cluster
+      description: Run the aws conformance test plan of the most basic cluster scope in order to cover cluster creation and deletion.
   steps:
-  - name: run-tests
-    image: quay.io/giantswarm/awscnfm:12.1.4-5798a32e3223ab4b8852d8d02583f92d9d0bee74
-    env:
-      - name: "AWSCNFM_TENANTCLUSTER_KUBECONFIG"
-        value: $(workspaces.cluster.path)/kubeconfig
-    script: |
-      #! /bin/sh
-      awscnfm cl001 ac000 execute
+    - name: run-tests
+      image: quay.io/giantswarm/awscnfm:12.6.0
+      volumeMounts:
+        - name: kubeconfig
+          mountPath: /etc/controlplane
+      script: |
+        #! /bin/sh
+        
+        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/kubeconfig
+        export AWSCNFM_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
+        
+        awscnfm plan pl001
