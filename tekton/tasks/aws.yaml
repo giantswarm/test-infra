@@ -10,7 +10,12 @@ spec:
   steps:
     - name: run-tests
       image: quay.io/giantswarm/awscnfm:12.6.0
+      volumeMounts:
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
       env:
+        - name: "AWSCNFM_CONTROLPLANE_KUBECONFIG"
+          value: /etc/kubeconfig/kubeconfig
         - name: "AWSCNFM_RELEASEVERSION"
           value: $(cat $(workspaces.cluster.path)/release-id)
       script: |
