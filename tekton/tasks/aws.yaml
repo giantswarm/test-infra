@@ -17,11 +17,10 @@ spec:
       volumeMounts:
         - name: kubeconfig
           mountPath: /etc/controlplane
-      env:
-        - name: "AWSCNFM_CONTROLPLANE_KUBECONFIG"
-          value: /etc/controlplane/kubeconfig
-        - name: "AWSCNFM_RELEASEVERSION"
-          value: $(cat $(workspaces.cluster.path)/release-id)
       script: |
         #! /bin/sh
+        
+        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/kubeconfig
+        export AWSCNFM_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
+        
         awscnfm plan pl001
