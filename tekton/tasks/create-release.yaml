@@ -32,7 +32,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: quay.io/giantswarm/standup:1.1.1
+    image: quay.io/giantswarm/standup:1.1.1-3aed822d39bcde35f1d92df99962ac5bdc7b9ebc
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
