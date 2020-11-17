@@ -42,6 +42,6 @@ spec:
       #! /bin/sh
       standup create release \
       --config /etc/endpoints-config/config \
-      --kubeconfig /etc/kubeconfig/kubeconfig \
+      --kubeconfig /etc/kubeconfig \
       --releases /workspace/releases \
       --output $(workspaces.cluster.path)
