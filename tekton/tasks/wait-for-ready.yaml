@@ -11,7 +11,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: wait-for-ready
-    image: quay.io/giantswarm/standup:1.1.1
+    image: quay.io/giantswarm/standup:1.1.1-63036dfea4a1a63f34c3fc3a663256e849842859
     script: |
       #! /bin/sh
       standup wait \

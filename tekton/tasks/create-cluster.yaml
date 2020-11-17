@@ -18,7 +18,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/standup:1.1.1
+    image: quay.io/giantswarm/standup:1.1.1-63036dfea4a1a63f34c3fc3a663256e849842859
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -28,7 +28,6 @@ spec:
       #! /bin/sh
       standup create cluster \
       --config /etc/endpoints-config/config \
-      --kubeconfig /etc/kubeconfig \
       --release $(cat $(workspaces.cluster.path)/release-id) \
       --provider $(cat $(workspaces.cluster.path)/provider) \
       --output $(workspaces.cluster.path)
