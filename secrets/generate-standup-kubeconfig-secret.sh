@@ -40,11 +40,10 @@ for provider in aws azure kvm; do
     # Read service account cert from the secret
     KUBECONFIG=$installation_kubeconfig kubectl -n giantswarm get secret/"$secret_name" -o jsonpath='{.data.ca\.crt}'  | base64 --decode > "$tmp_dir/ca_cert"
 
-    result_kubeconfig="$tmp_dir/result_kubeconfig"
     # Add service account data to the kubeconfig
     (
-    touch "$result_kubeconfig"
-    export KUBECONFIG="$result_kubeconfig"
+    export KUBECONFIG="$tmp_dir/$provider-kubeconfig"
+    touch $KUBECONFIG
 
     # Add data from the service account to the result kubeconfig
     kubectl config set-cluster "giantswarm-cluster-$installation" \
@@ -65,6 +64,8 @@ done
 
 kubectl create secret generic standup-kubeconfig \
     -n test-workloads \
-    --from-file=kubeconfig="$result_kubeconfig" \
+    --from-file=aws="$tmp_dir/aws-kubeconfig" \
+    --from-file=azure="$tmp_dir/azure-kubeconfig" \
+    --from-file=kvm="$tmp_dir/kvm-kubeconfig" \
     --dry-run=client -o yaml \
     > "$script_dir/standup-kubeconfig-secret.yaml"
