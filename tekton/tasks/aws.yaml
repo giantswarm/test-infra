@@ -20,7 +20,7 @@ spec:
       script: |
         #! /bin/sh
         
-        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/kubeconfig
+        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws
         export AWSCNFM_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
         
         awscnfm plan pl001
