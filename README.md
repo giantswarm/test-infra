@@ -39,7 +39,7 @@ To update `test-infra` you will need to manually edit the `app` CR on the `goril
 **There is currently no automatic rollout by merging to master!**
 
 The `roles` and `serviceaccounts` on the target CPs are currently created manually.
-You can find the resources in the [here](control-plane/README.md).
+You can find the resources [here](control-plane/README.md).
 
 Kubeconfigs to the target CPs are currently generated with a script using `opsctl` and then manually updated to `rfjh2`.
 You can find the necessary scripts [here](secrets/generate-standup-kubeconfig-secret.sh).
