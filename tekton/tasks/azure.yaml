@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: azure
+  namespace: test-workloads
+spec:
+  workspaces:
+    - name: cluster
+      description: Cluster information is stored here.
+  steps:
+    - name: run-tests
+      image: quay.io/giantswarm/alpine:3.12.0
+      script: |
+        #! /bin/sh
+        
+        echo "hello"
