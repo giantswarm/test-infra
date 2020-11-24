@@ -24,10 +24,35 @@ spec:
       - name: releases
         resource: releases
 
-  - name: test-azure
+  - name: create-cluster
     runAfter: [create-release]
+    taskRef:
+      name: create-cluster
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: wait-for-ready
+    runAfter: [create-cluster]
+    timeout: 1h0m0s
+    taskRef:
+      name: wait-for-ready
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: test-azure
+    runAfter: [wait-for-ready]
     taskRef:
       name: azure
     workspaces:
     - name: cluster
       workspace: cluster
+
+  finally:
+  - name: cleanup
+    taskRef:
+      name: cleanup
+    workspaces:
+      - name: cluster
+        workspace: cluster
