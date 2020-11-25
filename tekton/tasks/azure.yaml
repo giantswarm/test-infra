@@ -10,6 +10,9 @@ spec:
   steps:
     - name: run-tests
       image: quay.io/giantswarm/alpine:3.12.0
+      volumeMounts:
+        - name: kubeconfig
+          mountPath: /etc/controlplane
       script: |
         #! /bin/sh
         
