@@ -8,12 +8,32 @@ spec:
     - name: cluster
       description: Cluster information is stored here.
   steps:
-    - name: run-tests
-      image: quay.io/giantswarm/alpine:3.12.0
-      volumeMounts:
-        - name: kubeconfig
-          mountPath: /etc/controlplane
+    - env:
+        - name: KUBECONFIG
+          value: $(workspaces.cluster.path)/kubeconfig
+        - name: CP_KUBECONFIG
+          value: /etc/kubeconfig
+        - name: CLUSTER_ID
+          value: $(cat $(workspaces.cluster.path)/cluster-id)
+        - name: RESULTS_PATH
+          value: $(workspaces.cluster.path)/sonobuoy-results.tar
+      image: quay.io/giantswarm/conformance-tests
+      name: run-tests
+      resources: {}
       script: |
         #! /bin/sh
-        
-        echo "hello"
+        sonobuoy run \
+          --kubeconfig "${KUBECONFIG}" \
+          --plugin https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml \
+          --plugin-env giantswarm.KUBECONFIG="${KUBECONFIG}" \
+          --plugin-env giantswarm.CP_KUBECONFIG="${CP_KUBECONFIG}" \
+          --plugin-env giantswarm.CLUSTER_ID="${CLUSTER_ID}" \
+          --mode=certified-conformance \
+          --wait
+      volumeMounts:
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
