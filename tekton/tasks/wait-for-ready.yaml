@@ -11,8 +11,9 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: wait-for-ready
-    image: quay.io/giantswarm/standup:2.0.0
+    image: quay.io/giantswarm/standup:2.1.0
     script: |
       #! /bin/sh
       standup wait \
-      --kubeconfig $(workspaces.cluster.path)/kubeconfig
+      --kubeconfig $(workspaces.cluster.path)/kubeconfig \
+      --provider $(cat $(workspaces.cluster.path)/provider)
