@@ -10,7 +10,7 @@ log() {
 
 run_cis() {
   log "Running cis"
-  sonobuoy run  \
+  sonobuoy run \
     --kubeconfig "$kubeconfig_path" \
     --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml \
     --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml \
@@ -21,6 +21,18 @@ run_cis() {
 run_cncf() {
   log "Running cncf"
   sonobuoy run --kubeconfig "$kubeconfig_path" --mode=certified-conformance --wait
+}
+
+run_giantswarm() {
+  log "Running giantswarm"
+  sonobuoy run \
+    --kubeconfig "$kubeconfig_path" \
+    --plugin https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml \
+    --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")" \
+    --plugin-env giantswarm.CP_KUBECONFIG="$(cat "$kubeconfig_path")" \
+    --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")" \
+    --mode=certified-conformance \
+    --wait
 }
 
 print_results() {
@@ -40,7 +52,7 @@ print_results() {
 }
 
 check_if_failed() {
-  if sonobuoy status --kubeconfig "$kubeconfig_path" | grep failed > /dev/null; then
+  if sonobuoy status --kubeconfig "$kubeconfig_path" | grep failed >/dev/null; then
     log "Tests failed"
     exit 1
   fi
@@ -53,23 +65,28 @@ cleanup() {
   fi
 
   log "Deleting sonobuoy resources"
-  sonobuoy delete --kubeconfig "$kubeconfig_path"  --all --wait || true
+  sonobuoy delete --kubeconfig "$kubeconfig_path" --all --wait || true
 }
 
 trap cleanup INT TERM EXIT
 
 case "$1" in
-  cis)
-    run_cis
-    print_results
-    ;;
-  cncf)
-    run_cncf
-    print_results
-    check_if_failed
-    ;;
-  *)
-    log "Unknown test mode: $1"
-    exit 1
-    ;;
+cis)
+  run_cis
+  print_results
+  ;;
+cncf)
+  run_cncf
+  print_results
+  check_if_failed
+  ;;
+giantswarm)
+  run_giantswarm
+  print_results
+  check_if_failed
+  ;;
+*)
+  log "Unknown test mode: $1"
+  exit 1
+  ;;
 esac
