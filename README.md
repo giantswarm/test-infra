@@ -9,16 +9,19 @@ On this repository you can trigger new test runs through comments on Pull Reques
 
 Please be aware that all interactions with test-infra are designed with the idea in mind that a pull request will either modify or add a single release in the releases repository!
 Commands which are currently available are as follows:
+
 - `/test cncf` runs the `cncf` suite against the release.
 - `/test cis` runs the `cis` suite against the release.
 - `/test aws` runs `awscnfm` against the release - this only works for AWS.
 
 There are multiple dashboards which can be useful to track the progress of tests:
-- [prow](https://prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io/) gives a rough overview of the running tests.
-- [tekton](https://tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io/#/pipelineruns) gives a more in depth overview of the test progress,
+
+- [prow](https://prow.giantswarm.io/) gives a rough overview of the running tests.
+- [tekton](https://tekton.giantswarm.io/#/pipelineruns) gives a more in depth overview of the test progress,
 - [kibana](https://kibana.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io/app/kibana#/dashboard/a0274d90-151c-11eb-a856-f95f4e179788?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(description:'',filters:!(('$state':(store:appState),meta:(alias:!n,controlledBy:'1603451084569',disabled:!f,index:'83f5e030-146a-11eb-a856-f95f4e179788',key:kubernetes.labels.prow_k8s_io%2Frefs_repo.keyword,negate:!f,params:(query:releases),type:phrase),query:(match_phrase:(kubernetes.labels.prow_k8s_io%2Frefs_repo.keyword:releases)))),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),query:(language:kuery,query:''),timeRestore:!f,title:'Prow%20Dashboard',viewMode:view)) gives full insight of the logs emitted during your test.
 
 Each test will generally perform the same flow currently which can be summarized as this:
+
 1. Determine release CR from PR diff.
 2. Create release CR on provider CP (`gaia`,`godsmack`,`gorgoth`).
 3. Create tenant cluster with created release on target CP.
@@ -58,6 +61,7 @@ We utilize prow to trigger tests and have a nice Github integration to run high 
 #### Components
 
 This is a list of components which we run:
+
 - `Deck` - UI for prow jobs.
 - `Sinker` - Clean up stale prow jobs.
 - `Hook` - Handle GitHub events dispatching them to plugins.
@@ -76,13 +80,14 @@ We utilize it to actually run tests and to structure our test stages.
 #### Components
 
 This is a list of components which we run:
+
 - `Pipelines` - This enables the meat of functionalities by Tekton.
 - `Dashboard` - Gives and overview of active Tekton tasks and pipelines.
 - `prow-log-aggregator` - Collects logs from Tekton tasks and makes them available to Deck.
 
 ## Reference
 
-* How to write [`ProwJobs`](https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md)
+- How to write [`ProwJobs`](https://github.com/kubernetes/test-infra/blob/master/prow/jobs.md)
 
 [Prow]: https://github.com/kubernetes/test-infra/tree/master/prow
 [Tekton]: https://tekton.dev/
