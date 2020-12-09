@@ -103,6 +103,13 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 spec:
   rules:
+    - host: prow.giantswarm.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: deck
+              servicePort: 80
     - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
@@ -113,6 +120,7 @@ spec:
   tls:
     - hosts:
         - prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
+        - prow.giantswarm.io
       secretName: prow-deck
 ---
 apiVersion: extensions/v1beta1
@@ -129,6 +137,13 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
+    - host: prow.giantswarm.io
+      http:
+        paths:
+          - path: /oauth2
+            backend:
+              serviceName: oauth2-proxy
+              servicePort: 4180
     - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io 
       http:
         paths:
@@ -139,6 +154,7 @@ spec:
   tls:
     - hosts:
         - prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
+        - prow.giantswarm.io
       secretName: prow-deck
 ---
 apiVersion: apps/v1
