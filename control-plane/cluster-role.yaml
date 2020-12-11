@@ -4,7 +4,15 @@ metadata:
   name: release-manager
 rules:
   - apiGroups:
+      - cluster.x-k8s.io
+      - infrastructure.giantswarm.io
       - release.giantswarm.io
+    resources:
+      - "*"
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
     resources:
       - "*"
     verbs:
