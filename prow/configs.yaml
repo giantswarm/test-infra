@@ -67,6 +67,31 @@ presubmits:
                 storage: 10Mi
     trigger: "/test cncf"
     rerun_command: "/test cncf"
+  - name: gs
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: gs
+      serviceAccountName: test-runs
+      timeout: 10h0m0s
+      resources:
+      - name: releases
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+    trigger: "/test gs"
+    rerun_command: "/test gs"
   - name: aws
     agent: tekton-pipeline
     max_concurrency: 3

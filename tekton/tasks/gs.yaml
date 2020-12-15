@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: gs
+  namespace: test-workloads
+spec:
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: run-tests
+    image: quay.io/giantswarm/standup:2.1.0
+    env:
+      - name: "KUBECONFIG_PATH"
+        value: $(workspaces.cluster.path)/kubeconfig
+    script: |
+      #! /bin/sh
+      standup cnfm \
+      --kubeconfig $(workspaces.cluster.path)/kubeconfig \
+      --provider $(cat $(workspaces.cluster.path)/provider)
