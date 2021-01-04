@@ -13,7 +13,7 @@ spec:
       description: Run the aws conformance test plan of the most basic cluster scope in order to cover cluster creation and deletion.
   steps:
     - name: run-tests
-      image: quay.io/giantswarm/awscnfm:12.7.0
+      image: quay.io/giantswarm/awscnfm:13.0.0
       volumeMounts:
         - name: kubeconfig
           mountPath: /etc/controlplane
@@ -21,6 +21,6 @@ spec:
         #! /bin/sh
         
         export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws
-        export AWSCNFM_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
+        export AWSCNFM_CREATE_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
         
         awscnfm plan pl001
