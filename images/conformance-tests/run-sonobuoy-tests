@@ -27,7 +27,7 @@ run_giantswarm() {
   log "Running giantswarm"
   sonobuoy run \
     --kubeconfig "$kubeconfig_path" \
-    --namespace "$(cat "${CLUSTER_ID_PATH}")" \
+    --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
     --plugin https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml \
     --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")" \
     --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${KUBECONFIG_PATH}")" \
