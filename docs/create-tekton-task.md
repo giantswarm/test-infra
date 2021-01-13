@@ -24,7 +24,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: run-tests # One or many steps can be listed here.
-    image: quay.io/giantswarm/conformance-tests # Image used for running your tests.
+    image: quay.io/giantswarm/run-sonobuoy-tests # Image used for running your tests.
     env:
       - name: "KUBECONFIG_PATH"
         value: $(workspaces.cluster.path)/kubeconfig # Path to tenant cluster kubeconfig.
