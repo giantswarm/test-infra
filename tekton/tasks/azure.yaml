@@ -29,6 +29,3 @@ spec:
     - name: kubeconfig
       secret:
         secretName: sonobuoy-kubeconfig
-  workspaces:
-    - description: Cluster information is stored here.
-      name: cluster
