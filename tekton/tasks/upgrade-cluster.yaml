@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: upgrade-cluster
+  namespace: test-workloads
+spec:
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: upgrade-cluster
+    image: quay.io/giantswarm/standup:2.1.0
+    script: |
+      #! /bin/sh
+      echo "This will upgrade the cluster to $(cat $(workspaces.cluster.path)/release-id)"
