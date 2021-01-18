@@ -13,15 +13,15 @@ spec:
   - name: PROW_JOB_ID
     type: string
   tasks:
-  - name: create-cluster-latest
+  - name: create-cluster-stable
     taskRef:
-      name: create-cluster-latest
+      name: create-cluster-stable
     workspaces:
       - name: cluster
         workspace: cluster
 
   - name: create-release
-    runAfter: [create-cluster-latest]
+    runAfter: [create-cluster-stable]
     taskRef:
       name: create-release
     workspaces:
@@ -33,7 +33,7 @@ spec:
           resource: releases
 
   - name: wait-for-ready
-    runAfter: [create-cluster-latest]
+    runAfter: [create-cluster-stable]
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready

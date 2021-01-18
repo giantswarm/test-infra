@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: create-cluster-latest
+  name: create-cluster-stable
   namespace: test-workloads
   labels:
     app.kubernetes.io/name: "standup"
@@ -21,7 +21,7 @@ spec:
     description: The release version to use when creating the cluster.
     default: s3-bucket-credentials-secret
   steps:
-  - name: create-cluster-latest
+  - name: create-cluster-stable
     image: quay.io/giantswarm/standup:2.1.0
     volumeMounts:
       - name: endpoints-config
@@ -30,9 +30,9 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      LATEST_RELEASE=`find /workspace/releases/azure -regex 'azure/v[0-9]*\.[0-9]*\.[0-9]*' | sort | tail -n1`
+      LATEST_STABLE_RELEASE=`find /workspace/releases/azure -regex 'azure/v[0-9]*\.[0-9]*\.[0-9]*' | sort | tail -n1`
       standup create cluster \
       --config /etc/endpoints-config/config \
-      --release ${LATEST_RELEASE#"azure/"} \
+      --release ${LATEST_STABLE_RELEASE#"azure/"} \
       --provider $(cat $(workspaces.cluster.path)/provider) \
       --output $(workspaces.cluster.path)
