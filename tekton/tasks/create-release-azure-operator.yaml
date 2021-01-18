@@ -8,7 +8,7 @@ metadata:
 spec:
   resources:
     inputs:
-    - name: azureoperator
+    - name: azure-operator
       type: git
     - name: releases
       type: git
@@ -27,18 +27,16 @@ spec:
     image: quay.io/giantswarm/kubectl:1.18.15
     volumeMounts:
       - name: kubeconfig
-        mountPath: /etc/kubeconfig/azure
+        mountPath: /etc/kubeconfig
     script: |
       #!/bin/bash
 
-      AZURE_OPERATOR_REPO_DIR="$(resources.inputs.azureoperator.path)"
-      RELEASES_REPO_DIR="$(resources.inputs.releases.path)"
+      RELEASES_REPO_DIR="/releases"
 
-      cd "$RELEASES_REPO_DIR"
+      pushd $RELEASES_REPO_DIR
       latest="$(find azure -regex 'azure/v[0-9]*\.[0-9]*\.[0-9]*' | sort | tail -n1)"
       release="$(cat "${latest}/release.yaml" |yq -r .)"
-
-      cd "$AZURE_OPERATOR_REPO_DIR"
+      popd
 
       latest_version="$(echo "$release" | jq -r '.metadata.name')"
       new_version="$latest_version-$(date +'%s')"
