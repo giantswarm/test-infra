@@ -1,0 +1,55 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-release-azure-operator
+  namespace: test-workloads
+  labels:
+    app.kubernetes.io/name: "standup"
+spec:
+  resources:
+    inputs:
+    - name: azure-operator
+      type: git
+    - name: releases
+      type: git
+  volumes:
+  - name: endpoints-config
+    secret:
+      secretName: standup-endpoints-config
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: create-release
+    image: quay.io/giantswarm/kubectl:1.18.15
+    volumeMounts:
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #!/bin/bash
+
+      RELEASES_REPO_DIR="/releases"
+
+      pushd $RELEASES_REPO_DIR
+      latest="$(find azure -regex 'azure/v[0-9]*\.[0-9]*\.[0-9]*' | sort | tail -n1)"
+      release="$(cat "${latest}/release.yaml" |yq -r .)"
+      popd
+
+      latest_version="$(echo "$release" | jq -r '.metadata.name')"
+      new_version="$latest_version-$(date +'%s')"
+
+      azure_operator_head_sha="$(git rev-parse HEAD)"
+      azure_operator_new_version="$(cat pkg/project/project.go |grep version | grep -v return|cut -d '"' -f2)"
+      azure_operator_latest_version="$(echo "$release" | jq -r '.spec.components[] | select(.name == "azure-operator").version')"
+
+      release="$(echo "$release" | jq -r ".metadata.name = \"$new_version\"")"
+      release="$(echo "$release" | jq -r ".spec.date = \"$(date -u +'%FT%TZ')\"")"
+      release="$(echo "$release" | jq -r '.spec.state = "wip"')"
+      release="$(echo "$release" | jq -r ".spec.components |= map(if .name == \"azure-operator\" then .version = \"${azure_operator_new_version}\" else . end)")"
+      release="$(echo "$release" | jq -r ".spec.components |= map(if .name == \"azure-operator\" then .reference = \"${azure_operator_latest_version}-${azure_operator_head_sha}\" else . end)")"
+      release="$(echo "$release" | jq -r '.spec.components |= map(if .name == "azure-operator" then .catalog = "control-plane-test-catalog" else . end)')"
+
+      KUBECONFIG=/etc/kubeconfig echo "$release" | kubectl apply -f -
