@@ -19,6 +19,8 @@ spec:
           value: $(workspaces.cluster.path)/cluster-id
         - name: RESULTS_PATH
           value: $(workspaces.cluster.path)/sonobuoy-results.tar
+        - name: E2E_PROVIDER
+          value: azure
       script: |
         #! /bin/sh
         run-sonobuoy-tests giantswarm
