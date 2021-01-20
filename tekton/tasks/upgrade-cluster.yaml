@@ -9,7 +9,8 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: upgrade-cluster
-    image: quay.io/giantswarm/standup:2.1.0
+    image: quay.io/giantswarm/standup:2.3.0
     script: |
       #! /bin/sh
-      echo "This will upgrade the cluster to $(cat $(workspaces.cluster.path)/release-id)"
+      echo "Upgrading cluster $(cat $(workspaces.cluster.path)/cluster-id) to $(cat $(workspaces.cluster.path)/release-id)"
+      kubectl --kubeconfig /etc/kubeconfig/azure -n$(kubectl --kubeconfig /etc/kubeconfig/azure get clusters -A | grep $(cat $(workspaces.cluster.path)/cluster-id) | awk '{print $1}') patch cluster/$(cat $(workspaces.cluster.path)/cluster-id) -p '{"metadata":{"labels":{"release.giantswarm.io/version": "$(cat $(workspaces.cluster.path)/release-id)"}}}' --type=merge

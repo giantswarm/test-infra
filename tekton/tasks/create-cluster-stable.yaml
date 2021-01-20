@@ -16,13 +16,9 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
-  params:
-  - name: release-id
-    description: The release version to use when creating the cluster.
-    default: s3-bucket-credentials-secret
   steps:
   - name: create-cluster-stable
-    image: quay.io/giantswarm/standup:2.1.0
+    image: quay.io/giantswarm/standup:2.3.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -30,9 +26,10 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      LATEST_STABLE_RELEASE=`find /workspace/releases/azure -regex 'azure/v[0-9]*\.[0-9]*\.[0-9]*' | sort | tail -n1`
+      LATEST_STABLE_RELEASE=$(kubectl --kubeconfig /etc/kubeconfig/azure get releases -o json | jq -r '[.items | sort_by(.metadata.name) | reverse[] | select(.metadata.name | test("v[0-9]*\\.[0-9]*\\.[0-9]*$")) ][].metadata.name' | head -n1)
+      echo "Creating cluster using release ${LATEST_STABLE_RELEASE}"
       standup create cluster \
       --config /etc/endpoints-config/config \
-      --release ${LATEST_STABLE_RELEASE#"azure/"} \
+      --release ${LATEST_STABLE_RELEASE} \
       --provider $(cat $(workspaces.cluster.path)/provider) \
       --output $(workspaces.cluster.path)
