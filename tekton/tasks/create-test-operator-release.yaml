@@ -1,0 +1,51 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-test-operator-release
+  namespace: test-workloads
+  labels:
+    app.kubernetes.io/name: "standup"
+spec:
+  resources:
+    inputs:
+    - name: releases
+      type: git
+    - name: azure-operator
+      type: git
+  volumes:
+  - name: endpoints-config
+    secret:
+      secretName: standup-endpoints-config
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: chown-releases
+    command:
+    - chown
+    - -R
+    - 1000:1000
+    - /workspace
+    image: quay.io/giantswarm/standup:2.4.0
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+  - name: create-test-operator-release
+    image: quay.io/giantswarm/standup:2.4.0
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+      standup create test-operator-release \
+      --config /etc/endpoints-config/config \
+      --kubeconfig /etc/kubeconfig \
+      --operator-path /workspace/azure-operator \
+      --releases-path /workspace/releases \
+      --output $(workspaces.cluster.path) \
+      --provider azure
