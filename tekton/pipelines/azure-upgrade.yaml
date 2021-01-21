@@ -57,6 +57,19 @@ spec:
     - name: cluster
       workspace: cluster
 
+  - name: upload-to-s3-bucket
+    runAfter: [test-azure]
+    taskRef:
+      name: upload-to-s3-bucket
+    params:
+      - name: prow-job-id
+        value: "$(params.PROW_JOB_ID)"
+      - name: file-to-upload
+        value: $(workspaces.cluster.path)/sonobuoy-results.tar
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
   finally:
   - name: cleanup
     taskRef:
