@@ -10,6 +10,9 @@ spec:
   steps:
   - name: upgrade-cluster
     image: quay.io/giantswarm/standup:2.3.0
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
       echo "Upgrading cluster $(cat $(workspaces.cluster.path)/cluster-id) to $(cat $(workspaces.cluster.path)/release-id)"
