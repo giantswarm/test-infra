@@ -1,0 +1,75 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: azure-operator
+  namespace: test-workloads
+spec:
+  resources:
+  - name: releases
+    type: git
+  - name: azure-operator
+    type: git
+  workspaces:
+  - name: cluster
+  params:
+  - name: PROW_JOB_ID
+    type: string
+  tasks:
+  - name: create-test-operator-release
+    taskRef:
+      name: create-test-operator-release
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
+      - name: azure-operator
+        resource: azure-operator
+
+  - name: create-cluster
+    runAfter: [create-test-operator-release]
+    taskRef:
+      name: create-cluster
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: wait-for-ready
+    runAfter: [create-cluster]
+    timeout: 1h0m0s
+    taskRef:
+      name: wait-for-ready
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: test-azure
+    runAfter: [wait-for-ready]
+    taskRef:
+      name: azure
+    workspaces:
+    - name: cluster
+      workspace: cluster
+
+  - name: upload-to-s3-bucket
+    runAfter: [test-azure]
+    taskRef:
+      name: upload-to-s3-bucket
+    params:
+      - name: prow-job-id
+        value: "$(params.PROW_JOB_ID)"
+      - name: file-to-upload
+        value: $(workspaces.cluster.path)/sonobuoy-results.tar
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  finally:
+  - name: cleanup
+    taskRef:
+      name: cleanup
+    workspaces:
+      - name: cluster
+        workspace: cluster
