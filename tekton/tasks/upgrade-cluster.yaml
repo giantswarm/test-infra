@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: upgrade-cluster
+  namespace: test-workloads
+spec:
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: upgrade-cluster
+    image: quay.io/giantswarm/standup:2.3.0
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      set -eo pipefail
+
+      CLUSTER_NAMESPACE=$(kubectl --kubeconfig /etc/kubeconfig/azure get clusters -A | grep $(cat $(workspaces.cluster.path)/cluster-id) | awk '{print $1}')
+      CLUSTER_ID=$(cat $(workspaces.cluster.path)/cluster-id)
+      RELEASE_ID=$(cat $(workspaces.cluster.path)/release-id)
+
+      # Wait for the operator to be ready
+      while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} ${CLUSTER_ID} -o json | jq -e '.status.conditions[] | select(.type=="Ready" and .status=="True")'>/dev/null
+      do
+        echo "Cluster '${CLUSTER_ID}' is not Ready yet"
+        sleep 10
+      done
+
+      echo "Upgrading cluster ${CLUSTER_ID} to ${RELEASE_ID}"
+
+      # Update cluster label to trigger upgrade
+      kubectl --kubeconfig /etc/kubeconfig/azure -n${CLUSTER_NAMESPACE} patch cluster/${CLUSTER_ID} -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${RELEASE_ID}\"}}}" --type=merge
+
+      # Wait for the operator to pick up the change and start upgrading
+      while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} ${CLUSTER_ID} -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="True")'>/dev/null
+      do
+        echo "Cluster '${CLUSTER_ID}' is not Upgrading yet"
+        sleep 10
+      done
+
+      # Wait for the upgrade to finish
+      while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} ${CLUSTER_ID} -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="False")'>/dev/null
+      do
+        echo "Cluster ${CLUSTER_ID} is still upgrading"
+        sleep 10
+      done
+
