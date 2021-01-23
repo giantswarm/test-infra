@@ -1,0 +1,52 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: github-listener-interceptor
+  namespace: tekton-pipelines
+spec:
+  resources:
+    kubernetesResource:
+      spec:
+        template:
+          spec:
+            serviceAccountName: tekton-triggers-example-sa
+            containers:
+              - resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 250m
+                    memory: 64Mi
+  triggers:
+    - name: github-listener
+      template:
+        ref: github-template
+      bindings:
+        - kind: TriggerBinding
+          ref: github-pr-binding
+      interceptors:
+        - github:
+            eventTypes:
+              - issue_comment
+            secretRef:
+              secretKey: secretToken
+              secretName: github-secret
+        - cel:
+            filter:
+              body.repository.full_name.startsWith('giantswarm/') && body.repository.name
+              in ['sonobuoy-plugin']  && 'pull_request' in body.issue && 'url' in body.issue.pull_request
+              && body.issue.state == 'open' && body.comment.body.matches('^/test($| [^]*[ ]*$)')
+            overlays:
+              - key: add_pr_body.pull_request_url
+                expression: body.issue.pull_request.url
+        - webhook:
+            objectRef:
+              apiVersion: v1
+              kind: Service
+              name: add-pr-body
+              namespace: tekton-pipelines
+        - cel:
+            overlays:
+              - key: git_clone_depth
+                expression: "string(body.extensions.add_pr_body.pull_request_body.commits + 1.0)"
