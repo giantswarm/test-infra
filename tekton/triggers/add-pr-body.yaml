@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: add-pr-body
+  namespace: tekton-pipelines
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: add-pr-body
+  template:
+    metadata:
+      labels:
+        app: add-pr-body
+    spec:
+      containers:
+        - image: gcr.io/tekton-releases/dogfooding/add-pr-body-37196dbb1230b7cd43fd605aeb3ecda6@sha256:12120c1cb9235d548c2f7bed45932870a508abaa9c8f53077ccb2db34b38e3cb
+          imagePullPolicy: Always
+          name: add-pr-body-interceptor
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 65532
+      serviceAccountName: add-pr-body-bot
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: add-pr-body
+  namespace: tekton-pipelines
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: add-pr-body
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: add-pr-body-bot
+  namespace: tekton-pipelines
