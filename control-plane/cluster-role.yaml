@@ -7,6 +7,7 @@ rules:
       - cluster.x-k8s.io
       - infrastructure.giantswarm.io
       - release.giantswarm.io
+      - security.giantswarm.io
     resources:
       - "*"
     verbs:
