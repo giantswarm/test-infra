@@ -1,0 +1,7 @@
+apiVersion: security.giantswarm.io/v1alpha1
+kind: Organization
+metadata:
+  name: conformance-testing
+  labels:
+    giantswarm.io/conformance-testing: "true"
+spec: { }

@@ -30,6 +30,7 @@ spec:
       echo "Creating cluster using release ${LATEST_STABLE_RELEASE}"
       standup create cluster \
       --config /etc/endpoints-config/config \
+      --kubeconfig /etc/kubeconfig \
       --release ${LATEST_STABLE_RELEASE} \
       --provider $(cat $(workspaces.cluster.path)/provider) \
       --output $(workspaces.cluster.path)
