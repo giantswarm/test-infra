@@ -1,0 +1,17 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: github-pr-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: gitRevision
+      value: $(body.extensions.add_pr_body.pull_request_body.head.sha)
+    - name: pullRequestNumber
+      value: $(body.extensions.add_pr_body.pull_request_body.number)
+    - name: pullRequestUrl
+      value: $(body.issue.pull_request.html_url)
+    - name: gitHubCommand
+      value: $(body.comment.body)
+    - name: gitRepository
+      value: $(body.repository.html_url)
