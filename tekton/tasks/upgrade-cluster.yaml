@@ -13,7 +13,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: upgrade-cluster
-    image: quay.io/giantswarm/standup:2.3.0
+    image: quay.io/giantswarm/standup:2.5.0
     volumeMounts:
     - name: kubeconfig
       mountPath: /etc/kubeconfig
@@ -25,24 +25,6 @@ spec:
       CLUSTER_NAMESPACE=$(kubectl --kubeconfig /etc/kubeconfig/azure get clusters -A | grep $(cat $(workspaces.cluster.path)/cluster-id) | awk '{print $1}')
       CLUSTER_ID=$(cat $(workspaces.cluster.path)/cluster-id)
       RELEASE_ID=$(cat $(workspaces.cluster.path)/release-id)
-
-      # Wait for the cluster to be ready
-      while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} ${CLUSTER_ID} -o json | jq -e '.status.conditions[] | select(.type=="Ready" and .status=="True")'>/dev/null
-      do
-        echo "$(date): Cluster '${CLUSTER_ID}' is not Ready yet"
-        sleep 10
-      done
-
-      echo "$(date): Cluster ${CLUSTER_ID} is Ready"
-
-      # Wait for the cluster to be completely created
-      while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} ${CLUSTER_ID} -o json | jq -e '.status.conditions[] | select(.type=="Creating" and .status=="False")'>/dev/null
-      do
-        echo "$(date): Cluster '${CLUSTER_ID}' is still creating"
-        sleep 10
-      done
-
-      echo "$(date): Cluster ${CLUSTER_ID} has finished creating"
 
       echo "$(date): Upgrading cluster ${CLUSTER_ID} to ${RELEASE_ID}"
 

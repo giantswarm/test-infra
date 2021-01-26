@@ -32,11 +32,11 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: wait-for-ready
+  - name: wait-for-condition-ready
     runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
-      name: wait-for-ready
+      name: wait-for-condition-ready
     workspaces:
       - name: cluster
         workspace: cluster
