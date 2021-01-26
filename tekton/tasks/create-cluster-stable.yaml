@@ -18,7 +18,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: create-cluster-stable
-    image: quay.io/giantswarm/standup:2.3.0
+    image: quay.io/giantswarm/standup:2.5.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
