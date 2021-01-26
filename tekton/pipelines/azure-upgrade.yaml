@@ -42,7 +42,7 @@ spec:
         workspace: cluster
 
   - name: upgrade-cluster
-    runAfter: [wait-for-ready]
+    runAfter: [wait-for-condition-ready]
     taskRef:
       name: upgrade-cluster
     workspaces:

@@ -46,7 +46,7 @@ spec:
         workspace: cluster
 
   - name: test-azure
-    runAfter: [wait-for-ready]
+    runAfter: [wait-for-condition-ready]
     taskRef:
       name: azure
     workspaces:
