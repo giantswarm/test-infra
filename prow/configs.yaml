@@ -139,5 +139,5 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test azure-upgrade"
-    rerun_command: "/test azure-upgrade"
+    trigger: "/test upgrade-azure"
+    rerun_command: "/test upgrade-azure"
