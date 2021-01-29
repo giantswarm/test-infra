@@ -100,6 +100,7 @@ presubmits:
       pipelineRef:
         name: azure
       serviceAccountName: test-runs
+      timeout: 3h0m0s
       resources:
         - name: releases
           resourceRef:
@@ -124,6 +125,7 @@ presubmits:
       pipelineRef:
         name: azure-upgrade
       serviceAccountName: test-runs
+      timeout: 3h0m0s
       resources:
         - name: releases
           resourceRef:
