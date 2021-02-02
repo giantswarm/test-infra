@@ -1,0 +1,43 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: debug-azure
+  namespace: test-workloads
+spec:
+  resources:
+  - name: releases
+    type: git
+  workspaces:
+  - name: cluster
+  params:
+  - name: PROW_JOB_ID
+    type: string
+  - name: CLUSTER_ID
+    type: string
+  tasks:
+  - name: generate-workload-cluster-kubeconfig
+    taskRef:
+      name: generate-workload-cluster-kubeconfig
+    params:
+    - name: cluster-id
+      value: "$(params.CLUSTER_ID)"
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: wait-for-condition-ready
+    runAfter: [generate-workload-cluster-kubeconfig]
+    timeout: 1h0m0s
+    taskRef:
+      name: wait-for-condition-ready
+    workspaces:
+    - name: cluster
+      workspace: cluster
+
+  - name: test-azure
+    runAfter: [wait-for-condition-ready]
+    taskRef:
+      name: azure
+    workspaces:
+    - name: cluster
+      workspace: cluster
