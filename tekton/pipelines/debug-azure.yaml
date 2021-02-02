@@ -38,6 +38,9 @@ spec:
     runAfter: [wait-for-condition-ready]
     taskRef:
       name: azure
+    params:
+    - name: test-deletion
+      value: "0"
     workspaces:
     - name: cluster
       workspace: cluster
