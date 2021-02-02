@@ -24,7 +24,6 @@ spec:
 
         CLUSTER_NAMESPACE=$(kubectl --kubeconfig /etc/kubeconfig/azure get clusters -A | grep $(cat $(workspaces.cluster.path)/cluster-id) | awk '{print $1}')
         CLUSTER_ID=$(cat $(workspaces.cluster.path)/cluster-id)
-        RELEASE_ID=$(cat $(workspaces.cluster.path)/release-id)
 
         # Wait for the cluster to be ready
         while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} ${CLUSTER_ID} -o json | jq -e '.status.conditions[] | select(.type=="Ready" and .status=="True")'>/dev/null
