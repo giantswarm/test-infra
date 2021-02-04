@@ -7,3 +7,4 @@ secrets/standup-kubeconfig-secret.yaml
 secrets/sonobuoy-kubeconfig-secret.yaml
 .DS_Store
 .idea
+templated
