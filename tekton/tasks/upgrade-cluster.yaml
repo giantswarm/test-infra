@@ -28,8 +28,11 @@ spec:
 
       echo "$(date): Upgrading cluster ${CLUSTER_ID} to ${RELEASE_ID}"
 
+      # Remove initial "v" from RELEASE_ID
+      release="$(echo "${RELEASE_ID#"v"}")"
+
       # Update cluster label to trigger upgrade
-      kubectl --kubeconfig /etc/kubeconfig/azure -n${CLUSTER_NAMESPACE} patch cluster/${CLUSTER_ID} -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${RELEASE_ID}\"}}}" --type=merge
+      kubectl --kubeconfig /etc/kubeconfig/azure -n${CLUSTER_NAMESPACE} patch cluster/${CLUSTER_ID} -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge
 
       # Wait for the operator to pick up the change and start upgrading
       while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} ${CLUSTER_ID} -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="True")'>/dev/null
