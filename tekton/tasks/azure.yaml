@@ -7,6 +7,10 @@ spec:
   workspaces:
     - name: cluster
       description: Cluster information is stored here.
+  params:
+  - name: test-deletion
+    description: Whether or not test deletion of clusters.
+    default: "1"
   steps:
     - name: run-tests
       image: quay.io/giantswarm/run-sonobuoy-tests
@@ -21,6 +25,8 @@ spec:
           value: $(workspaces.cluster.path)/sonobuoy-results.tar
         - name: PROVIDER
           value: azure
+        - name: TEST_DELETION
+          value: $(params.test-deletion)
       script: |
         #! /bin/sh
         run-sonobuoy-tests giantswarm
