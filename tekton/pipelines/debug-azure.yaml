@@ -44,3 +44,16 @@ spec:
     workspaces:
     - name: cluster
       workspace: cluster
+
+  - name: manage-sonobuoy-results
+    runAfter: [test-azure]
+    taskRef:
+      name: manage-sonobuoy-results
+    params:
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/azure"
+      - name: sonobuoy-namespace
+        value: "$(params.CLUSTER_ID)-sonobuoy"
+    workspaces:
+      - name: cluster
+        workspace: cluster

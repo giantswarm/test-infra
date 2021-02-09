@@ -50,8 +50,19 @@ spec:
     - name: cluster
       workspace: cluster
 
-  - name: upload-to-s3-bucket
+  - name: manage-sonobuoy-results
     runAfter: [run-tests]
+    taskRef:
+      name: manage-sonobuoy-results
+    params:
+      - name: kubeconfig-path
+        value: $(workspaces.cluster.path)/kubeconfig
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: upload-to-s3-bucket
+    runAfter: [manage-sonobuoy-results]
     taskRef:
       name: upload-to-s3-bucket
     params:
