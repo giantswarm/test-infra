@@ -36,6 +36,24 @@ Feel free to reach out to team ludacris if you have further questions.
 
 You can find guides for the creation of new tests in the `docs` subfolder.
 
+### Local development
+
+A lot of functionality of tekton is available locally - the biggest exceptions being anything requiring an Ingress of webhooks.
+
+Tools required for local development:
+- KIND
+- Kustomize
+- Kubectl
+- Giant Swarm internal tooling for secrets
+
+To setup tekton in a KIND cluster you can simply do the following:
+1. Create a cluster with `kind create cluster`
+2. Apply all necessary files with `./tekton-kind.sh`
+
+Hack away!
+
+### In our ops cluster
+
 Deploying `test-infra` is currently a bit cumbersome as it is running as an app inside a tenant cluster.
 The tenant cluster is `rfjh2` on `gorilla`.
 To update `test-infra` you will need to manually edit the `app` CR on the `gorilla` CP in the namespace `rfjh2`.
