@@ -1,11 +1,13 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: azure-upgrade
+  name: azure-operator
   namespace: test-workloads
 spec:
   resources:
   - name: releases
+    type: git
+  - name: azure-operator
     type: git
   workspaces:
   - name: cluster
@@ -13,19 +15,20 @@ spec:
   - name: PROW_JOB_ID
     type: string
   tasks:
-  - name: create-release
+  - name: create-test-operator-release
     taskRef:
-      name: create-release
+      name: create-test-operator-release
     workspaces:
     - name: cluster
       workspace: cluster
     resources:
       inputs:
-        - name: releases
-          resource: releases
+      - name: releases
+        resource: releases
+      - name: azure-operator
+        resource: azure-operator
 
   - name: get-latest-release
-    runAfter: [create-release]
     taskRef:
       name: get-latest-release
     params:
@@ -53,7 +56,7 @@ spec:
       name: wait-for-condition-ready
     params:
       - name: cluster-id
-        value: "$(tasks.create-cluster-stable.results.cluster-id)"
+        value: "$(tasks.create-cluster.results.cluster-id)"
       - name: kubeconfig-path
         value: "/etc/kubeconfig/azure"
     workspaces:
@@ -70,10 +73,10 @@ spec:
       - name: kubeconfig-path
         value: "/etc/kubeconfig/azure"
       - name: release-id
-        value: "$(tasks.create-release.results.release-id)"
+        value: "$(tasks.create-test-operator-release.results.release-id)"
     workspaces:
-    - name: cluster
-      workspace: cluster
+      - name: cluster
+        workspace: cluster
 
   - name: test-azure
     runAfter: [upgrade-cluster]
@@ -94,7 +97,7 @@ spec:
       - name: kubeconfig-path
         value: "/etc/kubeconfig/azure"
       - name: sonobuoy-namespace
-        value: "$(tasks.create-cluster-stable.results.cluster-id)-sonobuoy"
+        value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
     workspaces:
       - name: cluster
         workspace: cluster
