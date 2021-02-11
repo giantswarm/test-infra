@@ -24,16 +24,30 @@ spec:
         - name: releases
           resource: releases
 
-  - name: create-cluster-stable
+  - name: get-latest-release
     runAfter: [create-release]
     taskRef:
       name: create-cluster-stable
+    params:
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/azure"
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: create-cluster
+    runAfter: [get-latest-release]
+    taskRef:
+      name: create-cluster
+    params:
+    - name: release-id
+      value: "$(tasks.get-latest-release.results.release-id)"
     workspaces:
       - name: cluster
         workspace: cluster
 
   - name: wait-for-condition-ready
-    runAfter: [create-cluster-stable]
+    runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
       name: wait-for-condition-ready
