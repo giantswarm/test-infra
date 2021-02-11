@@ -20,6 +20,9 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
+  results:
+  - name: release-id
+    description: The ID of the created release.
   steps:
   - name: chown-releases
     command:
@@ -45,3 +48,5 @@ spec:
       --kubeconfig /etc/kubeconfig \
       --releases /workspace/releases \
       --output $(workspaces.cluster.path)
+
+      cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)
