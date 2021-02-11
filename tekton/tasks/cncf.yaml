@@ -9,10 +9,10 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: run-tests
-    image: quay.io/giantswarm/run-sonobuoy-tests
+    image: sonobuoy/sonobuoy:v0.20.0
     env:
       - name: "KUBECONFIG_PATH"
         value: $(workspaces.cluster.path)/kubeconfig
     script: |
       #! /bin/sh
-      sonobuoy run --kubeconfig "${KUBECONFIG_PATH}" --mode=certified-conformance --wait
+      /sonobuoy run --kubeconfig "${KUBECONFIG_PATH}" --mode=certified-conformance --wait

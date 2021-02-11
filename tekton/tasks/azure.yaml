@@ -14,7 +14,7 @@ spec:
     type: string
   steps:
     - name: run-tests
-      image: quay.io/giantswarm/run-sonobuoy-tests
+      image: sonobuoy/sonobuoy:v0.20.0
       env:
         - name: TC_KUBECONFIG_PATH
           value: $(workspaces.cluster.path)/kubeconfig
@@ -28,7 +28,7 @@ spec:
           value: $(params.test-deletion)
       script: |
         #! /bin/sh
-        sonobuoy run \
+        /sonobuoy run \
             --kubeconfig "${KUBECONFIG_PATH}" \
             --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
             --plugin https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml \

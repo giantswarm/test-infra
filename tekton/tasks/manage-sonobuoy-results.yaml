@@ -17,29 +17,29 @@ spec:
       default: "sonobuoy"
   steps:
     - name: manage-sonobuoy-results
-      image: sonobuoy/sonobuoy:0.20.0
+      image: sonobuoy/sonobuoy:v0.20.0
       env:
         - name: RESULTS_PATH
           value: $(workspaces.cluster.path)/sonobuoy-results.tar
       script: |
         #! /bin/sh
 
-        set -eo pipefail
+        set -e
 
         cleanup() {
-          sonobuoy delete --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" --all --wait || true
+          /sonobuoy delete --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" --all --wait || true
         }
 
         trap cleanup INT TERM EXIT
 
-        sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
+        /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
 
-        outfile=$(sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)")
-        sonobuoy results "$outfile"
-        sonobuoy results "$outfile" --mode detailed
+        outfile=$(/sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)")
+        /sonobuoy results "$outfile"
+        /sonobuoy results "$outfile" --mode detailed
         mv "$outfile" "${RESULTS_PATH}"
 
-        if sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" | grep failed >/dev/null; then
+        if /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" | grep failed >/dev/null; then
           exit 1
         fi
       volumeMounts:
