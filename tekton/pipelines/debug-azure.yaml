@@ -21,6 +21,8 @@ spec:
     params:
     - name: cluster-id
       value: "$(params.CLUSTER_ID)"
+    - name: kubeconfig-path
+      value: "/etc/kubeconfig/azure"
     workspaces:
       - name: cluster
         workspace: cluster
@@ -31,10 +33,10 @@ spec:
     taskRef:
       name: wait-for-condition-ready
     params:
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
       - name: cluster-id
         value: "$(params.CLUSTER_ID)"
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/azure"
     workspaces:
     - name: cluster
       workspace: cluster
@@ -44,6 +46,8 @@ spec:
     taskRef:
       name: azure
     params:
+    - name: kubeconfig-path
+      value: "/etc/kubeconfig/azure"
     - name: test-deletion
       value: "0"
     workspaces:

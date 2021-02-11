@@ -15,6 +15,9 @@ spec:
   - name: cluster-id
     type: string
     description: Cluster ID for the cluster that will be upgraded.
+  - name: kubeconfig-path
+    type: string
+    description: Kubeconfig path for the cluster where sonobuoy will run.
   - name: release-id
     type: string
     description: Release ID that the cluster will be upgraded to.
@@ -29,7 +32,7 @@ spec:
 
       set -eo pipefail
 
-      CLUSTER_NAMESPACE=$(kubectl --kubeconfig /etc/kubeconfig/azure get clusters -A | grep $(params.cluster-id) | awk '{print $1}')
+      CLUSTER_NAMESPACE=$(kubectl --kubeconfig $(params.kubeconfig-path) get clusters -A | grep $(params.cluster-id) | awk '{print $1}')
 
       echo "$(date): Upgrading cluster $(params.cluster-id) to $(params.release-id)"
 
@@ -37,17 +40,17 @@ spec:
       release="$(echo "${RELEASE_ID#"v"}")"
 
       # Update cluster label to trigger upgrade
-      kubectl --kubeconfig /etc/kubeconfig/azure -n${CLUSTER_NAMESPACE} patch cluster/$(params.cluster-id) -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge
+      kubectl --kubeconfig $(params.kubeconfig-path) -n${CLUSTER_NAMESPACE} patch cluster/$(params.cluster-id) -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge
 
       # Wait for the operator to pick up the change and start upgrading
-      while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="True")'>/dev/null
+      while ! kubectl --kubeconfig $(params.kubeconfig-path) get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="True")'>/dev/null
       do
         echo "$(date): Cluster '$(params.cluster-id)' is not Upgrading yet"
         sleep 10
       done
 
       # Wait for the upgrade to finish
-      while ! kubectl --kubeconfig /etc/kubeconfig/azure get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="False")'>/dev/null
+      while ! kubectl --kubeconfig $(params.kubeconfig-path) get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="False")'>/dev/null
       do
         echo "$(date): Cluster $(params.cluster-id) is still upgrading"
         sleep 10

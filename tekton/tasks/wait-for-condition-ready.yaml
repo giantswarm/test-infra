@@ -12,12 +12,12 @@ spec:
     - name: cluster
       description: Cluster information is stored here.
   params:
-  - name: kubeconfig-path
-    type: string
-    description: Kubeconfig path for the cluster where sonobuoy will run.
   - name: cluster-id
     type: string
     description: Cluster ID for the cluster that we want to wait for.
+  - name: kubeconfig-path
+    type: string
+    description: Kubeconfig path for the cluster where sonobuoy will run.
   steps:
     - name: wait-for-condition-ready
       image: quay.io/giantswarm/standup:2.5.0

@@ -38,10 +38,10 @@ spec:
     taskRef:
       name: wait-for-condition-ready
     params:
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
       - name: cluster-id
         value: "$(tasks.create-cluster-stable.results.cluster-id)"
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/azure"
     workspaces:
       - name: cluster
         workspace: cluster
@@ -53,6 +53,8 @@ spec:
     params:
       - name: cluster-id
         value: "$(tasks.create-cluster-stable.results.cluster-id)"
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/azure"
       - name: release-id
         value: "$(tasks.create-release.results.release-id)"
     workspaces:
@@ -63,6 +65,9 @@ spec:
     runAfter: [upgrade-cluster]
     taskRef:
       name: azure
+    params:
+    - name: kubeconfig-path
+      value: "/etc/kubeconfig/azure"
     workspaces:
     - name: cluster
       workspace: cluster
