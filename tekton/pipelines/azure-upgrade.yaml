@@ -53,7 +53,7 @@ spec:
       name: wait-for-condition-ready
     params:
       - name: cluster-id
-        value: "$(tasks.create-cluster-stable.results.cluster-id)"
+        value: "$(tasks.create-cluster.results.cluster-id)"
       - name: kubeconfig-path
         value: "/etc/kubeconfig/azure"
     workspaces:
@@ -66,7 +66,7 @@ spec:
       name: upgrade-cluster
     params:
       - name: cluster-id
-        value: "$(tasks.create-cluster-stable.results.cluster-id)"
+        value: "$(tasks.create-cluster.results.cluster-id)"
       - name: kubeconfig-path
         value: "/etc/kubeconfig/azure"
       - name: release-id
@@ -94,7 +94,7 @@ spec:
       - name: kubeconfig-path
         value: "/etc/kubeconfig/azure"
       - name: sonobuoy-namespace
-        value: "$(tasks.create-cluster-stable.results.cluster-id)-sonobuoy"
+        value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
     workspaces:
       - name: cluster
         workspace: cluster
