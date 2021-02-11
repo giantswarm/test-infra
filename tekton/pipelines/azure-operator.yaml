@@ -32,6 +32,9 @@ spec:
     runAfter: [create-test-operator-release]
     taskRef:
       name: create-cluster
+    params:
+    - name: release-id
+      value: "$(tasks.create-test-operator-release.results.release-id)"
     workspaces:
       - name: cluster
         workspace: cluster
