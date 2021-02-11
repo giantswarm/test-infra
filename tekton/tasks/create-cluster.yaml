@@ -16,6 +16,13 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
+  params:
+  - name: release-id
+    type: string
+    description: Release ID to use when creating the cluster.
+  results:
+  - name: cluster-id
+    description: The ID of the created cluster.
   steps:
   - name: create-cluster
     image: quay.io/giantswarm/standup:2.5.0
@@ -29,6 +36,8 @@ spec:
       standup create cluster \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
-      --release $(cat $(workspaces.cluster.path)/release-id) \
+      --release $(params.release-id) \
       --provider $(cat $(workspaces.cluster.path)/provider) \
       --output $(workspaces.cluster.path)
+
+      cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)

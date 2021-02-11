@@ -34,3 +34,5 @@ spec:
       --release ${LATEST_STABLE_RELEASE} \
       --provider $(cat $(workspaces.cluster.path)/provider) \
       --output $(workspaces.cluster.path)
+
+      cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
