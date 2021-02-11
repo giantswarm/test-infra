@@ -16,6 +16,9 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
+  results:
+  - name: cluster-id
+    description: The ID of the created cluster.
   steps:
   - name: create-cluster-stable
     image: quay.io/giantswarm/standup:2.5.0
@@ -34,3 +37,5 @@ spec:
       --release ${LATEST_STABLE_RELEASE} \
       --provider $(cat $(workspaces.cluster.path)/provider) \
       --output $(workspaces.cluster.path)
+
+      cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
