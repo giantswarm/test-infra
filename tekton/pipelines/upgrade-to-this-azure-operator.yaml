@@ -29,6 +29,7 @@ spec:
         resource: azure-operator
 
   - name: get-latest-release
+    runAfter: [create-test-operator-release]
     taskRef:
       name: get-latest-release
     params:
