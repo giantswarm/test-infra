@@ -35,7 +35,7 @@ spec:
       CLUSTER_NAMESPACE=$(kubectl --kubeconfig $(params.kubeconfig-path) get clusters -A | grep $(params.cluster-id) | awk '{print $1}')
 
       echo "$(date): Upgrading cluster $(params.cluster-id) to $(params.release-id)"
-
+      RELEASE_ID="$(params.release-id)"
       # Remove initial "v" from RELEASE_ID
       release="$(echo "${RELEASE_ID#"v"}")"
 
