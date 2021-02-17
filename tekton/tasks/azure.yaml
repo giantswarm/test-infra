@@ -17,6 +17,11 @@ spec:
     default: "1"
     type: string
   steps:
+    - name: download-sonobuoy-plugin
+      image: busybox
+      script: |
+        #! /bin/sh
+        wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml
     - name: run-tests
       image: sonobuoy/sonobuoy:v0.20.0
       env:
@@ -35,7 +40,7 @@ spec:
         /sonobuoy run \
             --kubeconfig "${KUBECONFIG_PATH}" \
             --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
-            --plugin https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml \
+            --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml \
             --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")" \
             --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${KUBECONFIG_PATH}")" \
             --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")" \
