@@ -103,8 +103,12 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: upload-to-s3-bucket
-    runAfter: [manage-sonobuoy-results]
+  finally:
+  - name: upload-to-s3-bucket # executed only when tests fail
+    when:
+      - input: $(tasks.manage-sonobuoy-results.status)
+        operator: in
+        values: ["Failed"]
     taskRef:
       name: upload-to-s3-bucket
     params:
@@ -116,7 +120,6 @@ spec:
       - name: cluster
         workspace: cluster
 
-  finally:
   - name: cleanup
     taskRef:
       name: cleanup
