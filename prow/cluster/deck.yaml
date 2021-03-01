@@ -89,7 +89,7 @@ spec:
       protocol: TCP
   type: ClusterIP
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: test-infra
@@ -123,7 +123,7 @@ spec:
         - prow.giantswarm.io
       secretName: prow-deck
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: deck-oauth2-proxy
@@ -144,7 +144,7 @@ spec:
             backend:
               serviceName: oauth2-proxy
               servicePort: 4180
-    - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io 
+    - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /oauth2

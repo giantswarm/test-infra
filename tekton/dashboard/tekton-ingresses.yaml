@@ -4,7 +4,7 @@
 # If updating the Tekton release, keep these intact.
 #
 #
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: test-infra
@@ -38,7 +38,7 @@ spec:
         - tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       secretName: tekton-dashboard
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: tekton-dashboard-oauth2-proxy
