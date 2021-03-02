@@ -162,6 +162,8 @@ spec:
           - path: /hook
             pathType: Prefix
             backend:
-              serviceName: hook
-              servicePort: 8888
+              service:
+                name: hook
+                port:
+                  number: 8888
 ---
