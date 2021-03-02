@@ -107,16 +107,22 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
-              serviceName: deck
-              servicePort: 80
+              service:
+                name: deck
+                port:
+                  number: 80
     - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
-              serviceName: deck
-              servicePort: 80
+              service:
+                name: deck
+                port:
+                  number: 80
   tls:
     - hosts:
         - prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
@@ -141,16 +147,22 @@ spec:
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
-              serviceName: oauth2-proxy
-              servicePort: 4180
+              service:
+                name: oauth2-proxy
+                port:
+                  number: 4180
     - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
-              serviceName: oauth2-proxy
-              servicePort: 4180
+              service:
+                name: oauth2-proxy
+                port:
+                  number: 4180
   tls:
     - hosts:
         - prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io

@@ -22,16 +22,22 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
-              serviceName: tekton-dashboard
-              servicePort: 9097
+              service:
+                name: tekton-dashboard
+                port:
+                  number: 9097
     - host: tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
-              serviceName: tekton-dashboard
-              servicePort: 9097
+              service:
+                name: tekton-dashboard
+                port:
+                  number: 9097
   tls:
     - hosts:
         - tekton.giantswarm.io
@@ -56,16 +62,22 @@ spec:
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
-              serviceName: oauth2-proxy
-              servicePort: 4180
+              service:
+                name: oauth2-proxy
+                port:
+                  number: 4180
     - host: tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
-              serviceName: oauth2-proxy
-              servicePort: 4180
+              service:
+                name: oauth2-proxy
+                port:
+                  number: 4180
   tls:
     - hosts:
         - tekton.giantswarm.io
