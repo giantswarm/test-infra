@@ -22,6 +22,7 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
               serviceName: tekton-dashboard
               servicePort: 9097
@@ -29,6 +30,7 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
               serviceName: tekton-dashboard
               servicePort: 9097
@@ -56,6 +58,7 @@ spec:
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
               serviceName: oauth2-proxy
               servicePort: 4180
@@ -63,6 +66,7 @@ spec:
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
               serviceName: oauth2-proxy
               servicePort: 4180

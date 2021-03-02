@@ -107,6 +107,7 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
               serviceName: deck
               servicePort: 80
@@ -114,6 +115,7 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Exact
             backend:
               serviceName: deck
               servicePort: 80
@@ -141,6 +143,7 @@ spec:
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
               serviceName: oauth2-proxy
               servicePort: 4180
@@ -148,6 +151,7 @@ spec:
       http:
         paths:
           - path: /oauth2
+            pathType: Prefix
             backend:
               serviceName: oauth2-proxy
               servicePort: 4180
