@@ -13,7 +13,9 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: el-github-listener-interceptor
-              servicePort: 8080
+              service:
+                name: el-github-listener-interceptor
+                port:
+                  number: 8080
             path: /
             pathType: ImplementationSpecific

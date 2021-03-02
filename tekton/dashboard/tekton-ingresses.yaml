@@ -24,8 +24,10 @@ spec:
           - path: /
             pathType: Exact
             backend:
-              serviceName: tekton-dashboard
-              servicePort: 9097
+              service:
+                name: tekton-dashboard
+                port:
+                  number: 9097
     - host: tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
