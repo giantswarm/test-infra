@@ -1,0 +1,90 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-cluster-kgs
+  namespace: test-workloads
+  labels:
+    app.kubernetes.io/name: "standup"
+spec:
+  volumes:
+  - name: endpoints-config
+    secret:
+      secretName: standup-endpoints-config
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  params:
+  - name: cluster-id
+    description: ID of the cluster that will be created.
+  - name: region
+    description: Cloud region where to create the resources.
+  - name: organization
+    default: giantswarm
+    description: Organization owning the cluster.
+  - name: master-az
+    description: Tenant master availability zone.
+  - name: availability-zones
+    description: List of availability zones to use, instead of setting a number. Use comma to separate values.
+  - name: nodex-max
+    default: 3
+    description: Maximum number of worker nodes for the node pool.
+  - name: nodex-min
+    default: 3
+    description: Minimum number of worker nodes for the node pool.
+  steps:
+  - name: render-cluster-manifests
+    image: quay.io/giantswarm/standup:2.6.0
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+      VERSION=v1.23.0
+      wget https://github.com/giantswarm/kubectl-gs/releases/download/${VERSION}/kubectl-gs-${VERSION}-linux-amd64.tar.gz
+      tar xzf kubectl-gs-${VERSION}-linux-amd64.tar.gz
+      chmod +x kubectl-gs-${VERSION}-linux-amd64/kubectl-gs
+      cp kubectl-gs-${VERSION}-linux-amd64/kubectl-gs /usr/bin/
+      kubectl-gs template cluster \
+      --provider $(cat $(workspaces.cluster.path)/provider)
+      --release $(cat $(workspaces.cluster.path)/release-id)
+      --name "CAPI Conformance Test $(date -u)"
+      --owner "$(params.organization)"
+
+
+    # env AWS_CONTROL_PLANE_MACHINE_TYPE=m5.xlarge \
+    # AWS_NODE_MACHINE_TYPE=m5.xlarge \
+    # AWS_REGION="$(params.region)" \
+    # AWS_SSH_KEY_NAME=tekton-capi-setup \
+    # clusterctl config cluster example \
+    # --infrastructure $(cat $(workspaces.cluster.path)/provider)
+    # --kubernetes-version=v1.19.7 \
+    # --control-plane-machine-count=1 \
+    # --worker-machine-count=$(params.nodex-min) > $(workspaces.cluster.path)/cluster.yaml
+      
+      
+    # --from=file://$PWD/cluster-template-flatcar.yaml    
+    # standup create clusterkgs \
+    # --config /etc/endpoints-config/config \
+    # --release $(cat $(workspaces.cluster.path)/release-id) \
+    # --provider $(cat $(workspaces.cluster.path)/provider) \
+    # --cluster-id "$(params.cluster-id)" \
+    # --region "$(params.region)" \
+    # --organization "$(params.organization)" \
+    # --master-az "$(params.master-az)" \
+    # --availability-zones "$(params.availability-zones)" \
+    # --nodex-max $(params.nodex-max) \
+    # --nodex-min $(params.nodex-min) \
+    # --output $(workspaces.cluster.path)
+
+  - name: create-cluster
+    image: bitnami/kubectl:1.18
+    args: [
+      "apply",
+      "-f",
+      "$(workspaces.cluster.path)/manifests.yaml"
+    ]
