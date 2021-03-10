@@ -42,14 +42,14 @@ presubmits:
                 storage: 10Mi
     trigger: "/test cis"
     rerun_command: "/test cis"
-  - name: cis-capi
+  - name: security-cis-capi
     agent: tekton-pipeline
     max_concurrency: 3
     always_run: false
     skip_report: false
     pipeline_run_spec:
       pipelineRef:
-        name: cis-capi
+        name: security-cis-capi
       serviceAccountName: test-runs
       timeout: 5h0m0s
       resources:
@@ -65,8 +65,8 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test cis-capi"
-    rerun_command: "/test cis-capi"
+    trigger: "/test security-cis-capi"
+    rerun_command: "/test security-cis-capi"
   - name: cncf
     agent: tekton-pipeline
     max_concurrency: 3

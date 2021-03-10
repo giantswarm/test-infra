@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: cis-capi
+  name: security-cis-capi
   namespace: test-workloads
 spec:
   resources:
