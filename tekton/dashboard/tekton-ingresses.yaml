@@ -4,7 +4,7 @@
 # If updating the Tekton release, keep these intact.
 #
 #
-apiVersion: networking.k8s.io/v1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   namespace: test-infra
@@ -23,26 +23,22 @@ spec:
         paths:
           - path: /
             backend:
-              service:
-                name: tekton-dashboard
-                port:
-                  number: 9097
+              serviceName: tekton-dashboard
+              servicePort: 9097
     - host: tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /
             backend:
-              service:
-                name: tekton-dashboard
-                port:
-                  number: 9097
+              serviceName: tekton-dashboard
+              servicePort: 9097
   tls:
     - hosts:
         - tekton.giantswarm.io
         - tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       secretName: tekton-dashboard
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: tekton-dashboard-oauth2-proxy
@@ -60,22 +56,16 @@ spec:
       http:
         paths:
           - path: /oauth2
-            pathType: Prefix
             backend:
-              service:
-                name: oauth2-proxy
-                port:
-                  number: 4180
+              serviceName: oauth2-proxy
+              servicePort: 4180
     - host: tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:
         paths:
           - path: /oauth2
-            pathType: Prefix
             backend:
-              service:
-                name: oauth2-proxy
-                port:
-                  number: 4180
+              serviceName: oauth2-proxy
+              servicePort: 4180
   tls:
     - hosts:
         - tekton.giantswarm.io
