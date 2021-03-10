@@ -31,10 +31,10 @@ spec:
   - name: availability-zones
     description: List of availability zones to use, instead of setting a number. Use comma to separate values.
   - name: nodex-max
-    default: 3
+    default: "3"
     description: Maximum number of worker nodes for the node pool.
   - name: nodex-min
-    default: 3
+    default: "3"
     description: Minimum number of worker nodes for the node pool.
   steps:
   - name: render-cluster-manifests
@@ -57,32 +57,6 @@ spec:
       --name "CAPI Conformance Test $(date -u)"
       --owner "CAPI-CIS"
 
-
-    # env AWS_CONTROL_PLANE_MACHINE_TYPE=m5.xlarge \
-    # AWS_NODE_MACHINE_TYPE=m5.xlarge \
-    # AWS_REGION="$(params.region)" \
-    # AWS_SSH_KEY_NAME=tekton-capi-setup \
-    # clusterctl config cluster example \
-    # --infrastructure $(cat $(workspaces.cluster.path)/provider)
-    # --kubernetes-version=v1.19.7 \
-    # --control-plane-machine-count=1 \
-    # --worker-machine-count=$(params.nodex-min) > $(workspaces.cluster.path)/cluster.yaml
-      
-      
-    # --from=file://$PWD/cluster-template-flatcar.yaml    
-    # standup create clusterkgs \
-    # --config /etc/endpoints-config/config \
-    # --release $(cat $(workspaces.cluster.path)/release-id) \
-    # --provider $(cat $(workspaces.cluster.path)/provider) \
-    # --cluster-id "$(params.cluster-id)" \
-    # --region "$(params.region)" \
-    # --organization "$(params.organization)" \
-    # --master-az "$(params.master-az)" \
-    # --availability-zones "$(params.availability-zones)" \
-    # --nodex-max $(params.nodex-max) \
-    # --nodex-min $(params.nodex-min) \
-    # --output $(workspaces.cluster.path)
-
   - name: create-cluster
     image: bitnami/kubectl:1.18
     args: [
@@ -90,3 +64,27 @@ spec:
       "-f",
       "$(workspaces.cluster.path)/manifests.yaml"
     ]
+# env AWS_CONTROL_PLANE_MACHINE_TYPE=m5.xlarge \
+# AWS_NODE_MACHINE_TYPE=m5.xlarge \
+# AWS_REGION="$(params.region)" \
+# AWS_SSH_KEY_NAME=tekton-capi-setup \
+# clusterctl config cluster example \
+# --infrastructure $(cat $(workspaces.cluster.path)/provider)
+# --kubernetes-version=v1.19.7 \
+# --control-plane-machine-count=1 \
+# --worker-machine-count=$(params.nodex-min) > $(workspaces.cluster.path)/cluster.yaml
+  
+  
+# --from=file://$PWD/cluster-template-flatcar.yaml    
+# standup create clusterkgs \
+# --config /etc/endpoints-config/config \
+# --release $(cat $(workspaces.cluster.path)/release-id) \
+# --provider $(cat $(workspaces.cluster.path)/provider) \
+# --cluster-id "$(params.cluster-id)" \
+# --region "$(params.region)" \
+# --organization "$(params.organization)" \
+# --master-az "$(params.master-az)" \
+# --availability-zones "$(params.availability-zones)" \
+# --nodex-max $(params.nodex-max) \
+# --nodex-min $(params.nodex-min) \
+# --output $(workspaces.cluster.path)
