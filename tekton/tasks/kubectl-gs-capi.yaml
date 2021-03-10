@@ -38,7 +38,7 @@ spec:
     description: Minimum number of worker nodes for the node pool.
   steps:
   - name: render-cluster-manifests
-    image: quay.io/giantswarm/standup:2.6.0
+    image: quay.io/giantswarm/kubectl-gs:1.24.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -46,11 +46,6 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      VERSION=v1.23.0
-      wget https://github.com/giantswarm/kubectl-gs/releases/download/${VERSION}/kubectl-gs-${VERSION}-linux-amd64.tar.gz
-      tar xzf kubectl-gs-${VERSION}-linux-amd64.tar.gz
-      chmod +x kubectl-gs-${VERSION}-linux-amd64/kubectl-gs
-      cp kubectl-gs-${VERSION}-linux-amd64/kubectl-gs /usr/bin/
       kubectl-gs template cluster \
       --provider $(cat $(workspaces.cluster.path)/provider)
       --release $(cat $(workspaces.cluster.path)/release-id)
