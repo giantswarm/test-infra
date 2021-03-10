@@ -19,6 +19,8 @@ spec:
   params:
   - name: cluster-id
     description: ID of the cluster that will be created.
+  - name: release-id
+    description: release of the cluster that will be created (not used yet just testing).
   - name: region
     description: Cloud region where to create the resources.
   - name: organization
@@ -53,7 +55,7 @@ spec:
       --provider $(cat $(workspaces.cluster.path)/provider)
       --release $(cat $(workspaces.cluster.path)/release-id)
       --name "CAPI Conformance Test $(date -u)"
-      --owner "$(params.organization)"
+      --owner "CAPI-CIS"
 
 
     # env AWS_CONTROL_PLANE_MACHINE_TYPE=m5.xlarge \
