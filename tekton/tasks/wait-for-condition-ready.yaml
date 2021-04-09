@@ -20,7 +20,7 @@ spec:
     description: Kubeconfig path for the cluster where sonobuoy will run.
   steps:
     - name: wait-for-condition-ready
-      image: quay.io/giantswarm/standup:2.6.0
+      image: quay.io/giantswarm/standup:2.7.0
       volumeMounts:
         - name: kubeconfig
           mountPath: /etc/kubeconfig
