@@ -23,7 +23,7 @@ spec:
     description: Release ID that the cluster will be upgraded to.
   steps:
   - name: upgrade-cluster
-    image: quay.io/giantswarm/standup:2.6.0
+    image: quay.io/giantswarm/standup:2.7.0
     volumeMounts:
     - name: kubeconfig
       mountPath: /etc/kubeconfig
