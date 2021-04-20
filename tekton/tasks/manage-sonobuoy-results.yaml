@@ -39,10 +39,6 @@ spec:
         /sonobuoy results "$outfile"
         /sonobuoy results "$outfile" --mode detailed
         mv "$outfile" "$(params.results-path)"
-
-        if /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" | grep failed >/dev/null; then
-          exit 1
-        fi
       volumeMounts:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
