@@ -6,6 +6,7 @@ rules:
   - apiGroups:
       - cluster.x-k8s.io
       - infrastructure.giantswarm.io
+      - provider.giantswarm.io
       - release.giantswarm.io
       - security.giantswarm.io
     resources:
