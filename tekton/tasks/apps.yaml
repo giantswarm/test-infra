@@ -26,7 +26,7 @@ spec:
             --kubeconfig "${KUBECONFIG_PATH}" \
             --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
             --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml \
-            --plugin-env giantswarm.CP_KUBECONFIG="$(cat /etc/kubeconfig/$(cat $(workspaces.cluster.path)/provider)) \
+            --plugin-env giantswarm.CP_KUBECONFIG="$(cat /etc/kubeconfig/$(cat $(workspaces.cluster.path)/provider))" \
             --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")" \
             --plugin-env giantswarm.E2E_FOCUS="App" \
             --mode=quick \
