@@ -15,7 +15,6 @@ spec:
     type: string
     description: Whether or not test deletion of clusters.
     default: "1"
-    type: string
   steps:
     - name: download-sonobuoy-plugin
       image: busybox
