@@ -58,7 +58,7 @@ spec:
         name: manage-sonobuoy-results
       params:
         - name: kubeconfig-path
-          value: $(workspaces.cluster.path)/kubeconfig
+          value: "/etc/kubeconfig/$(cat $(workspaces.cluster.path)/provider)"
         - name: sonobuoy-namespace
           value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
       workspaces:
