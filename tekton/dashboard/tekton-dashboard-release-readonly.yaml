@@ -200,9 +200,9 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.14.0
-    dashboard.tekton.dev/release: v0.14.0
-    version: v0.14.0
+    app.kubernetes.io/version: v0.16.1
+    dashboard.tekton.dev/release: v0.16.1
+    version: v0.16.1
   name: tekton-dashboard
   namespace: test-infra
 spec:
@@ -226,9 +226,9 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.14.0
-    dashboard.tekton.dev/release: v0.14.0
-    version: v0.14.0
+    app.kubernetes.io/version: v0.16.1
+    dashboard.tekton.dev/release: v0.16.1
+    version: v0.16.1
   name: tekton-dashboard
   namespace: test-infra
 spec:
@@ -247,7 +247,7 @@ spec:
         app.kubernetes.io/instance: default
         app.kubernetes.io/name: dashboard
         app.kubernetes.io/part-of: tekton-dashboard
-        app.kubernetes.io/version: v0.14.0
+        app.kubernetes.io/version: v0.16.1
       name: tekton-dashboard
     spec:
       containers:
@@ -260,7 +260,6 @@ spec:
             - --log-level=info
             - --log-format=json
             - --namespace=
-            - --openshift=false
             - --stream-logs=false
             - --external-logs=
           env:
@@ -268,7 +267,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:e36ec9efe78b4bb56a4b1c24d8241bee3a2b477aeef20ff864d1edef31953cd8
+          image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:1ab6db4fa26a8b17c190c5db8a12fd75dfcc0d22f10ceb7a086003591634ea1d
           livenessProbe:
             httpGet:
               path: /health
