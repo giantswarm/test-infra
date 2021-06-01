@@ -26,6 +26,7 @@ spec:
 
   - name: test-aws
     runAfter: [create-release]
+    timeout: 1h30m0s
     taskRef:
       name: aws
     workspaces:
