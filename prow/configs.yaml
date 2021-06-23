@@ -101,6 +101,7 @@ presubmits:
       pipelineRef:
         name: aws
       serviceAccountName: test-runs
+      timeout: 5h0m0s
       resources:
         - name: releases
           resourceRef:
