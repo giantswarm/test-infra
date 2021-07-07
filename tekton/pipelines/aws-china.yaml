@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: aws_china
+  name: aws-china
   namespace: test-workloads
 spec:
   resources:
@@ -28,7 +28,7 @@ spec:
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
-      name: aws_china
+      name: aws-china
     workspaces:
     - name: cluster
       workspace: cluster

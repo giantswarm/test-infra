@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: aws_china
+  name: aws-china
   namespace: test-workloads
 spec:
   volumes:
@@ -20,7 +20,7 @@ spec:
       script: |
         #! /bin/sh
         
-        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws_china
+        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws-china
         export AWSCNFM_CREATE_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
         
         awscnfm plan pl001

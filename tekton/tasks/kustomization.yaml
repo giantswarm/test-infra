@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
 - apps.yaml
 - aws.yaml
-- aws_china.yaml
+- aws-china.yaml
 - azure.yaml
 - cis.yaml
 - cleanup.yaml
