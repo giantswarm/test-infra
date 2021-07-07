@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: aws_china
+  namespace: test-workloads
+spec:
+  resources:
+  - name: releases
+    type: git
+  workspaces:
+  - name: cluster
+  params:
+  - name: PROW_JOB_ID
+    type: string
+  tasks:
+  - name: create-release
+    taskRef:
+      name: create-release
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
+
+  - name: test-aws-china
+    runAfter: [create-release]
+    timeout: 2h0m0s
+    taskRef:
+      name: aws_china
+    workspaces:
+    - name: cluster
+      workspace: cluster
