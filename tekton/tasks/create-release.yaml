@@ -47,6 +47,7 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --releases /workspace/releases \
-      --output $(workspaces.cluster.path)
+      --output $(workspaces.cluster.path) \
+      --task $(context.taskRun.name)
 
       cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)

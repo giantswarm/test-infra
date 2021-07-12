@@ -51,6 +51,7 @@ spec:
       --operator-path /workspace/azure-operator \
       --releases-path /workspace/releases \
       --output $(workspaces.cluster.path) \
-      --provider azure
+      --provider azure \
+      --task $(context.taskRun.name)
 
       cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)

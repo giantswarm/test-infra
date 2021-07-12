@@ -30,5 +30,5 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --cluster $(cat $(workspaces.cluster.path)/cluster-id) \
-      --provider $(cat $(workspaces.cluster.path)/provider) \
+      --installation $(cat $(workspaces.cluster.path)/installation) \
       --release $(cat $(workspaces.cluster.path)/release-id)
