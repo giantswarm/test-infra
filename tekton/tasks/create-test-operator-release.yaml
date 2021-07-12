@@ -38,6 +38,9 @@ spec:
       runAsGroup: 0
   - name: create-test-operator-release
     image: quay.io/giantswarm/standup:2.7.0-92a782a3bd4beb761759784b5d8aba7589500b0e
+    env:
+      - name: TASK_NAME
+        value: $(context.task.name)
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -52,6 +55,6 @@ spec:
       --releases-path /workspace/releases \
       --output $(workspaces.cluster.path) \
       --provider azure \
-      --task $(context.taskRun.name)
+      --task $TASK_NAME
 
       cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)
