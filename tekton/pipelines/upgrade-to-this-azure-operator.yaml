@@ -16,6 +16,9 @@ spec:
     type: string
   tasks:
   - name: create-test-operator-release
+    params:
+    - name: pipeline-name
+      value: "$(context.pipeline.name)"
     taskRef:
       name: create-test-operator-release
     workspaces:
