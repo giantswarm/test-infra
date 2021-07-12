@@ -59,6 +59,6 @@ spec:
       --releases-path /workspace/releases \
       --output $(workspaces.cluster.path) \
       --provider azure \
-      --task $PIPELINE_NAME
+      --pipeline $PIPELINE_NAME
 
       cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)

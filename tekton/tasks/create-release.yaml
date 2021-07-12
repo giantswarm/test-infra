@@ -56,6 +56,6 @@ spec:
       --kubeconfig /etc/kubeconfig \
       --releases /workspace/releases \
       --output $(workspaces.cluster.path) \
-      --task "${PIPELINE_NAME}"
+      --pipeline "${PIPELINE_NAME}"
 
       cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)
