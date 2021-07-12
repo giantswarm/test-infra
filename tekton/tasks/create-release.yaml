@@ -46,11 +46,12 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
+      echo $TASK_NAME
       standup create release \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --releases /workspace/releases \
       --output $(workspaces.cluster.path) \
-      --task $TASK_NAME
+      --task "${TASK_NAME}"
 
       cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)
