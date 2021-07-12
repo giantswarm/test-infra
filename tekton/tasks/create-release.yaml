@@ -9,6 +9,7 @@ spec:
   params:
     - name: pipeline-name
       type: string
+      default: "generic"
       description: Name of the pipeline running this task.
   resources:
     inputs:
@@ -50,7 +51,6 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      echo $PIPELINE_NAME
       standup create release \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
