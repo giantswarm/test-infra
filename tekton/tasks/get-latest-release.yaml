@@ -22,7 +22,7 @@ spec:
     description: The ID of the latest release.
   steps:
   - name: get-latest-release
-    image: quay.io/giantswarm/standup:2.7.0-92a782a3bd4beb761759784b5d8aba7589500b0e
+    image: quay.io/giantswarm/standup:2.7.0-f6cbffe2c7f94b247320f16da95f55f20f380cb3
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
