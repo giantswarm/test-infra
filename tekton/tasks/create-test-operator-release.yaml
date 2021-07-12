@@ -32,12 +32,12 @@ spec:
     - -R
     - 1000:1000
     - /workspace
-    image: quay.io/giantswarm/standup:2.7.0
+    image: quay.io/giantswarm/standup:2.7.0-92a782a3bd4beb761759784b5d8aba7589500b0e
     securityContext:
       runAsUser: 0
       runAsGroup: 0
   - name: create-test-operator-release
-    image: quay.io/giantswarm/standup:2.7.0
+    image: quay.io/giantswarm/standup:2.7.0-92a782a3bd4beb761759784b5d8aba7589500b0e
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
