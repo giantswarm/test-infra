@@ -6,6 +6,11 @@ metadata:
   labels:
     app.kubernetes.io/name: "standup"
 spec:
+  params:
+    - name: pipeline-name
+      type: string
+      default: "generic"
+      description: Name of the pipeline running this task.
   resources:
     inputs:
     - name: releases
@@ -30,12 +35,15 @@ spec:
     - -R
     - 1000:1000
     - /workspace
-    image: quay.io/giantswarm/standup:2.7.0
+    image: quay.io/giantswarm/standup:3.0.0
     securityContext:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: quay.io/giantswarm/standup:2.7.0
+    image: quay.io/giantswarm/standup:3.0.0
+    env:
+      - name: PIPELINE_NAME
+        value: $(params.pipeline-name)
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -47,6 +55,7 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --releases /workspace/releases \
-      --output $(workspaces.cluster.path)
+      --output $(workspaces.cluster.path) \
+      --pipeline "${PIPELINE_NAME}"
 
       cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)

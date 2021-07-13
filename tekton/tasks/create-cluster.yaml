@@ -25,7 +25,7 @@ spec:
     description: The ID of the created cluster.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/standup:2.7.0
+    image: quay.io/giantswarm/standup:3.0.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -37,7 +37,7 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --release $(params.release-id) \
-      --provider $(cat $(workspaces.cluster.path)/provider) \
+      --installation $(cat $(workspaces.cluster.path)/installation) \
       --output $(workspaces.cluster.path)
 
       cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)

@@ -2,6 +2,7 @@
 
 declare -A provider_installations
 provider_installations[aws]=gaia
+provider_installations[aws-china]=giraffe
 provider_installations[azure]=godsmack
 provider_installations[kvm]=gorgoth
 
@@ -15,7 +16,7 @@ function cleanup() {
 trap cleanup EXIT
 
 for service_account in "test-infra" "sonobuoy"; do
-  for provider in aws azure kvm; do
+  for provider in aws aws-china azure kvm; do
       installation=${provider_installations[$provider]}
       echo "creating $provider kubeconfig for $service_account in $installation"
 
@@ -66,6 +67,7 @@ for service_account in "test-infra" "sonobuoy"; do
       kubectl create secret generic standup-kubeconfig \
         -n test-workloads \
         --from-file=aws="$tmp_dir/aws-kubeconfig-$service_account" \
+        --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
         --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
         --from-file=kvm="$tmp_dir/kvm-kubeconfig-$service_account" \
         --dry-run=client -o yaml \
@@ -75,6 +77,7 @@ for service_account in "test-infra" "sonobuoy"; do
     kubectl create secret generic $service_account-kubeconfig \
       -n test-workloads \
       --from-file=aws="$tmp_dir/aws-kubeconfig-$service_account" \
+      --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
       --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
       --from-file=kvm="$tmp_dir/kvm-kubeconfig-$service_account" \
       --dry-run=client -o yaml \
