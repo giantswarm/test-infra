@@ -21,7 +21,7 @@ spec:
       default: "sonobuoy"
   steps:
     - name: manage-sonobuoy-results
-      image: sonobuoy/sonobuoy:v0.20.0
+      image: sonobuoy/sonobuoy:v0.52.0
       script: |
         #! /bin/sh
 
