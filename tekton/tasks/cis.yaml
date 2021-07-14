@@ -16,12 +16,13 @@ spec:
     command: 
       - "/sonobuoy"
     args:
-      - run
-      - --kubeconfig $KUBECONFIG_PATH
-      - --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml
-      - --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml
-      - --plugin-env kube-bench-master.KUBERNETES_VERSION=1.19 --plugin-env kube-bench-node.KUBERNETES_VERSION=1.19
-      - --wait
+      - |
+        run
+        --kubeconfig $KUBECONFIG_PATH
+        --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml
+        --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml
+        --plugin-env kube-bench-master.KUBERNETES_VERSION=1.19 --plugin-env kube-bench-node.KUBERNETES_VERSION=1.19
+        --wait
     # args:
     # [
     #   "--kubeconfig $KUBECONFIG_PATH",
