@@ -22,7 +22,7 @@ spec:
         #! /bin/sh
         wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml
     - name: run-tests
-      image: sonobuoy/sonobuoy:v0.52.0
+      image: sonobuoy/sonobuoy:v0.20.0
       env:
         - name: TC_KUBECONFIG_PATH
           value: $(workspaces.cluster.path)/kubeconfig
@@ -34,30 +34,30 @@ spec:
           value: azure
         - name: TEST_DELETION
           value: $(params.test-deletion)
-      args:
-        - --kubeconfig "${KUBECONFIG_PATH}"
-        - --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy"
-        - --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml
-        - --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")"
-        - --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${KUBECONFIG_PATH}")"
-        - --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")"
-        - --plugin-env giantswarm.PROVIDER="${PROVIDER}"
-        - --plugin-env giantswarm.TEST_DELETION="${TEST_DELETION}"
-        - --mode=certified-conformance
-        - --wait
-      # script: |
-      #   #! /bin/sh
-      #   /sonobuoy run \
-      #       --kubeconfig "${KUBECONFIG_PATH}" \
-      #       --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
-      #       --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml \
-      #       --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")" \
-      #       --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${KUBECONFIG_PATH}")" \
-      #       --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")" \
-      #       --plugin-env giantswarm.PROVIDER="${PROVIDER}" \
-      #       --plugin-env giantswarm.TEST_DELETION="${TEST_DELETION}" \
-      #       --mode=certified-conformance \
-      #       --wait
+      script: |
+        #! /bin/sh
+        /sonobuoy run \
+            --kubeconfig "${KUBECONFIG_PATH}" \
+            --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
+            --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml \
+            --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")" \
+            --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${KUBECONFIG_PATH}")" \
+            --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")" \
+            --plugin-env giantswarm.PROVIDER="${PROVIDER}" \
+            --plugin-env giantswarm.TEST_DELETION="${TEST_DELETION}" \
+            --mode=certified-conformance \
+            --wait
+      # args:
+      #   - --kubeconfig "${KUBECONFIG_PATH}"
+      #   - --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy"
+      #   - --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml
+      #   - --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")"
+      #   - --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${KUBECONFIG_PATH}")"
+      #   - --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")"
+      #   - --plugin-env giantswarm.PROVIDER="${PROVIDER}"
+      #   - --plugin-env giantswarm.TEST_DELETION="${TEST_DELETION}"
+      #   - --mode=certified-conformance
+      #   - --wait
       volumeMounts:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
