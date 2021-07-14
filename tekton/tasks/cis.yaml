@@ -14,8 +14,9 @@ spec:
       - name: "KUBECONFIG_PATH"
         value: $(workspaces.cluster.path)/kubeconfig
     command: 
-      - "/sonobuoy run"
+      - "/sonobuoy"
     args:
+      - run
       - --kubeconfig $KUBECONFIG_PATH
       - --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml
       - --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml
