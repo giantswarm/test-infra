@@ -23,4 +23,5 @@ spec:
         export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws-china
         export AWSCNFM_CREATE_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
         
-        awscnfm plan pl001
+        awscnfm plan pl001 \
+        --output $(workspaces.cluster.path)
