@@ -66,6 +66,17 @@ spec:
       - name: cluster
         workspace: cluster
 
+  - name: sonobuoy-delete
+    runAfter: [run-tests]
+    taskRef:
+      name: sonobuoy-delete
+    params:
+      - name: kubeconfig-path
+        value: $(workspaces.cluster.path)/kubeconfig
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
   - name: manage-sonobuoy-results
     runAfter: [run-tests]
     taskRef:
