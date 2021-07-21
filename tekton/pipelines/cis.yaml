@@ -55,6 +55,17 @@ spec:
     - name: cluster
       workspace: cluster
 
+  - name: save-sonobuoy-results
+    runAfter: [run-tests]
+    taskRef:
+      name: save-sonobuoy-results
+    params:
+      - name: kubeconfig-path
+        value: $(workspaces.cluster.path)/kubeconfig
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
   - name: manage-sonobuoy-results
     runAfter: [run-tests]
     taskRef:
