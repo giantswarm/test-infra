@@ -10,5 +10,7 @@ resources:
 - cncf.yaml
 - create-cluster.yaml
 - create-release.yaml
+- save-sonobuoy-results.yaml
+- sonobuoy-delete.yaml
 - upload-to-s3-bucket.yaml
 - wait-for-ready.yaml
