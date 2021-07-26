@@ -28,19 +28,29 @@ spec:
         set -e
 
         cleanup() {
+          echo trapped
           /sonobuoy delete --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" --all --wait || true
         }
 
         trap cleanup INT TERM EXIT
 
+        echo status:
         /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
 
+        echo Retrieving: /sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
         outfile=$(/sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)")
+
+        echo "$outfile" results:
         /sonobuoy results "$outfile"
+
+        echo "$outfile" detailed results:
         /sonobuoy results "$outfile" --mode detailed
+
+        echo moving $outfile to "$(params.results-path)" AKA $(params.results-path)
         mv "$outfile" "$(params.results-path)"
 
         if /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" | grep failed >/dev/null; then
+          echo failed
           exit 1
         fi
       volumeMounts:
