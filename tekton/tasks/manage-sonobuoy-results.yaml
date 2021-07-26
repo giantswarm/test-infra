@@ -40,7 +40,7 @@ spec:
         echo Retrieving: /sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
         outfile=$(/sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)")
 
-        echo "$outfile" results:
+        echo "$outfile" $outfile results:
         /sonobuoy results "$outfile"
 
         echo "$outfile" detailed results:
