@@ -21,7 +21,7 @@ spec:
       default: "sonobuoy"
   steps:
     - name: manage-sonobuoy-results
-      image: sonobuoy/sonobuoy:v0.20.0
+      image: quay.io/giantswarm/sonobuoy:v0.52.0-alpine-giantswarm
       script: |
         #! /bin/sh
 
@@ -35,12 +35,18 @@ spec:
 
         /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
 
+        echo Retrieving logs...
         outfile=$(/sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)")
+        echo Results saved to $outfile
+
+        echo Results:
         /sonobuoy results "$outfile"
         /sonobuoy results "$outfile" --mode detailed
+
         mv "$outfile" "$(params.results-path)"
 
         if /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" | grep failed >/dev/null; then
+          echo Found failed tests in sonobuoy status
           exit 1
         fi
       volumeMounts:
