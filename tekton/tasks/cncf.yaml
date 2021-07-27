@@ -9,7 +9,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: run-tests
-    image: quay.io/giantswarm/sonobuoy-alpine:0.0.0-c9ca8ce9fecc3577efcad9f1d3edba3d984a4821
+    image: quay.io/giantswarm/sonobuoy-alpine:0.0.0-9f1ef327f35d0b5cc5b06aae15783a7b93629075
     env:
       - name: "KUBECONFIG_PATH"
         value: $(workspaces.cluster.path)/kubeconfig
