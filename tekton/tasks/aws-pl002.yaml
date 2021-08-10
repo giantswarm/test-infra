@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: aws-full
+  name: aws-pl002
   namespace: test-workloads
 spec:
   volumes:
