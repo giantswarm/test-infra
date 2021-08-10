@@ -1,0 +1,72 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: aws-full
+  namespace: test-workloads
+spec:
+  resources:
+  - name: releases
+    type: git
+  workspaces:
+  - name: cluster
+  params:
+  - name: PROW_JOB_ID
+    type: string
+  tasks:
+  - name: create-release
+    params:
+    - name: pipeline-name
+      value: "$(context.pipeline.name)"
+    taskRef:
+      name: create-release
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
+
+  - name: test-aws-pl002
+    runAfter: [create-release]
+    timeout: 2h0m0s
+    taskRef:
+      name: aws-pl002
+    workspaces:
+    - name: cluster
+      workspace: cluster
+
+  - name: test-aws-pl003
+    runAfter: [create-release]
+    timeout: 2h0m0s
+    taskRef:
+      name: aws-pl003
+    workspaces:
+    - name: cluster
+      workspace: cluster
+
+  - name: test-aws-pl004
+    runAfter: [create-release]
+    timeout: 2h0m0s
+    taskRef:
+      name: aws-pl004
+    workspaces:
+    - name: cluster
+      workspace: cluster
+    
+  - name: test-aws-pl005
+    runAfter: [create-release]
+    timeout: 2h0m0s
+    taskRef:
+      name: aws-pl005
+    workspaces:
+    - name: cluster
+      workspace: cluster
+
+  finally:
+  - name: cleanup
+    taskRef:
+      name: cleanup
+    workspaces:
+      - name: cluster
+        workspace: cluster

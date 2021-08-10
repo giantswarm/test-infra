@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: aws-full
+  namespace: test-workloads
+spec:
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
+  workspaces:
+    - name: cluster
+      description: Run the aws conformance test plan to test upgrades.
+  steps:
+    - name: run-tests
+      image: quay.io/giantswarm/awscnfm:15.2.0
+      volumeMounts:
+        - name: kubeconfig
+          mountPath: /etc/controlplane
+      script: |
+        #! /bin/sh
+        
+        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws
+        export AWSCNFM_CREATE_RELEASEVERSION=v14.2.2 
+        export AWSCNFM_UPDATE_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
+
+        awscnfm plan pl002 \
+        --output $(workspaces.cluster.path)

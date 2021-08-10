@@ -142,6 +142,31 @@ presubmits:
                   storage: 10Mi
     trigger: "/test aws-china"
     rerun_command: "/test aws-china"
+  - name: aws-full
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: aws-full
+      serviceAccountName: test-runs
+      timeout: 5h0m0s
+      resources:
+        - name: releases
+          resourceRef:
+            name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test aws-full"
+    rerun_command: "/test aws-full"
   - name: azure
     agent: tekton-pipeline
     max_concurrency: 5
