@@ -31,7 +31,10 @@ spec:
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
-      name: aws
+      name: aws-cnfm
+    params:
+      - name: cnfm-plan
+        value: pl001
     workspaces:
     - name: cluster
       workspace: cluster

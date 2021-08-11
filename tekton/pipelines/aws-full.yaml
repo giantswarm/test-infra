@@ -31,7 +31,10 @@ spec:
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
-      name: aws-pl002
+      name: aws-cnfm
+    params:
+      - name: cnfm-plan
+        value: pl002
     workspaces:
     - name: cluster
       workspace: cluster
@@ -40,7 +43,10 @@ spec:
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
-      name: aws-pl003
+      name: aws-cnfm
+    params:
+      - name: cnfm-plan
+        value: pl003
     workspaces:
     - name: cluster
       workspace: cluster
@@ -49,7 +55,10 @@ spec:
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
-      name: aws-pl004
+      name: aws-cnfm
+    params:
+      - name: cnfm-plan
+        value: pl004
     workspaces:
     - name: cluster
       workspace: cluster
@@ -58,7 +67,10 @@ spec:
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
-      name: aws-pl005
+      name: aws-cnfm
+    params:
+      - name: cnfm-plan
+        value: pl005
     workspaces:
     - name: cluster
       workspace: cluster
