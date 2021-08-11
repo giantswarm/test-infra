@@ -2,12 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - apps.yaml
-- aws.yaml
-- aws-china.yaml
-- aws-pl002.yaml
-- aws-pl003.yaml
-- aws-pl004.yaml
-- aws-pl005.yaml
+- aws-cnfm.yaml
 - azure.yaml
 - cis.yaml
 - cleanup.yaml
