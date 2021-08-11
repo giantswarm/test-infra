@@ -20,7 +20,7 @@ spec:
       image: quay.io/giantswarm/awscnfm:15.2.0
       env:
         - name: CNFM_PLAN
-          value: $(params.test-deletion)
+          value: $(params.cnfm-plan)
       volumeMounts:
         - name: kubeconfig
           mountPath: /etc/controlplane
