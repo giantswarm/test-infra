@@ -40,7 +40,7 @@ spec:
       workspace: cluster
 
   - name: test-aws-pl003
-    runAfter: [create-release]
+    runAfter: [test-aws-pl002]
     timeout: 2h0m0s
     taskRef:
       name: aws-cnfm
@@ -52,7 +52,7 @@ spec:
       workspace: cluster
 
   - name: test-aws-pl004
-    runAfter: [create-release]
+    runAfter: [test-aws-pl003]
     timeout: 2h0m0s
     taskRef:
       name: aws-cnfm
@@ -64,7 +64,7 @@ spec:
       workspace: cluster
     
   - name: test-aws-pl005
-    runAfter: [create-release]
+    runAfter: [test-aws-pl004]
     timeout: 2h0m0s
     taskRef:
       name: aws-cnfm
