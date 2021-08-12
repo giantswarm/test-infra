@@ -31,5 +31,4 @@ spec:
         export AWSCNFM_CREATE_RELEASEVERSION=v14.2.2 
         export AWSCNFM_UPDATE_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
 
-        awscnfm plan $CNFM_PLAN \
-        --output $(workspaces.cluster.path)
+        awscnfm plan $CNFM_PLAN
