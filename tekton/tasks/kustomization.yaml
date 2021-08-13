@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - apps.yaml
 - aws-cnfm.yaml
+- aws-cnfm-update.yaml
 - azure.yaml
 - cis.yaml
 - cleanup.yaml
