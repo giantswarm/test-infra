@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: aws-cnfm
+  name: aws-cnfm-update
   namespace: test-workloads
 spec:
   volumes:
