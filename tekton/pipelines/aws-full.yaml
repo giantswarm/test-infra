@@ -7,11 +7,6 @@ spec:
   resources:
   - name: releases
     type: git
-  workspaces:
-  - name: cluster-pl002
-  - name: cluster-pl003
-  - name: cluster-pl004
-  - name: cluster-pl005
   params:
   - name: PROW_JOB_ID
     type: string
@@ -22,27 +17,23 @@ spec:
       value: "$(context.pipeline.name)"
     taskRef:
       name: create-release
-    workspaces:
-    - name: cluster
-      workspace: cluster
     resources:
       inputs:
       - name: releases
         resource: releases
 
-  - name: test-aws-pl002
+  - name: test-pl002
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
-      name: aws-cnfm-update
+      name: aws-cnfm
     params:
       - name: cnfm-plan
         value: pl002
-    workspaces:
-    - name: cluster
-      workspace: cluster-pl002
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
 
-  - name: test-aws-pl003
+  - name: test-pl003
     runAfter: [create-release]
     timeout: 2h0m0s
     taskRef:
@@ -50,56 +41,27 @@ spec:
     params:
       - name: cnfm-plan
         value: pl003
-    workspaces:
-    - name: cluster
-      workspace: cluster-pl003
-
-  - name: test-aws-pl004
-    runAfter: [create-release]
-    timeout: 2h0m0s
-    taskRef:
-      name: aws-cnfm
-    params:
-      - name: cnfm-plan
-        value: pl004
-    workspaces:
-    - name: cluster
-      workspace: cluster-pl004
-    
-  - name: test-aws-pl005
-    runAfter: [create-release]
-    timeout: 2h0m0s
-    taskRef:
-      name: aws-cnfm
-    params:
-      - name: cnfm-plan
-        value: pl005
-    workspaces:
-    - name: cluster
-      workspace: cluster-pl005
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
 
   finally:
   - name: cleanup-pl002
     taskRef:
       name: cleanup
-    workspaces:
-      - name: cluster
-        workspace: cluster-pl002
+    params:
+      - name: cluster-id
+        value: "$(tasks.test-pl002.results.cluster-id)"
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
+      - name: installation
+        value: "$(tasks.create-release.results.installation)"
   - name: cleanup-pl003
     taskRef:
       name: cleanup
-    workspaces:
-      - name: cluster
-        workspace: cluster-pl003
-  - name: cleanup-pl004
-    taskRef:
-      name: cleanup
-    workspaces:
-      - name: cluster
-        workspace: cluster-pl004
-  - name: cleanup-pl005
-    taskRef:
-      name: cleanup
-    workspaces:
-      - name: cluster
-        workspace: cluster-pl005
+    params:
+      - name: cluster-id
+        value: "$(tasks.test-pl003.results.cluster-id)"
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
+      - name: installation
+        value: "$(tasks.create-release.results.installation)"

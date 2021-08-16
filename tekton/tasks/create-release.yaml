@@ -22,12 +22,11 @@ spec:
   - name: kubeconfig
     secret:
       secretName: standup-kubeconfig
-  workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
   results:
   - name: release-id
     description: The ID of the created release.
+  - name: installation
+    description: The ID of the installation.
   steps:
   - name: chown-releases
     command:
@@ -55,7 +54,8 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --releases /workspace/releases \
-      --output $(workspaces.cluster.path) \
+      --output /workspace \
       --pipeline "${PIPELINE_NAME}"
 
-      cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)
+      cat /workspace/release-id > $(results.release-id.path)
+      cat /workspace/installation > $(results.installation.path)

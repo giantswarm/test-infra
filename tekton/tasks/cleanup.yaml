@@ -13,12 +13,26 @@ spec:
     - name: kubeconfig
       secret:
         secretName: standup-kubeconfig
-  workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
+  params:
+    - name: release-id
+      type: string
+      description: Release to test
+    - name: installation
+      type: string
+      description: Installation to test
+    - name: cluster-id
+      type: string
+      description: Cluster ID
   steps:
   - name: cleanup
     image: quay.io/giantswarm/standup:3.0.0
+    env:
+      - name: RELEASE_ID
+        value: $(params.release-id)
+      - name: CLUSTER_ID
+        value: $(params.cluster-id)
+      - name: INSTALLATION
+        value: $(params.installation)
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -29,6 +43,6 @@ spec:
       standup cleanup \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
-      --cluster $(cat $(workspaces.cluster.path)/cluster-id) \
-      --installation $(cat $(workspaces.cluster.path)/installation) \
-      --release $(cat $(workspaces.cluster.path)/release-id)
+      --cluster $CLUSTER_ID \
+      --installation $INSTALLATION_ID \
+      --release $RELEASE_ID
