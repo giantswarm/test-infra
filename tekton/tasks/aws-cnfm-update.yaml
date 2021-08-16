@@ -17,7 +17,7 @@ spec:
       description: CNFM plan to execute
   steps:
     - name: run-tests
-      image: quay.io/giantswarm/awscnfm:15.2.0
+      image: quay.io/giantswarm/awscnfm:15.2.1
       env:
         - name: CNFM_PLAN
           value: $(params.cnfm-plan)
