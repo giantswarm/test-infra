@@ -79,9 +79,27 @@ spec:
       workspace: cluster-pl005
 
   finally:
-  - name: cleanup
+  - name: cleanup-pl002
     taskRef:
       name: cleanup
     workspaces:
       - name: cluster
-        workspace: cluster
+        workspace: cluster-pl002
+  - name: cleanup-pl003
+    taskRef:
+      name: cleanup
+    workspaces:
+      - name: cluster
+        workspace: cluster-pl003
+  - name: cleanup-pl004
+    taskRef:
+      name: cleanup
+    workspaces:
+      - name: cluster
+        workspace: cluster-pl004
+  - name: cleanup-pl005
+    taskRef:
+      name: cleanup
+    workspaces:
+      - name: cluster
+        workspace: cluster-pl005
