@@ -31,7 +31,7 @@ spec:
         value: $(params.release-id)
       - name: CLUSTER_ID
         value: $(params.cluster-id)
-      - name: INSTALLATION
+      - name: INSTALLATION_ID
         value: $(params.installation)
     volumeMounts:
       - name: endpoints-config
