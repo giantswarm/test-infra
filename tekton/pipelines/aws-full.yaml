@@ -44,6 +44,28 @@ spec:
       - name: release-id
         value: "$(tasks.create-release.results.release-id)"
 
+  - name: test-pl004
+    runAfter: [create-release]
+    timeout: 2h0m0s
+    taskRef:
+      name: aws-cnfm
+    params:
+      - name: cnfm-plan
+        value: pl003
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
+
+  - name: test-pl005
+    runAfter: [create-release]
+    timeout: 2h0m0s
+    taskRef:
+      name: aws-cnfm
+    params:
+      - name: cnfm-plan
+        value: pl003
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
+
   finally:
   - name: cleanup-pl002
     taskRef:
@@ -56,6 +78,26 @@ spec:
       - name: installation
         value: "$(tasks.create-release.results.installation)"
   - name: cleanup-pl003
+    taskRef:
+      name: cleanup
+    params:
+      - name: cluster-id
+        value: "$(tasks.test-pl003.results.cluster-id)"
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
+      - name: installation
+        value: "$(tasks.create-release.results.installation)"
+  - name: cleanup-pl004
+    taskRef:
+      name: cleanup
+    params:
+      - name: cluster-id
+        value: "$(tasks.test-pl003.results.cluster-id)"
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
+      - name: installation
+        value: "$(tasks.create-release.results.installation)"
+  - name: cleanup-pl005
     taskRef:
       name: cleanup
     params:
