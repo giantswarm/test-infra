@@ -82,7 +82,7 @@ presubmits:
         resourceRef:
           name: PROW_IMPLICIT_GIT_REF
       workspaces:
-      - name: cluster
+      - name: sonobuoy
         volumeClaimTemplate:
           spec:
             accessModes:
