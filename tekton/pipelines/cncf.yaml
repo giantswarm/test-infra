@@ -42,7 +42,7 @@ spec:
     params:
       - name: kubeconfig
         value: "$(tasks.create-cluster.results.kubeconfig)"
-       - name: provider
+      - name: provider
         value: "$(tasks.create-cluster.results.provider)" 
 
   - name: run-tests
