@@ -42,8 +42,8 @@ spec:
       --kubeconfig /etc/kubeconfig \
       --release $(params.release-id) \
       --installation $(params.installation) \
-      --output /tmp
+      --output ~/
 
-      cat /tmp/cluster-id > $(results.cluster-id.path)
-      cat /tmp/kubeconfig > $(results.kubeconfig.path)
-      cat /tmp/provider > $(results.provider.path)
+      cat ~/cluster-id > $(results.cluster-id.path)
+      cat ~/kubeconfig > $(results.kubeconfig.path)
+      cat ~/provider > $(results.provider.path)
