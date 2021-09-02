@@ -6,14 +6,20 @@ metadata:
   labels:
     app.kubernetes.io/name: "standup"
 spec:
-  workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
+  params:
+  - name: kubeconfig
+    type: string
+    description: Kubeconfig of the created cluster.
+  - name: provider
+    type: string
+    description: Provider of the created cluster.
   steps:
   - name: wait-for-ready
     image: quay.io/giantswarm/standup:3.0.0
     script: |
       #! /bin/sh
+      echo $(params.kubeconfig) > /tmp/kubeconfig
+
       standup wait \
-      --kubeconfig $(workspaces.cluster.path)/kubeconfig \
-      --provider $(cat $(workspaces.cluster.path)/provider)
+      --kubeconfig /tmp/kubeconfig \
+      --provider $(params.provider)

@@ -13,16 +13,20 @@ spec:
   - name: kubeconfig
     secret:
       secretName: standup-kubeconfig
-  workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
   params:
+  - name: installation
+    type: string
+    description: Installation where the cluster will be created.
   - name: release-id
     type: string
     description: Release ID to use when creating the cluster.
   results:
   - name: cluster-id
     description: The ID of the created cluster.
+  - name: kubeconfig
+    description: Kubeconfig of the created cluster.
+  - name: provider
+    description: Provider of the created cluster.
   steps:
   - name: create-cluster
     image: quay.io/giantswarm/standup:3.0.0
@@ -37,7 +41,9 @@ spec:
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --release $(params.release-id) \
-      --installation $(cat $(workspaces.cluster.path)/installation) \
-      --output $(workspaces.cluster.path)
+      --installation $(params.installation) \
+      --output /tmp
 
-      cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
+      cat /tmp/cluster-id > $(results.cluster-id.path)
+      cat /tmp/kubeconfig > $(results.kubeconfig.path)
+      cat /tmp/provider > $(results.provider.path)

@@ -8,7 +8,7 @@ spec:
   - name: releases
     type: git
   workspaces:
-  - name: cluster
+  - name: sonobuoy
   params:
   - name: PROW_JOB_ID
     type: string
@@ -19,9 +19,6 @@ spec:
       value: "$(context.pipeline.name)"
     taskRef:
       name: create-release
-    workspaces:
-    - name: cluster
-      workspace: cluster
     resources:
       inputs:
       - name: releases
@@ -32,40 +29,41 @@ spec:
     taskRef:
       name: create-cluster
     params:
+    - name: installation
+      value: "$(tasks.create-release.results.installation)"
     - name: release-id
       value: "$(tasks.create-release.results.release-id)"
-    workspaces:
-    - name: cluster
-      workspace: cluster
 
   - name: wait-for-ready
     runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
-    workspaces:
-      - name: cluster
-        workspace: cluster
+    params:
+      - name: kubeconfig
+        value: "$(tasks.create-cluster.results.kubeconfig)"
+       - name: provider
+        value: "$(tasks.create-cluster.results.provider)" 
 
   - name: run-tests
     runAfter: [wait-for-ready]
     timeout: 5h0m0s
     taskRef:
       name: cncf
-    workspaces:
-    - name: cluster
-      workspace: cluster
+    params:
+      - name: kubeconfig
+        value: "$(tasks.create-cluster.results.kubeconfig)"
 
   - name: manage-sonobuoy-results
     runAfter: [run-tests]
     taskRef:
       name: manage-sonobuoy-results
     params:
-      - name: kubeconfig-path
-        value: $(workspaces.cluster.path)/kubeconfig
+      - name: kubeconfig
+        value: "$(tasks.create-cluster.results.kubeconfig)"
     workspaces:
-      - name: cluster
-        workspace: cluster
+    - name: sonobuoy
+      workspace: sonobuoy
 
   - name: upload-to-s3-bucket
     runAfter: [manage-sonobuoy-results]
@@ -75,10 +73,10 @@ spec:
     - name: prow-job-id
       value: "$(params.PROW_JOB_ID)"
     - name: file-to-upload
-      value: $(workspaces.cluster.path)/sonobuoy-results.tar
+      value: $(workspaces.sonobuoy.path)/sonobuoy-results.tar
     workspaces:
-    - name: cluster
-      workspace: cluster
+    - name: sonobuoy
+      workspace: sonobuoy
 
   finally:
   - name: cleanup

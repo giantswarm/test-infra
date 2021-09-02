@@ -4,15 +4,14 @@ metadata:
   name: cncf
   namespace: test-workloads
 spec:
-  workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
+  params:
+  - name: kubeconfig
+    type: string
+    description: Kubeconfig of the created cluster.
   steps:
   - name: run-tests
     image: quay.io/giantswarm/sonobuoy:v0.52.0-alpine-giantswarm
-    env:
-      - name: "KUBECONFIG_PATH"
-        value: $(workspaces.cluster.path)/kubeconfig
     script: |
       #! /bin/sh
-      /sonobuoy run --kubeconfig "${KUBECONFIG_PATH}" --mode=certified-conformance --wait
+      echo $(params.kubeconfig) > /tmp/kubeconfig
+      /sonobuoy run --kubeconfig /tmp/kubeconfig --mode=certified-conformance --wait

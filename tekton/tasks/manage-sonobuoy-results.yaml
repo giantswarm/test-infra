@@ -5,20 +5,20 @@ metadata:
   namespace: test-workloads
 spec:
   workspaces:
-    - name: cluster
-      description: Cluster information is stored here.
+    - name: sonobuoy
+      description: Sonobuoy results is stored here.
   params:
-    - name: kubeconfig-path
-      type: string
-      description: Kubeconfig path for the cluster where sonobuoy will run.
     - name: results-path
       type: string
       description: Path where results will be stored.
-      default: "$(workspaces.cluster.path)/sonobuoy-results.tar"
+      default: "$(workspaces.sonobuoy.path)/sonobuoy-results.tar"
     - name: sonobuoy-namespace
       type: string
       description: Namespace that sonobuoy will create to store its resources.
       default: "sonobuoy"
+    - name: kubeconfig
+      type: string
+      description: Kubeconfig of the created cluster.
   steps:
     - name: manage-sonobuoy-results
       image: quay.io/giantswarm/sonobuoy:v0.52.0-alpine-giantswarm
@@ -26,17 +26,19 @@ spec:
         #! /bin/sh
 
         set -e
+  
+        echo $(params.kubeconfig) > /tmp/kubeconfig
 
         cleanup() {
-          /sonobuoy delete --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" --all --wait || true
+          /sonobuoy delete --namespace "$(params.sonobuoy-namespace)" --kubeconfig /tmp/kubeconfig --all --wait || true
         }
 
         trap cleanup INT TERM EXIT
 
-        /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
+        /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig /tmp/kubeconfig
 
         echo Retrieving logs...
-        outfile=$(/sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)")
+        outfile=$(/sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig /tmp/kubeconfig)
         echo Results saved to $outfile
 
         echo Results:
@@ -45,14 +47,7 @@ spec:
 
         mv "$outfile" "$(params.results-path)"
 
-        if /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" | grep failed >/dev/null; then
+        if /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig /tmp/kubeconfig | grep failed >/dev/null; then
           echo Found failed tests in sonobuoy status
           exit 1
         fi
-      volumeMounts:
-        - mountPath: /etc/kubeconfig
-          name: kubeconfig
-  volumes:
-    - name: kubeconfig
-      secret:
-        secretName: sonobuoy-kubeconfig

@@ -5,8 +5,8 @@ metadata:
   namespace: test-workloads
 spec:
   workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
+    - name: sonobuoy
+      description: Sonobuoy results is stored here.
   params:
   - name: prow-job-id
     description: ID of the prow job of this task
