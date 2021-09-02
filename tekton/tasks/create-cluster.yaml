@@ -20,13 +20,14 @@ spec:
   - name: release-id
     type: string
     description: Release ID to use when creating the cluster.
+  - name: provider
+    type: string
+    description: Provider of the created cluster.
   results:
   - name: cluster-id
     description: The ID of the created cluster.
   - name: kubeconfig
     description: Kubeconfig of the created cluster.
-  - name: provider
-    description: Provider of the created cluster.
   steps:
   - name: create-cluster
     image: quay.io/giantswarm/standup:3.0.0
@@ -37,13 +38,14 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
+      echo $(params.provider) > /tmp/provider
+
       standup create cluster \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
       --release $(params.release-id) \
       --installation $(params.installation) \
-      --output ~/
+      --output /tmp
 
-      cat ~/cluster-id > $(results.cluster-id.path)
-      cat ~/kubeconfig > $(results.kubeconfig.path)
-      cat ~/provider > $(results.provider.path)
+      cat /tmp/cluster-id > $(results.cluster-id.path)
+      cat /tmp/kubeconfig > $(results.kubeconfig.path)

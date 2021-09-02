@@ -43,7 +43,7 @@ spec:
       - name: kubeconfig
         value: "$(tasks.create-cluster.results.kubeconfig)"
       - name: provider
-        value: "$(tasks.create-cluster.results.provider)" 
+        value: "$(tasks.create-release.results.provider)" 
 
   - name: run-tests
     runAfter: [wait-for-ready]

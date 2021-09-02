@@ -27,6 +27,8 @@ spec:
     description: The ID of the created release.
   - name: installation
     description: The ID of the installation.
+  - name: provider
+    description: Provider of the created cluster.
   steps:
   - name: chown-releases
     command:
@@ -59,3 +61,4 @@ spec:
 
       cat /workspace/release-id > $(results.release-id.path)
       cat /workspace/installation > $(results.installation.path)
+      cat /workspace/provider > $(results.provider.path)
