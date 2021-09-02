@@ -29,6 +29,8 @@ spec:
     taskRef:
       name: create-cluster
     params:
+    - name: provider
+      value: "$(tasks.create-release.results.provider)" 
     - name: installation
       value: "$(tasks.create-release.results.installation)"
     - name: release-id
@@ -40,10 +42,10 @@ spec:
     taskRef:
       name: wait-for-ready
     params:
-      - name: kubeconfig
-        value: "$(tasks.create-cluster.results.kubeconfig)"
       - name: provider
         value: "$(tasks.create-release.results.provider)" 
+      - name: kubeconfig
+        value: "$(tasks.create-cluster.results.kubeconfig)"
 
   - name: run-tests
     runAfter: [wait-for-ready]
