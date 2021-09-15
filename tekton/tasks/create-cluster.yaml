@@ -86,7 +86,7 @@ spec:
 
       cat /tmp/nodepool.yaml >>$(workspaces.cluster.path)/cluster.yaml
 
-  - name: create-cluster
+  - name: apply-capi-manifest
     image: bitnami/kubectl:1.18
     volumeMounts:
       - name: endpoints-config
