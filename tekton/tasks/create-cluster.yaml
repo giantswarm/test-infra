@@ -41,11 +41,11 @@ spec:
       fi
 
       standup create cluster \
-          --config /etc/endpoints-config/config \
-          --kubeconfig /etc/kubeconfig \
-          --release $(params.release-id) \
-          --installation $(cat $(workspaces.cluster.path)/installation) \
-          --output $(workspaces.cluster.path)
+        --config /etc/endpoints-config/config \
+        --kubeconfig /etc/kubeconfig \
+        --release $(params.release-id) \
+        --installation $(cat $(workspaces.cluster.path)/installation) \
+        --output $(workspaces.cluster.path)
 
       cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
 
