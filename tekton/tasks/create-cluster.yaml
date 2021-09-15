@@ -24,7 +24,7 @@ spec:
   - name: cluster-id
     description: The ID of the created cluster.
   steps:
-  - name: create-cluster
+  - name: create-cluster-gsctl
     image: quay.io/giantswarm/standup:3.0.0
     volumeMounts:
       - name: endpoints-config
@@ -33,11 +33,74 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
+
+      if [ "$(params.release-id)" == "20.0.0" ]
+      then
+        echo "Release $(params.release-id) is a CAPI release"
+        exit 0
+      fi
+
       standup create cluster \
-      --config /etc/endpoints-config/config \
-      --kubeconfig /etc/kubeconfig \
-      --release $(params.release-id) \
-      --installation $(cat $(workspaces.cluster.path)/installation) \
-      --output $(workspaces.cluster.path)
+          --config /etc/endpoints-config/config \
+          --kubeconfig /etc/kubeconfig \
+          --release $(params.release-id) \
+          --installation $(cat $(workspaces.cluster.path)/installation) \
+          --output $(workspaces.cluster.path)
 
       cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
+
+  - name: create-cluster-kubectl-gs
+    image: quay.io/giantswarm/kubectl-gs:1.39.1
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      if [ "$(params.release-id)" != "20.0.0" ]
+      then
+        echo "Release $(params.release-id) is not a CAPI release"
+        exit 0
+      fi
+
+      # Generate template for control plane.
+      kubectl-gs template cluster \
+        --provider azure \
+        --release 20.0.0 \
+        --owner giantswarm \
+        --output $(workspaces.cluster.path)/cluster.yaml
+
+      # Extract cluster name from template.
+      cluster_id="$(cat $(workspaces.cluster.path)/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d'"' -f4)"
+
+      echo -n "$(cluster_id)" > $(results.cluster-id.path)
+
+      kubectl-gs template nodepool \
+        --provider azure \
+        --release 20.0.0 \
+        --owner giantswarm \
+        --cluster-name "$(cluster_id)" \
+        --output /tmp/nodepool.yaml
+
+      cat /tmp/nodepool.yaml >>$(workspaces.cluster.path)/cluster.yaml
+
+  - name: create-cluster
+    image: bitnami/kubectl:1.18
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      if [ "$(params.release-id)" != "20.0.0" ]
+      then
+        echo "Release $(params.release-id) is not a CAPI release"
+        exit 0
+      fi
+
+      kubectl apply -f $(workspaces.cluster.path)/cluster.yaml
+
