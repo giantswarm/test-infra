@@ -15,10 +15,15 @@ spec:
   - name: cluster
     description: Cluster information is stored here.
   steps:
-    - name: echo
-      image: ubuntu
-      command:
-        - sh
-      args:
-        - -c
-        - date; echo sleeping; sleep 1d
+  - name: echo
+    image: ubuntu
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    command:
+      - sh
+    args:
+      - -c
+      - date; echo sleeping; sleep 1d
