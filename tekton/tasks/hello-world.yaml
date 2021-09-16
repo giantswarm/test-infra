@@ -4,6 +4,9 @@ metadata:
   name: hello-world
   namespace: test-workloads
 spec:
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
   steps:
     - name: echo
       image: ubuntu
