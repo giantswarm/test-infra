@@ -11,6 +11,7 @@ spec:
     - name: echo
       image: ubuntu
       command:
-        - echo
+        - sh
       args:
-        - "Hello World"
+        - -c
+        - date; echo sleeping; sleep 1d
