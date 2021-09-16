@@ -79,7 +79,7 @@ spec:
 
       kubectl-gs template nodepool \
         --provider azure \
-        --release 20.0.0 \
+        --release $(params.release-id) \
         --owner giantswarm \
         --cluster-name "$(cluster_id)" \
         --output /tmp/nodepool.yaml
