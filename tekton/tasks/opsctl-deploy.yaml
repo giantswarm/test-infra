@@ -1,0 +1,32 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: opsctl-deploy
+  namespace: test-workloads
+spec:
+  volumes:
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
+  - name: github-token
+    secret:
+      secretName: bot-token-github
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: deploy
+    image: quay.io/giantswarm/opsctl:1530428626f9724b20e7ca4e44b5554cdc4216b7
+    volumeMounts:
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+      - name: github-token
+        mountPath: /etc/github-token
+    script: |
+      #! /bin/sh
+      export KUBECONFIG=/etc/kubeconfig/aws
+      export OPSCTL_GITHUB_TOKEN=$(cat /etc/github-token/bot-token)
+      opsctl deploy \
+      --2cp \
+      prometheus-meta-operator@v1.51.1
+
