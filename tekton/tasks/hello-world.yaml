@@ -4,6 +4,13 @@ metadata:
   name: hello-world
   namespace: test-workloads
 spec:
+  volumes:
+  - name: endpoints-config
+    secret:
+      secretName: standup-endpoints-config
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
