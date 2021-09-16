@@ -87,7 +87,7 @@ spec:
       cat /tmp/nodepool.yaml >>$(workspaces.cluster.path)/cluster.yaml
 
   - name: apply-capi-manifest
-    image: bitnami/kubectl:1.18
+    image: quay.io/giantswarm/kubectl:1.18.19
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
