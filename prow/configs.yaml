@@ -230,10 +230,6 @@ presubmits:
         name: heartbeat
       serviceAccountName: test-runs
       timeout: 3h0m0s
-      resources:
-        - name: releases
-          resourceRef:
-            name: PROW_IMPLICIT_GIT_REF
       workspaces:
         - name: cluster
           volumeClaimTemplate:
