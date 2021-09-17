@@ -1,9 +1,0 @@
-apiVersion: tekton.dev/v1beta1
-kind: PipelineRun
-metadata:
-  name: heartbeat-runner
-  namespace: test-workloads
-spec:
-  pipelineRef:
-    name: heartbeat
-  serviceAccountName: heartbeat-runner
