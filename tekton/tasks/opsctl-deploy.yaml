@@ -22,10 +22,16 @@ spec:
         mountPath: /etc/kubeconfig
       - name: github-token
         mountPath: /etc/github-token
+    env:
+      - name: KUBECONFIG
+        value: /etc/kubeconfig/aws
+      - name: OPSCTL_GITHUB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: bot-token-github
+            key: bot-token
     script: |
       #! /bin/sh
-      export KUBECONFIG=/etc/kubeconfig/aws
-      export OPSCTL_GITHUB_TOKEN=$(cat /etc/github-token/bot-token)
       opsctl deploy \
       --2cp \
       prometheus-meta-operator@v1.51.1
