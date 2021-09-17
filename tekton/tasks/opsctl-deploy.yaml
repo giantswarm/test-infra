@@ -13,13 +13,15 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: deploy
-    image: quay.io/giantswarm/opsctl:latest
+    image: quay.io/giantswarm/opsctl:1c1dd06d849723fae7e4ea836b9ab9699ed9a45c
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
     env:
       - name: KUBECONFIG
         value: /etc/kubeconfig/aws
+      - name: OPSCTL_UNSAFE_FORCE_VERSION
+        value: 1.29.1-dev
       - name: OPSCTL_GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
@@ -28,5 +30,5 @@ spec:
     script: |
       #! /bin/sh
       opsctl deploy \
-      --2cp \
+      --use-kubeconfig \
       prometheus-meta-operator@v1.51.1
