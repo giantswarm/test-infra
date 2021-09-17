@@ -8,3 +8,4 @@ resources:
 - cis.yaml
 - cncf.yaml
 - heartbeat.yaml
+- heartbeat-runner.yaml
