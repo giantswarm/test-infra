@@ -17,8 +17,6 @@ spec:
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
-      - name: github-token
-        mountPath: /etc/github-token
     env:
       - name: KUBECONFIG
         value: /etc/kubeconfig/aws
