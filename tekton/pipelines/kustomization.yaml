@@ -7,3 +7,4 @@ resources:
 - azure.yaml
 - cis.yaml
 - cncf.yaml
+- heartbeat.yaml
