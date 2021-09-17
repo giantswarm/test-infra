@@ -8,9 +8,6 @@ spec:
   - name: kubeconfig
     secret:
       secretName: standup-kubeconfig
-  - name: github-token
-    secret:
-      secretName: bot-token-github
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
@@ -28,8 +25,8 @@ spec:
       - name: OPSCTL_GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
-            name: bot-token-github
-            key: bot-token
+            name: tityosbot-token-github
+            key: oauth
     script: |
       #! /bin/sh
       opsctl deploy \
