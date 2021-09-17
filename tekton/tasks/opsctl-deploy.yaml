@@ -30,4 +30,3 @@ spec:
       opsctl deploy \
       --2cp \
       prometheus-meta-operator@v1.51.1
-      sleep 1h
