@@ -6,6 +6,9 @@ metadata:
 spec:
   workspaces:
     - name: cluster
+  params:
+    - name: PROW_JOB_ID
+      type: string
   tasks:
     - name: deploy
       taskRef:
