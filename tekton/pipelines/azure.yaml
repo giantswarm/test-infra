@@ -38,22 +38,17 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: wait-for-condition-ready
+  - name: wait-for-ready
     runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
-      name: wait-for-condition-ready
-    params:
-      - name: cluster-id
-        value: "$(tasks.create-cluster.results.cluster-id)"
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
+      name: wait-for-ready
     workspaces:
       - name: cluster
         workspace: cluster
 
   - name: test-azure
-    runAfter: [wait-for-condition-ready]
+    runAfter: [wait-for-ready]
     taskRef:
       name: azure
     params:
