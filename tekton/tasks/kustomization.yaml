@@ -11,10 +11,10 @@ resources:
 - create-cluster.yaml
 - create-release.yaml
 - create-test-operator-release.yaml
+- hello-world.yaml
 - generate-workload-cluster-kubeconfig.yaml
 - get-latest-release.yaml
 - manage-sonobuoy-results.yaml
 - upgrade-cluster.yaml
 - upload-to-s3-bucket.yaml
-- wait-for-condition-ready.yaml
 - wait-for-ready.yaml
