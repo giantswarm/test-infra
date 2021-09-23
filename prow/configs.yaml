@@ -167,6 +167,33 @@ presubmits:
                   storage: 10Mi
     trigger: "/test azure"
     rerun_command: "/test azure"
+
+  - name: capz
+    agent: tekton-pipeline
+    max_concurrency: 5
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: capz
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      resources:
+        - name: releases
+          resourceRef:
+            name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test capz"
+    rerun_command: "/test capz"
+
   - name: azure-upgrade
     agent: tekton-pipeline
     max_concurrency: 5

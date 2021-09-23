@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: azure
+  name: capz
   namespace: test-workloads
 spec:
   resources:
@@ -60,7 +60,7 @@ spec:
     - name: kubeconfig-path
       value: "/etc/kubeconfig/azure"
     - name: plugin-branch
-      value: "master"
+      value: "capz-support"
     workspaces:
     - name: cluster
       workspace: cluster

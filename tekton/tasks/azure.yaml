@@ -15,12 +15,16 @@ spec:
     type: string
     description: Whether or not test deletion of clusters.
     default: "1"
+  - name: plugin-branch
+    type: string
+    description: Branch of the plugin repository to use.
+    default: "master"
   steps:
     - name: download-sonobuoy-plugin
       image: busybox
       script: |
         #! /bin/sh
-        wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml
+        wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/$(params.test-deletion)/giantswarm-plugin.yaml
     - name: run-tests
       image: quay.io/giantswarm/sonobuoy:v0.52.0-alpine-giantswarm
       env:
