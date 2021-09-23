@@ -245,3 +245,26 @@ presubmits:
                   storage: 10Mi
     trigger: "/test upgrade-to-this-azure-operator"
     rerun_command: "/test upgrade-to-this-azure-operator"
+
+  giantswarm/prometheus-meta-operator:
+  - name: heartbeat
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: heartbeat
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test heartbeat"
+    rerun_command: "/test heartbeat"

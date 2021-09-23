@@ -24,8 +24,8 @@ spec:
   - name: cluster-id
     description: The ID of the created cluster.
   steps:
-  - name: create-cluster
-    image: quay.io/giantswarm/standup:3.0.0
+  - name: create-cluster-legacy
+    image: quay.io/giantswarm/standup:3.2.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -33,6 +33,13 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
+
+      if [ "$(params.release-id)" == "v20.0.0" ]
+      then
+        echo "Release $(params.release-id) is a CAPI release"
+        exit 0
+      fi
+
       standup create cluster \
       --config /etc/endpoints-config/config \
       --kubeconfig /etc/kubeconfig \
@@ -41,3 +48,75 @@ spec:
       --output $(workspaces.cluster.path)
 
       cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
+
+  - name: create-cluster-capi
+    image: quay.io/giantswarm/kubectl-gs:1.39.1
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      set -e
+      set -x
+
+      if [ "$(params.release-id)" != "v20.0.0" ]
+      then
+        echo "Release $(params.release-id) is not a CAPI release"
+        exit 0
+      fi
+
+      # Generate template for control plane.
+      kubectl-gs template cluster \
+        --provider $(cat $(workspaces.cluster.path)/installation) \
+        --release $(params.release-id) \
+        --owner giantswarm \
+        --description "e2e test" \
+        --output /tmp/cluster.yaml
+
+      # Extract cluster name from template.
+      cluster_id="$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d'"' -f4)"
+
+      echo -n "${cluster_id}" >$(workspaces.cluster.path)/cluster-id
+      echo -n "${cluster_id}" > $(results.cluster-id.path)
+
+      kubectl-gs template nodepool \
+        --provider $(cat $(workspaces.cluster.path)/installation) \
+        --release $(params.release-id) \
+        --owner giantswarm \
+        --cluster-name "${cluster_id}" \
+        --description "np1" \
+        --nodes-min 3 \
+        --nodes-max 10 \
+        --output /tmp/nodepool.yaml
+
+      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
+      cat /tmp/cluster.yaml /tmp/nodepool.yaml | kubectl apply -f -
+
+  - name: capi-get-kubeconfig
+    image: quay.io/giantswarm/clusterctl:0.4.2
+    volumeMounts:
+      - name: endpoints-config
+        mountPath: /etc/endpoints-config
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      set -e
+
+      if [ "$(params.release-id)" != "v20.0.0" ]
+      then
+        echo "Release $(params.release-id) is not a CAPI release"
+        exit 0
+      fi
+
+      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
+      while ! clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig
+      do
+        sleep 5
+      done
+
+
