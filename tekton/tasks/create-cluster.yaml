@@ -50,7 +50,7 @@ spec:
       cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
 
   - name: create-cluster-capi
-    image: quay.io/giantswarm/kubectl-gs:1.39.1
+    image: quay.io/giantswarm/kubectl-gs:1.40.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -72,7 +72,7 @@ spec:
       kubectl-gs template cluster \
         --provider $(cat $(workspaces.cluster.path)/installation) \
         --release $(params.release-id) \
-        --owner giantswarm \
+        --organization giantswarm \
         --description "e2e test" \
         --output /tmp/cluster.yaml
 
@@ -85,7 +85,7 @@ spec:
       kubectl-gs template nodepool \
         --provider $(cat $(workspaces.cluster.path)/installation) \
         --release $(params.release-id) \
-        --owner giantswarm \
+        --organization giantswarm \
         --cluster-name "${cluster_id}" \
         --description "np1" \
         --nodes-min 3 \
