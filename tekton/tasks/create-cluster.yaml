@@ -70,6 +70,7 @@ spec:
 
       # Generate template for control plane.
       kubectl-gs template cluster \
+        --kubeconfig /etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation) \
         --provider $(cat $(workspaces.cluster.path)/installation) \
         --release $(params.release-id) \
         --organization giantswarm \
