@@ -78,7 +78,7 @@ spec:
         --output /tmp/cluster.yaml
 
       # Extract cluster name from template.
-      cluster_id="$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d'"' -f4)"
+      cluster_id=$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d" " -f6)
 
       echo -n "${cluster_id}" >$(workspaces.cluster.path)/cluster-id
       echo -n "${cluster_id}" > $(results.cluster-id.path)
