@@ -94,7 +94,8 @@ spec:
         --output /tmp/nodepool.yaml
 
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
-      cat /tmp/cluster.yaml /tmp/nodepool.yaml | kubectl apply -f -
+      cat /tmp/cluster.yaml | kubectl apply -f -
+      cat /tmp/nodepool.yaml | kubectl apply -f -
 
   - name: capi-get-kubeconfig
     image: quay.io/giantswarm/clusterctl:0.4.2
