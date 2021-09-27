@@ -60,6 +60,8 @@ spec:
     params:
     - name: kubeconfig-path
       value: "/etc/kubeconfig/azure"
+    - name: plugin-branch
+      value: "legacy"
     workspaces:
     - name: cluster
       workspace: cluster
