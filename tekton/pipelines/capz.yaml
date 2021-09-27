@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: azure
+  name: capz
   namespace: test-workloads
 spec:
   resources:
@@ -38,24 +38,29 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: wait-for-ready
+  - name: wait-for-condition-ready
     runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
-      name: wait-for-ready
+      name: wait-for-condition-ready
+    params:
+      - name: cluster-id
+        value: "$(tasks.create-cluster.results.cluster-id)"
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/azure"
     workspaces:
       - name: cluster
         workspace: cluster
 
   - name: test-azure
-    runAfter: [wait-for-ready]
+    runAfter: [wait-for-condition-ready]
     taskRef:
       name: azure
     params:
     - name: kubeconfig-path
       value: "/etc/kubeconfig/azure"
     - name: plugin-branch
-      value: "master"
+      value: "capz-support"
     workspaces:
     - name: cluster
       workspace: cluster

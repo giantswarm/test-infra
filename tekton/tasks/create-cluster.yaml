@@ -50,7 +50,7 @@ spec:
       cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
 
   - name: create-cluster-capi
-    image: quay.io/giantswarm/kubectl-gs:1.39.1
+    image: quay.io/giantswarm/kubectl-gs:1.40.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -70,14 +70,15 @@ spec:
 
       # Generate template for control plane.
       kubectl-gs template cluster \
+        --kubeconfig /etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation) \
         --provider $(cat $(workspaces.cluster.path)/installation) \
         --release $(params.release-id) \
-        --owner giantswarm \
+        --organization giantswarm \
         --description "e2e test" \
         --output /tmp/cluster.yaml
 
       # Extract cluster name from template.
-      cluster_id="$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d'"' -f4)"
+      cluster_id=$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d" " -f6)
 
       echo -n "${cluster_id}" >$(workspaces.cluster.path)/cluster-id
       echo -n "${cluster_id}" > $(results.cluster-id.path)
@@ -85,7 +86,7 @@ spec:
       kubectl-gs template nodepool \
         --provider $(cat $(workspaces.cluster.path)/installation) \
         --release $(params.release-id) \
-        --owner giantswarm \
+        --organization giantswarm \
         --cluster-name "${cluster_id}" \
         --description "np1" \
         --nodes-min 3 \
@@ -93,7 +94,8 @@ spec:
         --output /tmp/nodepool.yaml
 
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
-      cat /tmp/cluster.yaml /tmp/nodepool.yaml | kubectl apply -f -
+      cat /tmp/cluster.yaml | kubectl apply -f -
+      cat /tmp/nodepool.yaml | kubectl apply -f -
 
   - name: capi-get-kubeconfig
     image: quay.io/giantswarm/clusterctl:0.4.2
@@ -116,6 +118,7 @@ spec:
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
       while ! clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig
       do
+        ((retries++)) && ((retries==10)) && break
         sleep 5
       done
 
