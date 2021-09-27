@@ -48,6 +48,8 @@ spec:
     params:
     - name: kubeconfig-path
       value: "/etc/kubeconfig/azure"
+    - name: plugin-branch
+      value: "legacy"
     - name: test-deletion
       value: "0"
     workspaces:
