@@ -24,7 +24,7 @@ This assumes that you are in the `prow` directory and that you can reach your wo
 
   - Install the `add-hook` tool
     ```bash
-    go get -u k8s.io/test-infra/experiment/add-hook
+    go get -u k8s.io/test-infra/experiment/add-hook@d6394f164a8d40f9bbf97b043719db5cb5da9783
     ```
 
   - Attach it to the organisation using `--repo` flag (or to a precise repo using `MY_ORG/MY_REPO` convention)

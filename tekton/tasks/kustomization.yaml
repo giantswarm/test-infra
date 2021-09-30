@@ -18,5 +18,4 @@ resources:
 - opsctl-deploy.yaml
 - upgrade-cluster.yaml
 - upload-to-s3-bucket.yaml
-- wait-for-condition-ready.yaml
 - wait-for-ready.yaml
