@@ -34,6 +34,8 @@ spec:
             key: oauth
     script: |
       #! /bin/sh
+      env
+
       ref=""
       if [ -n "$(params.ref)" ]; then
         ref="@$(params.ref)"
