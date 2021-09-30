@@ -13,6 +13,11 @@ spec:
     - name: deploy
       taskRef:
         name: opsctl-deploy
+      params:
+        - name: chart
+          value: prometheus-meta-operator
+        - name: ref
+          value: v1.51.1
       workspaces:
         - name: cluster
           workspace: cluster

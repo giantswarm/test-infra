@@ -4,6 +4,11 @@ metadata:
   name: opsctl-deploy
   namespace: test-workloads
 spec:
+  params:
+    - name: chart
+      type: string
+    - name: ref
+      type: string
   volumes:
   - name: kubeconfig
     secret:
@@ -29,6 +34,11 @@ spec:
             key: oauth
     script: |
       #! /bin/sh
+      ref=""
+      if [ -n "$(params.ref)" ]; then
+        ref="@$(params.ref)"
+      fi
+
       opsctl deploy \
       --use-kubeconfig \
-      prometheus-meta-operator@v1.51.1
+      $(params.chart)$ref
