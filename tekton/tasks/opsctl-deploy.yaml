@@ -39,6 +39,7 @@ spec:
         ref="@$(params.ref)"
       fi
 
+      set -x
       opsctl deploy \
       --use-kubeconfig \
       $(params.chart)$ref
