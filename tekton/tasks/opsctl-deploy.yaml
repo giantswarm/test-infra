@@ -18,15 +18,13 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: deploy
-    image: quay.io/giantswarm/opsctl:1.29.0-00425306b6dc81715bed30e3ad1b2e117d54faaf
+    image: quay.io/giantswarm/opsctl:1.29.1
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
     env:
       - name: KUBECONFIG
         value: /etc/kubeconfig/aws
-      - name: OPSCTL_UNSAFE_FORCE_VERSION
-        value: 1.29.1-dev
       - name: OPSCTL_GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
