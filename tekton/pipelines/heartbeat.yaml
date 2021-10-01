@@ -25,6 +25,44 @@ spec:
       workspaces:
         - name: cluster
           workspace: cluster
+
+    - name: get-latest-release
+      taskRef:
+        name: get-latest-release
+      params:
+        - name: kubeconfig-path
+          value: "/etc/kubeconfig/aws"
+      workspaces:
+        - name: cluster
+          workspace: cluster
+
+    - name: create-cluster
+      runAfter:
+        - get-latest-release
+        - deploy-prometheus-meta-operator
+      taskRef:
+        name: create-cluster
+      params:
+      - name: release-id
+        value: "$(tasks.get-latest-release.results.release-id)"
+      workspaces:
+        - name: cluster
+          workspace: cluster
+
+    - name: wait-for-ready
+      runAfter: [create-cluster]
+      timeout: 1h0m0s
+      taskRef:
+        name: wait-for-ready
+      params:
+        - name: cluster-id
+          value: "$(tasks.create-cluster.results.cluster-id)"
+        - name: kubeconfig-path
+          value: "/etc/kubeconfig/aws"
+      workspaces:
+        - name: cluster
+          workspace: cluster
+
   finally:
     - name: undeploy-prometheus-meta-operator
       taskRef:
