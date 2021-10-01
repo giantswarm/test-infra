@@ -20,7 +20,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: deploy
-    image: quay.io/giantswarm/opsctl:1.30.0
+    image: quay.io/giantswarm/opsctl:1.31.0
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
