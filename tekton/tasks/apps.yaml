@@ -12,7 +12,7 @@ spec:
       image: busybox
       script: |
         #! /bin/sh
-        wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml
+        wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/legacy/giantswarm-plugin.yaml
     - name: run-tests
       image: quay.io/giantswarm/sonobuoy:v0.53.2-alpine-giantswarm
       env:
