@@ -20,6 +20,8 @@ spec:
           value: prometheus-meta-operator
         - name: ref
           value: "$(params.PULL_PULL_SHA)"
+        - name: kubeconfig
+          value: aws
       workspaces:
         - name: cluster
           workspace: cluster

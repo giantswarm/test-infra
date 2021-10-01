@@ -9,6 +9,8 @@ spec:
       type: string
     - name: ref
       type: string
+    - name: kubeconfig
+      type: string
   volumes:
   - name: kubeconfig
     secret:
@@ -24,7 +26,7 @@ spec:
         mountPath: /etc/kubeconfig
     env:
       - name: KUBECONFIG
-        value: /etc/kubeconfig/aws
+        value: "/etc/kubeconfig/$(params.kubeconfig)"
       - name: OPSCTL_GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
