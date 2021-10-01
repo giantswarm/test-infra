@@ -12,7 +12,7 @@ spec:
     - name: PULL_PULL_SHA
       type: string
   tasks:
-    - name: deploy
+    - name: deploy-prometheus-meta-operator
       taskRef:
         name: opsctl-deploy
       params:
