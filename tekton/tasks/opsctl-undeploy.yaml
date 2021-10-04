@@ -7,6 +7,8 @@ spec:
   params:
     - name: chart
       type: string
+    - name: ref
+      type: string
     - name: kubeconfig
       type: string
   volumes:
@@ -32,7 +34,12 @@ spec:
             key: oauth
     script: |
       #! /bin/sh
+      ref=""
+      if [ -n "$(params.ref)" ]; then
+        ref="@$(params.ref)"
+      fi
+
       set -x
       opsctl undeploy \
       --use-kubeconfig \
-      $(params.chart)
+      $(params.chart)$ref
