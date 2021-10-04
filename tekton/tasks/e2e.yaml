@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: azure
+  name: e2e
   namespace: test-workloads
 spec:
   workspaces:

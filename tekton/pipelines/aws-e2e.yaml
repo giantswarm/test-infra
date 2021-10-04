@@ -50,7 +50,7 @@ spec:
   - name: test-aws
     runAfter: [wait-for-ready]
     taskRef:
-      name: azure
+      name: e2e
     params:
     - name: provider
       value: "aws"

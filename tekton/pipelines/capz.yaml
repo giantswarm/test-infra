@@ -55,7 +55,7 @@ spec:
   - name: test-azure
     runAfter: [wait-for-condition-ready]
     taskRef:
-      name: azure
+      name: e2e
     params:
     - name: provider
       value: "azure"
