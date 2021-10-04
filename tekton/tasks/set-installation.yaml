@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: set-installation
+  namespace: test-workloads
+spec:
+  params:
+    - name: installation
+      type: string
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: set-installation
+    image: busybox
+    script: |
+      #! /bin/sh
+      printf "%s" "$(params.installation)" > "$(workspaces.cluster.path)/installation"

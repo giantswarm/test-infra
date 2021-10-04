@@ -17,6 +17,7 @@ resources:
 - manage-sonobuoy-results.yaml
 - opsctl-deploy.yaml
 - opsctl-undeploy.yaml
+- set-installation.yaml
 - upgrade-cluster.yaml
 - upload-to-s3-bucket.yaml
 - wait-for-ready.yaml

@@ -36,10 +36,21 @@ spec:
         - name: cluster
           workspace: cluster
 
+    - name: set-installation
+      taskRef:
+        name: set-installation
+      params:
+        - name: installation
+          value: aws
+      workspaces:
+        - name: cluster
+          workspace: cluster
+
     - name: create-cluster
       runAfter:
         - get-latest-release
         - deploy-prometheus-meta-operator
+        - set-installation
       taskRef:
         name: create-cluster
       params:
