@@ -57,6 +57,8 @@ spec:
     taskRef:
       name: azure
     params:
+    - name: provider
+      value: "azure"
     - name: kubeconfig-path
       value: "/etc/kubeconfig/azure"
     - name: plugin-branch

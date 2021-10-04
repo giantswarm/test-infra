@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: azure-upgrade
+  name: aws-e2e
   namespace: test-workloads
 spec:
   resources:
@@ -24,27 +24,16 @@ spec:
       workspace: cluster
     resources:
       inputs:
-        - name: releases
-          resource: releases
-
-  - name: get-latest-release
-    runAfter: [create-release]
-    taskRef:
-      name: get-latest-release
-    params:
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
-    workspaces:
-      - name: cluster
-        workspace: cluster
+      - name: releases
+        resource: releases
 
   - name: create-cluster
-    runAfter: [get-latest-release]
+    runAfter: [create-release]
     taskRef:
       name: create-cluster
     params:
     - name: release-id
-      value: "$(tasks.get-latest-release.results.release-id)"
+      value: "$(tasks.create-release.results.release-id)"
     workspaces:
       - name: cluster
         workspace: cluster
@@ -54,39 +43,19 @@ spec:
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
-    params:
-      - name: cluster-id
-        value: "$(tasks.create-cluster.results.cluster-id)"
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
     workspaces:
       - name: cluster
         workspace: cluster
 
-  - name: upgrade-cluster
+  - name: test-aws
     runAfter: [wait-for-ready]
-    taskRef:
-      name: upgrade-cluster
-    params:
-      - name: cluster-id
-        value: "$(tasks.create-cluster.results.cluster-id)"
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
-      - name: release-id
-        value: "$(tasks.create-release.results.release-id)"
-    workspaces:
-    - name: cluster
-      workspace: cluster
-
-  - name: test-azure
-    runAfter: [upgrade-cluster]
     taskRef:
       name: azure
     params:
     - name: provider
-      value: "azure"
+      value: "aws"
     - name: kubeconfig-path
-      value: "/etc/kubeconfig/azure"
+      value: "/etc/kubeconfig/aws"
     - name: plugin-branch
       value: "legacy"
     workspaces:
@@ -94,12 +63,12 @@ spec:
       workspace: cluster
 
   - name: manage-sonobuoy-results
-    runAfter: [test-azure]
+    runAfter: [test-aws]
     taskRef:
       name: manage-sonobuoy-results
     params:
       - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
+        value: "/etc/kubeconfig/aws"
       - name: sonobuoy-namespace
         value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
     workspaces:
