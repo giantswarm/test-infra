@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: opsctl-deploy
+  namespace: test-workloads
+spec:
+  params:
+    - name: chart
+      type: string
+    - name: ref
+      type: string
+    - name: kubeconfig
+      type: string
+  volumes:
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  steps:
+  - name: deploy
+    image: quay.io/giantswarm/opsctl:1.30.0
+    volumeMounts:
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    env:
+      - name: KUBECONFIG
+        value: "/etc/kubeconfig/$(params.kubeconfig)"
+      - name: OPSCTL_GITHUB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: tityosbot-token-github
+            key: oauth
+    script: |
+      #! /bin/sh
+      ref=""
+      if [ -n "$(params.ref)" ]; then
+        ref="@$(params.ref)"
+      fi
+
+      set -x
+      opsctl deploy \
+      --use-kubeconfig \
+      $(params.chart)$ref

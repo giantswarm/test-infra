@@ -1,3 +1,4 @@
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -29,3 +30,27 @@ rules:
       - "customresourcedefinitions"
     verbs:
       - "get"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: test-infra-opsctl
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - "applications"
+    verbs:
+      - "patch"
+  - apiGroups:
+      - "application.giantswarm.io"
+    resources:
+      - "apps"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "core.giantswarm.io"
+    resources:
+      - "configs"
+    verbs:
+      - "*"
