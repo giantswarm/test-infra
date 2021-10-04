@@ -14,7 +14,6 @@ resources:
 - hello-world.yaml
 - generate-workload-cluster-kubeconfig.yaml
 - get-latest-release.yaml
-- gsctl-create-cluster.yaml
 - manage-sonobuoy-results.yaml
 - opsctl-deploy.yaml
 - opsctl-undeploy.yaml
