@@ -4,3 +4,5 @@ version: [[ .Version ]]
 appVersion: master
 description: Giant Swarm conformance testing stack.
 home: https://github.com/giantswarm/test-infra
+annotations:
+  config.giantswarm.io/version: test-infra
