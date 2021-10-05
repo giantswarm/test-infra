@@ -25,3 +25,17 @@ spec:
       workspaces:
         - name: cluster
           workspace: cluster
+  finally:
+    - name: undeploy-prometheus-meta-operator
+      taskRef:
+        name: opsctl-undeploy
+      params:
+        - name: chart
+          value: prometheus-meta-operator
+        - name: ref
+          value: "$(params.PULL_PULL_SHA)"
+        - name: kubeconfig
+          value: aws
+      workspaces:
+        - name: cluster
+          workspace: cluster

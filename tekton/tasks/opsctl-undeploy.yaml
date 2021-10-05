@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: opsctl-deploy
+  name: opsctl-undeploy
   namespace: test-workloads
 spec:
   params:
@@ -19,7 +19,7 @@ spec:
   - name: cluster
     description: Cluster information is stored here.
   steps:
-  - name: deploy
+  - name: undeploy
     image: quay.io/giantswarm/opsctl:1.31.0
     volumeMounts:
       - name: kubeconfig
@@ -40,6 +40,6 @@ spec:
       fi
 
       set -x
-      opsctl deploy \
+      opsctl undeploy \
       --use-kubeconfig \
       $(params.chart)$ref
