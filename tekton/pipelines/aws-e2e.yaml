@@ -1,13 +1,11 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: azure-operator
+  name: aws-e2e
   namespace: test-workloads
 spec:
   resources:
   - name: releases
-    type: git
-  - name: azure-operator
     type: git
   workspaces:
   - name: cluster
@@ -15,9 +13,12 @@ spec:
   - name: PROW_JOB_ID
     type: string
   tasks:
-  - name: create-test-operator-release
+  - name: create-release
+    params:
+    - name: pipeline-name
+      value: "$(context.pipeline.name)"
     taskRef:
-      name: create-test-operator-release
+      name: create-release
     workspaces:
     - name: cluster
       workspace: cluster
@@ -25,16 +26,14 @@ spec:
       inputs:
       - name: releases
         resource: releases
-      - name: azure-operator
-        resource: azure-operator
 
   - name: create-cluster
-    runAfter: [create-test-operator-release]
+    runAfter: [create-release]
     taskRef:
       name: create-cluster
     params:
     - name: release-id
-      value: "$(tasks.create-test-operator-release.results.release-id)"
+      value: "$(tasks.create-release.results.release-id)"
     workspaces:
       - name: cluster
         workspace: cluster
@@ -44,24 +43,19 @@ spec:
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
-    params:
-      - name: cluster-id
-        value: "$(tasks.create-cluster.results.cluster-id)"
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
     workspaces:
       - name: cluster
         workspace: cluster
 
-  - name: test-azure
+  - name: test-aws
     runAfter: [wait-for-ready]
     taskRef:
       name: e2e
     params:
     - name: provider
-      value: "azure"
+      value: "aws"
     - name: kubeconfig-path
-      value: "/etc/kubeconfig/azure"
+      value: "/etc/kubeconfig/aws"
     - name: plugin-branch
       value: "legacy"
     workspaces:
@@ -69,12 +63,12 @@ spec:
       workspace: cluster
 
   - name: manage-sonobuoy-results
-    runAfter: [test-azure]
+    runAfter: [test-aws]
     taskRef:
       name: manage-sonobuoy-results
     params:
       - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
+        value: "/etc/kubeconfig/aws"
       - name: sonobuoy-namespace
         value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
     workspaces:
@@ -84,16 +78,16 @@ spec:
   finally:
   - name: upload-to-s3-bucket # executed only when tests fail
     when:
-    - input: $(tasks.manage-sonobuoy-results.status)
-      operator: in
-      values: ["Failed"]
+      - input: $(tasks.manage-sonobuoy-results.status)
+        operator: in
+        values: ["Failed"]
     taskRef:
       name: upload-to-s3-bucket
     params:
-    - name: prow-job-id
-      value: "$(params.PROW_JOB_ID)"
-    - name: file-to-upload
-      value: $(workspaces.cluster.path)/sonobuoy-results.tar
+      - name: prow-job-id
+        value: "$(params.PROW_JOB_ID)"
+      - name: file-to-upload
+        value: $(workspaces.cluster.path)/sonobuoy-results.tar
     workspaces:
       - name: cluster
         workspace: cluster
