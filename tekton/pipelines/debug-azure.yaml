@@ -44,8 +44,10 @@ spec:
   - name: test-azure
     runAfter: [wait-for-ready]
     taskRef:
-      name: azure
+      name: e2e
     params:
+    - name: provider
+      value: "azure"
     - name: kubeconfig-path
       value: "/etc/kubeconfig/azure"
     - name: plugin-branch
