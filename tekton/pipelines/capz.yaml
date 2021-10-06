@@ -38,11 +38,11 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: wait-for-condition-ready
+  - name: wait-for-ready
     runAfter: [create-cluster]
     timeout: 1h0m0s
     taskRef:
-      name: wait-for-condition-ready
+      name: wait-for-ready
     params:
       - name: cluster-id
         value: "$(tasks.create-cluster.results.cluster-id)"
@@ -53,7 +53,7 @@ spec:
         workspace: cluster
 
   - name: test-azure
-    runAfter: [wait-for-condition-ready]
+    runAfter: [wait-for-ready]
     taskRef:
       name: e2e
     params:
