@@ -116,10 +116,7 @@ spec:
       fi
 
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
-      while ! clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig
-      do
-        ((retries++)) && ((retries==10)) && break
+      for i in $(seq 1 10); do
+        clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig && break
         sleep 5
       done
-
-
