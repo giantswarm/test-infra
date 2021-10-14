@@ -19,14 +19,13 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
   versions:
-    - &version
-      name: v1alpha1
+    - name: v1alpha1
       served: true
       storage: false
       schema:
@@ -44,9 +43,24 @@ spec:
       # starts to increment
       subresources:
         status: {}
-    - !!merge <<: *version
-      name: v1beta1
+    - name: v1beta1
+      served: true
       storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
   names:
     kind: ClusterTask
     plural: clustertasks
@@ -85,8 +99,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   versions:
@@ -117,45 +131,6 @@ spec:
   scope: Namespaced
 
 ---
-# Copyright 2018 The Knative Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-apiVersion: apiextensions.k8s.io/v1beta1
-kind: CustomResourceDefinition
-metadata:
-  name: images.caching.internal.knative.dev
-  labels:
-    app.kubernetes.io/instance: default
-    app.kubernetes.io/part-of: tekton-pipelines
-    knative.dev/crd-install: "true"
-spec:
-  group: caching.internal.knative.dev
-  version: v1alpha1
-  names:
-    kind: Image
-    plural: images
-    singular: image
-    categories:
-      - knative-internal
-      - caching
-    shortNames:
-      - img
-  scope: Namespaced
-  subresources:
-    status: {}
-
----
 # Copyright 2019 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -177,14 +152,13 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
   versions:
-    - &version
-      name: v1alpha1
+    - name: v1alpha1
       served: true
       storage: false
       # Opt into the status subresource so metadata.generation
@@ -202,9 +176,24 @@ spec:
           # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
           # See issue: https://github.com/knative/serving/issues/912
           x-kubernetes-preserve-unknown-fields: true
-    - !!merge <<: *version
-      name: v1beta1
+    - name: v1beta1
+      served: true
       storage: true
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
   names:
     kind: Pipeline
     plural: pipelines
@@ -243,14 +232,13 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
   versions:
-    - &version
-      name: v1alpha1
+    - name: v1alpha1
       served: true
       storage: false
       schema:
@@ -267,10 +255,10 @@ spec:
       additionalPrinterColumns:
         - name: Succeeded
           type: string
-          jsonPath: '.status.conditions[?(@.type=="Succeeded")].status'
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].status"
         - name: Reason
           type: string
-          jsonPath: '.status.conditions[?(@.type=="Succeeded")].reason'
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].reason"
         - name: StartTime
           type: date
           jsonPath: .status.startTime
@@ -281,9 +269,37 @@ spec:
       # starts to increment
       subresources:
         status: {}
-    - !!merge <<: *version
-      name: v1beta1
+    - name: v1beta1
+      served: true
       storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Succeeded
+          type: string
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].reason"
+        - name: StartTime
+          type: date
+          jsonPath: .status.startTime
+        - name: CompletionTime
+          type: date
+          jsonPath: .status.completionTime
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
   names:
     kind: PipelineRun
     plural: pipelineruns
@@ -325,8 +341,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   versions:
@@ -378,8 +394,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
@@ -401,10 +417,10 @@ spec:
       additionalPrinterColumns:
         - name: Succeeded
           type: string
-          jsonPath: '.status.conditions[?(@.type=="Succeeded")].status'
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].status"
         - name: Reason
           type: string
-          jsonPath: '.status.conditions[?(@.type=="Succeeded")].reason'
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].reason"
         - name: StartTime
           type: date
           jsonPath: .status.startTime
@@ -445,14 +461,13 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
   versions:
-    - &version
-      name: v1alpha1
+    - name: v1alpha1
       served: true
       storage: false
       schema:
@@ -470,9 +485,24 @@ spec:
       # starts to increment
       subresources:
         status: {}
-    - !!merge <<: *version
-      name: v1beta1
+    - name: v1beta1
+      served: true
       storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
   names:
     kind: Task
     plural: tasks
@@ -511,14 +541,13 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    pipeline.tekton.dev/release: "v0.24.1"
+    version: "v0.24.1"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
   versions:
-    - &version
-      name: v1alpha1
+    - name: v1alpha1
       served: true
       storage: false
       schema:
@@ -535,10 +564,10 @@ spec:
       additionalPrinterColumns:
         - name: Succeeded
           type: string
-          jsonPath: '.status.conditions[?(@.type=="Succeeded")].status'
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].status"
         - name: Reason
           type: string
-          jsonPath: '.status.conditions[?(@.type=="Succeeded")].reason'
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].reason"
         - name: StartTime
           type: date
           jsonPath: .status.startTime
@@ -549,9 +578,37 @@ spec:
       # starts to increment
       subresources:
         status: {}
-    - !!merge <<: *version
-      name: v1beta1
+    - name: v1beta1
+      served: true
       storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Succeeded
+          type: string
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type==\"Succeeded\")].reason"
+        - name: StartTime
+          type: date
+          jsonPath: .status.startTime
+        - name: CompletionTime
+          type: date
+          jsonPath: .status.completionTime
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
   names:
     kind: TaskRun
     plural: taskruns
