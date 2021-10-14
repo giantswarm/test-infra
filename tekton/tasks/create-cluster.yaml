@@ -107,8 +107,6 @@ spec:
     script: |
       #! /bin/sh
 
-      set -e
-
       if [ "$(params.release-id)" != "v20.0.0" ]
       then
         echo "Release $(params.release-id) is not a CAPI release"
@@ -116,7 +114,12 @@ spec:
       fi
 
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
-      for i in $(seq 1 10); do
-        clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig && break
+      for i in $(seq 1 20); do
+        clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig
+        success=$?
+        if [ "$success" -eq "0" ]; then
+          break
+        fi
         sleep 5
       done
+      exit $success
