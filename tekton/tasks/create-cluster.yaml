@@ -50,7 +50,7 @@ spec:
       cat $(workspaces.cluster.path)/cluster-id > $(results.cluster-id.path)
 
   - name: create-cluster-capi
-    image: quay.io/giantswarm/kubectl-gs:1.40.0
+    image: quay.io/giantswarm/kubectl-gs:1.43.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
