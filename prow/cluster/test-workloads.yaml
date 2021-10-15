@@ -24,6 +24,20 @@ rules:
     verbs:
       - "*"
 ---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: test-workloads
+  name: secret-manager
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "secrets"
+    verbs:
+      - get
+      - list
+---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -33,6 +47,20 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: release-manager
+subjects:
+  - kind: ServiceAccount
+    name: test-runs
+    namespace: test-workloads
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: test-workloads
+  name: secret-manager-test-runs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: secret-manager
 subjects:
   - kind: ServiceAccount
     name: test-runs
