@@ -115,7 +115,7 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test aws"
+    trigger: "/test aws$"
     rerun_command: "/test aws"
   - name: aws-china
     agent: tekton-pipeline
@@ -165,7 +165,7 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test azure"
+    trigger: "/test azure$"
     rerun_command: "/test azure"
   - name: aws-e2e
     agent: tekton-pipeline
@@ -242,7 +242,7 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test azure-upgrade"
+    trigger: "/test azure-upgrade$"
     rerun_command: "/test azure-upgrade"
 
   - name: upgrade-to-this-azure-operator
