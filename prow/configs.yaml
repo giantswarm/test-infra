@@ -166,7 +166,7 @@ presubmits:
                 requests:
                   storage: 10Mi
     trigger: "/test azure$"
-    rerun_command: "/test azure$"
+    rerun_command: "/test azure"
   - name: aws-e2e
     agent: tekton-pipeline
     max_concurrency: 5
@@ -243,7 +243,7 @@ presubmits:
                 requests:
                   storage: 10Mi
     trigger: "/test azure-upgrade$"
-    rerun_command: "/test azure-upgrade$"
+    rerun_command: "/test azure-upgrade"
 
   - name: upgrade-to-this-azure-operator
     agent: tekton-pipeline
