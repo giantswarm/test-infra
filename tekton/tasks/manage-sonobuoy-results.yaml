@@ -21,7 +21,7 @@ spec:
       description: Kubeconfig of the created cluster.
   steps:
     - name: manage-sonobuoy-results
-      image: quay.io/giantswarm/sonobuoy:v0.52.0-alpine-giantswarm
+      image: quay.io/giantswarm/sonobuoy:v0.53.2-alpine-giantswarm
       script: |
         #! /bin/sh
 

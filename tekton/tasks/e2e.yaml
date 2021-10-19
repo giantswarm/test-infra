@@ -1,13 +1,16 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: azure
+  name: e2e
   namespace: test-workloads
 spec:
   workspaces:
     - name: cluster
       description: Cluster information is stored here.
   params:
+  - name: provider
+    type: string
+    description: Provider where workload cluster will be created.
   - name: kubeconfig-path
     type: string
     description: Management Cluster kubeconfig path.
@@ -15,14 +18,18 @@ spec:
     type: string
     description: Whether or not test deletion of clusters.
     default: "1"
+  - name: plugin-branch
+    type: string
+    description: Branch of the plugin repository to use.
+    default: "master"
   steps:
     - name: download-sonobuoy-plugin
       image: busybox
       script: |
         #! /bin/sh
-        wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/master/giantswarm-plugin.yaml
+        wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/$(params.plugin-branch)/giantswarm-plugin.yaml
     - name: run-tests
-      image: quay.io/giantswarm/sonobuoy:v0.52.0-alpine-giantswarm
+      image: quay.io/giantswarm/sonobuoy:v0.53.2-alpine-giantswarm
       env:
         - name: TC_KUBECONFIG_PATH
           value: $(workspaces.cluster.path)/kubeconfig
@@ -31,7 +38,7 @@ spec:
         - name: CLUSTER_ID_PATH
           value: $(workspaces.cluster.path)/cluster-id
         - name: PROVIDER
-          value: azure
+          value: $(params.provider)
         - name: TEST_DELETION
           value: $(params.test-deletion)
       script: |

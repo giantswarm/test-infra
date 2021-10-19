@@ -1,3 +1,4 @@
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -9,6 +10,10 @@ rules:
       - provider.giantswarm.io
       - release.giantswarm.io
       - security.giantswarm.io
+      - infrastructure.cluster.x-k8s.io
+      - controlplane.cluster.x-k8s.io
+      - infrastructure.cluster.x-k8s.io
+      - bootstrap.cluster.x-k8s.io
     resources:
       - "*"
     verbs:
@@ -17,5 +22,35 @@ rules:
       - ""
     resources:
       - "*"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "apiextensions.k8s.io"
+    resources:
+      - "customresourcedefinitions"
+    verbs:
+      - "get"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: test-infra-opsctl
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - "applications"
+    verbs:
+      - "patch"
+  - apiGroups:
+      - "application.giantswarm.io"
+    resources:
+      - "apps"
+    verbs:
+      - "*"
+  - apiGroups:
+      - "core.giantswarm.io"
+    resources:
+      - "configs"
     verbs:
       - "*"

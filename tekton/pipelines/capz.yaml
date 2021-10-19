@@ -1,13 +1,11 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: upgrade-to-this-azure-operator
+  name: capz
   namespace: test-workloads
 spec:
   resources:
   - name: releases
-    type: git
-  - name: azure-operator
     type: git
   workspaces:
   - name: cluster
@@ -15,12 +13,12 @@ spec:
   - name: PROW_JOB_ID
     type: string
   tasks:
-  - name: create-test-operator-release
+  - name: create-release
     params:
     - name: pipeline-name
       value: "$(context.pipeline.name)"
     taskRef:
-      name: create-test-operator-release
+      name: create-release
     workspaces:
     - name: cluster
       workspace: cluster
@@ -28,27 +26,14 @@ spec:
       inputs:
       - name: releases
         resource: releases
-      - name: azure-operator
-        resource: azure-operator
-
-  - name: get-latest-release
-    runAfter: [create-test-operator-release]
-    taskRef:
-      name: get-latest-release
-    params:
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
-    workspaces:
-      - name: cluster
-        workspace: cluster
 
   - name: create-cluster
-    runAfter: [get-latest-release]
+    runAfter: [create-release]
     taskRef:
       name: create-cluster
     params:
     - name: release-id
-      value: "$(tasks.get-latest-release.results.release-id)"
+      value: "$(tasks.create-release.results.release-id)"
     workspaces:
       - name: cluster
         workspace: cluster
@@ -62,23 +47,8 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: upgrade-cluster
-    runAfter: [wait-for-ready]
-    taskRef:
-      name: upgrade-cluster
-    params:
-      - name: cluster-id
-        value: "$(tasks.create-cluster.results.cluster-id)"
-      - name: kubeconfig-path
-        value: "/etc/kubeconfig/azure"
-      - name: release-id
-        value: "$(tasks.create-test-operator-release.results.release-id)"
-    workspaces:
-      - name: cluster
-        workspace: cluster
-
   - name: test-azure
-    runAfter: [upgrade-cluster]
+    runAfter: [wait-for-ready]
     taskRef:
       name: e2e
     params:
@@ -87,7 +57,7 @@ spec:
     - name: kubeconfig-path
       value: "/etc/kubeconfig/azure"
     - name: plugin-branch
-      value: "legacy"
+      value: "master"
     workspaces:
     - name: cluster
       workspace: cluster

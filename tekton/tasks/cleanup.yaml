@@ -25,7 +25,7 @@ spec:
       description: Cluster ID
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/standup:3.0.0
+    image: quay.io/giantswarm/standup:3.2.0
     env:
       - name: RELEASE_ID
         value: $(params.release-id)

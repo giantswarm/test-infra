@@ -15,11 +15,12 @@ spec:
     description: Provider of the created cluster.
   steps:
   - name: wait-for-ready
-    image: quay.io/giantswarm/standup:3.0.0
+    image: quay.io/giantswarm/standup:3.2.0
     script: |
       #! /bin/sh
       echo $(params.kubeconfig) > /tmp/kubeconfig
 
       standup wait \
       --kubeconfig /tmp/kubeconfig \
-      --provider $(params.provider)
+      --provider $(params.provider) \
+      --nodes 4

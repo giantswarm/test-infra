@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: aws-china
+  name: aws
   namespace: test-workloads
 spec:
   volumes:
@@ -10,7 +10,7 @@ spec:
         secretName: standup-kubeconfig
   workspaces:
     - name: cluster
-      description: In China, run the aws conformance test plan of the most basic cluster scope in order to cover cluster creation and deletion.
+      description: Run the aws conformance test plan of the most basic cluster scope in order to cover cluster creation and deletion.
   steps:
     - name: run-tests
       image: quay.io/giantswarm/awscnfm:16.0.0
@@ -20,7 +20,7 @@ spec:
       script: |
         #! /bin/sh
         
-        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws-china
+        export AWSCNFM_CONTROLPLANE_KUBECONFIG=/etc/controlplane/aws
         export AWSCNFM_CREATE_RELEASEVERSION=$(cat $(workspaces.cluster.path)/release-id)
         
         awscnfm plan pl001 \
