@@ -236,7 +236,6 @@ spec:
         - args:
             - --port=9097
             - --logout-url=
-            - --pipelines-namespace=tekton-pipelines
             - --triggers-namespace=tekton-pipelines
             - --read-only=true
             - --log-level=info
