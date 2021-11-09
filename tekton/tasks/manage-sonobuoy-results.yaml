@@ -21,7 +21,7 @@ spec:
       default: "sonobuoy"
   steps:
     - name: manage-sonobuoy-results
-      image: quay.io/giantswarm/sonobuoy:v0.53.2-alpine-giantswarm
+      image: quay.io/giantswarm/sonobuoy:v0.54.0-alpine-giantswarm
       script: |
         #! /bin/sh
 
