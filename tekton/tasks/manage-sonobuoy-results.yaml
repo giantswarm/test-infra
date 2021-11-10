@@ -36,14 +36,29 @@ spec:
         /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)"
 
         echo Retrieving logs...
-        outfile=$(/sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)")
-        echo Results saved to $outfile
+        set +e
+        ok="false"
+        for i in $(seq 1 5); do
+          /sonobuoy retrieve --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" -f "$(params.results-path)"
+          success=$?
+          if [ "$success" -eq "0" ]; then
+            ok="true"
+            break
+          fi
+          sleep 5
+        done
+        set -e
+
+        if [ "$ok" != "true" ]
+        then
+          echo "Failed to retrieve test results"
+          cleanup
+          exit 1
+        fi
 
         echo Results:
-        /sonobuoy results "$outfile"
-        /sonobuoy results "$outfile" --mode detailed
-
-        mv "$outfile" "$(params.results-path)"
+        /sonobuoy results "$(params.results-path)"
+        /sonobuoy results "$(params.results-path)" --mode detailed
 
         if /sonobuoy status --namespace "$(params.sonobuoy-namespace)" --kubeconfig "$(params.kubeconfig-path)" | grep failed >/dev/null; then
           echo Found failed tests in sonobuoy status

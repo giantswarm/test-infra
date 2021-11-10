@@ -26,9 +26,8 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      standup cleanup \
-      --config /etc/endpoints-config/config \
-      --kubeconfig /etc/kubeconfig \
-      --cluster $(cat $(workspaces.cluster.path)/cluster-id) \
-      --installation $(cat $(workspaces.cluster.path)/installation) \
-      --release $(cat $(workspaces.cluster.path)/release-id)
+
+      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
+
+      kubectl -n org-giantswarm delete cluster $(cat $(workspaces.cluster.path)/cluster-id) || true
+      kubectl delete release $(cat $(workspaces.cluster.path)/release-id) || true
