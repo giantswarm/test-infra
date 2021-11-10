@@ -29,5 +29,5 @@ spec:
 
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
 
-      kubectl -n org-giantswarm delete cluster $(cat $(workspaces.cluster.path)/cluster-id) --wait=false
-      kubectl delete release $(cat $(workspaces.cluster.path)/release-id) --wait=false
+      kubectl -n org-giantswarm delete cluster $(cat $(workspaces.cluster.path)/cluster-id) || true
+      kubectl delete release $(cat $(workspaces.cluster.path)/release-id) || true
