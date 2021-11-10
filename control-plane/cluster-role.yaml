@@ -14,6 +14,9 @@ rules:
       - controlplane.cluster.x-k8s.io
       - infrastructure.cluster.x-k8s.io
       - bootstrap.cluster.x-k8s.io
+      - exp.infrastructure.cluster.x-k8s.io
+      - exp.cluster.x-k8s.io
+      - core.giantswarm.io
     resources:
       - "*"
     verbs:
