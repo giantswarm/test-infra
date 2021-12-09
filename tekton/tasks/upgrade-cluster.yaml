@@ -39,6 +39,13 @@ spec:
       # Remove initial "v" from RELEASE_ID
       release="$(echo "${RELEASE_ID#"v"}")"
 
+      # Wait for the Cluster Creating condition to be false
+      while kubectl --kubeconfig $(params.kubeconfig-path) get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Creating" and .status=="True")'>/dev/null
+      do
+        echo "$(date): Cluster '$(params.cluster-id)' still has Creating condition set to True"
+        sleep 10
+      done
+
       # Update cluster label to trigger upgrade
       kubectl --kubeconfig $(params.kubeconfig-path) -n${CLUSTER_NAMESPACE} patch cluster/$(params.cluster-id) -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge
 
