@@ -54,6 +54,14 @@ spec:
       echo -n "${cluster_id}" >$(workspaces.cluster.path)/cluster-id
       echo -n "${cluster_id}" > $(results.cluster-id.path)
 
+      # AZ is mandatory on AWS, so we need an if here.
+      # Also, we run tests for AWS on gaia, in eu-central-1
+      AZS=""
+      if [ $(cat $(workspaces.cluster.path)/installation) == "aws" ]
+      then
+        AZS="--availability-zones eu-central-1a"
+      fi
+
       kubectl-gs template nodepool \
         --provider $(cat $(workspaces.cluster.path)/installation) \
         --release $(params.release-id) \
@@ -62,6 +70,7 @@ spec:
         --description "np1" \
         --nodes-min 3 \
         --nodes-max 10 \
+        $AZS \
         --output /tmp/nodepool.yaml
 
       cat /tmp/cluster.yaml | kubectl apply -f -
