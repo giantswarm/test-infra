@@ -8,3 +8,4 @@ resources:
 - cis.yaml
 - cncf.yaml
 - heartbeat.yaml
+- openstack-create.yaml
