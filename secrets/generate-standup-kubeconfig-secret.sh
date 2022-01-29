@@ -5,9 +5,12 @@ provider_installations[aws]=gaia
 provider_installations[aws-china]=giraffe
 provider_installations[azure]=godsmack
 provider_installations[kvm]=gorgoth
+provider_installations[openstack]=gamma
+provider_installations[vsphere]=gopher
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 tmp_dir="$script_dir/tmp"
+mkdir -p $tmp_dir
 
 function cleanup() {
     rm -rf "$tmp_dir"
@@ -16,13 +19,18 @@ function cleanup() {
 trap cleanup EXIT
 
 for service_account in "test-infra" "sonobuoy"; do
-  for provider in aws aws-china azure kvm; do
+  for provider in aws aws-china azure kvm openstack vsphere; do
       installation=${provider_installations[$provider]}
       echo "creating $provider kubeconfig for $service_account in $installation"
 
       # Create a temp kubeconfig for the installation
       installation_kubeconfig="$tmp_dir/tmp-kubeconfig-$installation"
-      KUBECONFIG=$installation_kubeconfig opsctl create kubeconfig -i $installation --certificate-common-name-prefix $service_account --ttl 30 > /dev/null
+      if [ "$provider" = "openstack" ]; then
+        # TODO: replace with opsctl create kubeconfig once supported
+        lpass show "Shared-Team Rocket/CAPO\kubeconfigs/$installation.kubeconfig" --notes > $installation_kubeconfig
+      else
+        KUBECONFIG=$installation_kubeconfig opsctl create kubeconfig -i $installation --certificate-common-name-prefix $service_account --ttl 30 > /dev/null
+      fi
 
       # Get the installation server
       server=$(KUBECONFIG=$installation_kubeconfig kubectl config view -o jsonpath='{.clusters[].cluster.server}')
@@ -70,6 +78,8 @@ for service_account in "test-infra" "sonobuoy"; do
         --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
         --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
         --from-file=kvm="$tmp_dir/kvm-kubeconfig-$service_account" \
+        --from-file=openstack="$tmp_dir/openstack-kubeconfig-$service_account" \
+        --from-file=vsphere="$tmp_dir/vsphere-kubeconfig-$service_account" \
         --dry-run=client -o yaml \
         > "$script_dir/standup-kubeconfig-secret.yaml"
 
@@ -80,6 +90,8 @@ for service_account in "test-infra" "sonobuoy"; do
       --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
       --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
       --from-file=kvm="$tmp_dir/kvm-kubeconfig-$service_account" \
+      --from-file=openstack="$tmp_dir/openstack-kubeconfig-$service_account" \
+      --from-file=vsphere="$tmp_dir/vsphere-kubeconfig-$service_account" \
       --dry-run=client -o yaml \
       > "$script_dir/$service_account-kubeconfig-secret.yaml"
 

@@ -1,0 +1,72 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-cluster-openstack
+  namespace: test-workloads
+spec:
+  volumes:
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  resources:
+    inputs:
+    - name: cluster-openstack
+      type: git
+  results:
+  - name: cluster-id
+    description: The ID of the created cluster.
+  steps:
+  - name: create-cluster
+    image: quay.io/giantswarm/kubectl-gs:1.49.0
+    volumeMounts:
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      set -e
+      set -x
+
+      export KUBECONFIG=/etc/kubeconfig/openstack
+
+      # Generate template for control plane.
+      kubectl-gs template cluster \
+        --provider openstack \
+        --cluster-topology \
+        --cluster-user-configmap values.yaml \
+        --default-apps-user-configmap values.yaml \
+        --cluster-app-version 0.3.0 \
+        --default-apps-app-version 0.1.0 \
+        --organization multi-project \
+        --description "e2e test" \
+        --output /tmp/cluster.yaml
+
+      # Extract cluster name from template.
+      cluster_id=$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d" " -f6)
+
+      echo -n "${cluster_id}" >$(workspaces.cluster.path)/cluster-id
+      echo -n "${cluster_id}" > $(results.cluster-id.path)
+
+      kubectl apply -f /tmp/cluster.yaml
+
+  - name: capi-get-kubeconfig
+    image: quay.io/giantswarm/clusterctl:1.0.2
+    volumeMounts:
+      - name: kubeconfig
+        mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
+      for i in $(seq 1 20); do
+        clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig
+        success=$?
+        if [ "$success" -eq "0" ]; then
+          break
+        fi
+        sleep 5
+      done
+      exit $success

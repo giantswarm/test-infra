@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: openstack-create
+  namespace: test-workloads
+spec:
+  resources:
+  - name: cluster-openstack
+    type: git
+  workspaces:
+  - name: cluster
+  params:
+  - name: PROW_JOB_ID
+    type: string
+  tasks:
+
+  - name: create-cluster
+    taskRef:
+      name: create-cluster-openstack
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: wait-for-ready
+    runAfter: [create-cluster]
+    timeout: 1h0m0s
+    taskRef:
+      name: wait-for-ready
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: cleanup
+    taskRef:
+      name: cleanup
+    workspaces:
+      - name: cluster
+        workspace: cluster

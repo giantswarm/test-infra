@@ -268,3 +268,30 @@ presubmits:
                   storage: 10Mi
     trigger: "/test heartbeat"
     rerun_command: "/test heartbeat"
+
+  giantswarm/cluster-openstack:
+  - name: heartbeat
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: openstack-create
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      resources:
+        - name: cluster-openstack
+          resourceRef:
+            name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test openstack-create$"
+    rerun_command: "/test openstack-create"
