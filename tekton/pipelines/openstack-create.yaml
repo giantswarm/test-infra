@@ -22,8 +22,8 @@ spec:
         workspace: cluster
     resources:
       inputs:
-      - name: releases
-        resource: releases
+      - name: cluster-openstack
+        resource: cluster-openstack
 
   - name: wait-for-ready
     runAfter: [create-cluster]
