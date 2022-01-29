@@ -20,6 +20,10 @@ spec:
     workspaces:
       - name: cluster
         workspace: cluster
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
 
   - name: wait-for-ready
     runAfter: [create-cluster]
