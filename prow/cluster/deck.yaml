@@ -150,7 +150,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: oauth2-proxy
+                name: g8s-oauth2-proxy
                 port:
                   number: 4180
     - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
@@ -160,7 +160,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: oauth2-proxy
+                name: g8s-oauth2-proxy
                 port:
                   number: 4180
   tls:
