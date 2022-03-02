@@ -53,7 +53,7 @@ spec:
       kubectl apply -f /tmp/cluster.yaml
 
   - name: capi-get-kubeconfig
-    image: quay.io/giantswarm/clusterctl:1.0.2
+    image: quay.io/giantswarm/clusterctl:v1.0.2
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
