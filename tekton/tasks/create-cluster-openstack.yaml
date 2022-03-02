@@ -20,7 +20,7 @@ spec:
     description: The ID of the created cluster.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:1.49.0
+    image: quay.io/giantswarm/kubectl-gs:2.0.0
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
@@ -38,8 +38,8 @@ spec:
         --cluster-topology \
         --cluster-user-configmap values.yaml \
         --default-apps-user-configmap values.yaml \
-        --cluster-app-version 0.3.0 \
-        --default-apps-app-version 0.1.0 \
+        --cluster-app-version 0.3.1 \
+        --default-apps-app-version 0.1.1 \
         --organization multi-project \
         --description "e2e test" \
         --output /tmp/cluster.yaml
