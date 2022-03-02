@@ -20,7 +20,7 @@ spec:
     description: The ID of the created cluster.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.0.0
+    image: quay.io/giantswarm/kubectl-gs:2.1.1-04a6d48d66560b0ff9dfb6aa27f216acda4aea5a
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
@@ -35,13 +35,27 @@ spec:
       # Generate template for control plane.
       kubectl-gs template cluster \
         --provider openstack \
-        --cluster-topology \
-        --cluster-user-configmap values.yaml \
-        --default-apps-user-configmap values.yaml \
-        --cluster-app-version 0.3.1 \
-        --default-apps-app-version 0.1.1 \
         --organization multi-project \
         --description "e2e test" \
+        --worker-failure-domain gb-lon-1 \
+        --cloud openstack \
+        --cloud-config cloud-config-giantswarm-2 \
+        --bastion-image 8f0ccaf8-501e-4760-97cc-fbb8b812eb50 \
+        --worker-image 857c9ff3-ac41-4aa3-bfde-2bb0cc4600f1 \
+        --control-plane-image 857c9ff3-ac41-4aa3-bfde-2bb0cc4600f1 \
+        --external-network-id cdbcb519-1f91-43fb-b0a9-312f0abf8f12 \
+        --node-cidr 10.6.0.0/24 \
+        --bastion-machine-flavor n1.tiny \
+        --control-plane-machine-flavor n1.small \
+        --worker-machine-flavor n1.small \
+        --control-plane-disk-size 50 \
+        --worker-disk-size 50 \
+        --name thom3 \
+        --control-plane-az gb-lon-1 \
+        --worker-replicas 3 \
+        --bastion-boot-from-volume \
+        --control-plane-boot-from-volume \
+        --worker-boot-from-volume \
         --output /tmp/cluster.yaml
 
       # Extract cluster name from template.
