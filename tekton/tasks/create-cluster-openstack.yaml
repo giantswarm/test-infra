@@ -50,9 +50,8 @@ spec:
         --worker-machine-flavor n1.small \
         --control-plane-disk-size 50 \
         --worker-disk-size 50 \
-        --name thom3 \
         --control-plane-az gb-lon-1 \
-        --worker-replicas 3 \
+        --worker-replicas 2 \
         --bastion-boot-from-volume \
         --control-plane-boot-from-volume \
         --worker-boot-from-volume \
