@@ -3,8 +3,6 @@ kind: Task
 metadata:
   name: wait-for-ready
   namespace: test-workloads
-  labels:
-    app.kubernetes.io/name: "standup"
 spec:
   workspaces:
   - name: cluster

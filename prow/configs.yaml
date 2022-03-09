@@ -270,18 +270,25 @@ presubmits:
     rerun_command: "/test heartbeat"
 
   giantswarm/cluster-openstack:
-  - name: openstack-create
+  - name: create
     agent: tekton-pipeline
     max_concurrency: 1
     always_run: false
     skip_report: false
     pipeline_run_spec:
       pipelineRef:
-        name: openstack-create
+        name: create-cluster-capi-pure
       serviceAccountName: test-runs
       timeout: 3h0m0s
+      params:
+        provider: openstack
+        installation: gamma
+        cluster-chart: cluster-openstack
+        cluster-catalog: cluster-test
+        default-apps-chart: default-apps-openstack
+        default-apps-catalog: cluster
       resources:
-        - name: cluster-openstack
+        - name: source-repo
           resourceRef:
             name: PROW_IMPLICIT_GIT_REF
       workspaces:
@@ -293,5 +300,32 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test openstack-create$"
-    rerun_command: "/test openstack-create"
+    trigger: "/test create$"
+    rerun_command: "/test create"
+
+  giantswarm/default-apps-openstack:
+  - name: create
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: create-cluster-capi-pure
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      resources:
+        - name: source-repo
+          resourceRef:
+            name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test create$"
+    rerun_command: "/test create"

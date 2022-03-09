@@ -1,10 +1,8 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: create-cluster
+  name: create-cluster-capi-hybrid
   namespace: test-workloads
-  labels:
-    app.kubernetes.io/name: "standup"
 spec:
   volumes:
   - name: endpoints-config
@@ -25,7 +23,7 @@ spec:
     description: The ID of the created cluster.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:1.43.1
+    image: quay.io/giantswarm/kubectl-gs:2.3.0
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config

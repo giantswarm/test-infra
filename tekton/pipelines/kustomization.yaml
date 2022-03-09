@@ -1,11 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- aws.yaml
 - aws-china.yaml
 - aws-e2e.yaml
+- aws.yaml
+- azure-operator.yaml
+- azure-upgrade.yaml
 - azure.yaml
+- capz.yaml
 - cis.yaml
 - cncf.yaml
+- debug-azure
 - heartbeat.yaml
 - openstack-create.yaml
+- upgrade-to-this-azure-operator.yaml

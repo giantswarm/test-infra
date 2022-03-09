@@ -4,9 +4,10 @@ resources:
 - aws.yaml
 - aws-china.yaml
 - cis.yaml
-- cleanup.yaml
+- cleanup-capi.yaml
+- cleanup-legacy.yaml
 - cncf.yaml
-- create-cluster.yaml
+- create-cluster-legacy.yaml
 - create-cluster-openstack.yaml
 - create-release.yaml
 - create-test-operator-release.yaml

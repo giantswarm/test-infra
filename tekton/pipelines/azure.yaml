@@ -30,7 +30,7 @@ spec:
   - name: create-cluster
     runAfter: [create-release]
     taskRef:
-      name: create-cluster
+      name: create-cluster-capi-hybrid
     params:
     - name: release-id
       value: "$(tasks.create-release.results.release-id)"

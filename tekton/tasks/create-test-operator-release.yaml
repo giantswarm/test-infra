@@ -3,8 +3,6 @@ kind: Task
 metadata:
   name: create-test-operator-release
   namespace: test-workloads
-  labels:
-    app.kubernetes.io/name: "standup"
 spec:
   params:
     - name: pipeline-name
