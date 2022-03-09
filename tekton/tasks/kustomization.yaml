@@ -4,11 +4,11 @@ resources:
 - aws.yaml
 - aws-china.yaml
 - cis.yaml
-- cleanup-capi.yaml
-- cleanup-legacy.yaml
+- cleanup-capi-hybrid.yaml
+- cleanup-capi-pure.yaml
 - cncf.yaml
-- create-cluster-legacy.yaml
-- create-cluster-openstack.yaml
+- create-cluster-capi-hybrid.yaml
+- create-cluster-capi-pure.yaml
 - create-release.yaml
 - create-test-operator-release.yaml
 - e2e.yaml
