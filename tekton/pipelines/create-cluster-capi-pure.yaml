@@ -10,10 +10,6 @@ spec:
   workspaces:
   - name: cluster
   params:
-  - name: PROW_JOB_ID
-    type: string
-  - name: REPO_NAME
-    type: string
   - name: provider
     type: string
   - name: installation
@@ -33,8 +29,6 @@ spec:
       value: $(params.provider)
     - name: installation
       value: $(params.installation)
-    - name: repo-name
-      value: $(params.repo-name)
     - name: cluster-chart
       value: $(params.cluster-chart)
     - name: cluster-catalog
