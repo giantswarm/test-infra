@@ -20,7 +20,7 @@ spec:
     description: The ID of the created cluster.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.1.1-04a6d48d66560b0ff9dfb6aa27f216acda4aea5a
+    image: quay.io/giantswarm/kubectl-gs:2.1.1-d09e316c5860ad66e81804bdb61220874722212a
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
@@ -31,12 +31,14 @@ spec:
       set -x
 
       export KUBECONFIG=/etc/kubeconfig/openstack
+      cluster_id="tktn$(date +%s | cut -c5-10)"
 
       # Generate template for control plane.
       kubectl-gs template cluster \
         --provider openstack \
         --organization multi-project \
         --description "e2e test" \
+        --name $cluster_id \
         --worker-failure-domain gb-lon-1 \
         --cloud openstack \
         --cloud-config cloud-config-giantswarm-2 \
@@ -55,32 +57,19 @@ spec:
         --bastion-boot-from-volume \
         --control-plane-boot-from-volume \
         --worker-boot-from-volume \
+        --enable-long-names \
         --output /tmp/cluster.yaml
 
-      # Extract cluster name from template.
-      cluster_id=$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d" " -f6)
-
       echo -n "${cluster_id}" > $(workspaces.cluster.path)/cluster-id
+      echo -n "openstack" > $(workspaces.cluster.path)/installation
+      echo -n "kvm" > $(workspaces.cluster.path)/provider
       echo -n "${cluster_id}" > $(results.cluster-id.path)
 
       kubectl apply -f /tmp/cluster.yaml
 
-  - name: capi-get-kubeconfig
-    image: quay.io/giantswarm/kubectl-gs:2.1.1-04a6d48d66560b0ff9dfb6aa27f216acda4aea5a
-    volumeMounts:
-      - name: kubeconfig
-        mountPath: /etc/kubeconfig
-    script: |
-      #! /bin/sh
+      while ! kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig; do echo "waiting for kubeconfig"; sleep 10; done
+      kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig -o jsonpath='{.data.value}' | base64 -d > $(workspaces.cluster.path)/kubeconfig
 
-      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
-      secret_name=$(cat $(workspaces.cluster.path)/cluster-id)-kubeconfig
-      for i in $(seq 1 40); do
-        kubectl get secrets -n org-multi-project $secret_name -o jsonpath='{.data.value}' > $(workspaces.cluster.path)/kubeconfig
-        success=$?
-        if [ "$success" -eq "0" ]; then
-          break
-        fi
-        sleep 20
-      done
+      cat $(workspaces.cluster.path)/kubeconfig
+
       exit $success
