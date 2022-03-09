@@ -42,7 +42,7 @@ spec:
     - name: PROVIDER
       value: $(params.provider)
     - name: INSTALLATION
-      value: $(params.installations)
+      value: $(params.installation)
     - name: CLUSTER_CATALOG
       value: $(params.cluster-catalog)
     - name: CLUSTER_CHART
