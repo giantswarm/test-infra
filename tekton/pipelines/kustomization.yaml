@@ -10,7 +10,7 @@ resources:
 - capz.yaml
 - cis.yaml
 - cncf.yaml
+- create-cluster-capi-pure.yaml
 - debug-azure.yaml
 - heartbeat.yaml
-- openstack-create.yaml
 - upgrade-to-this-azure-operator.yaml
