@@ -29,10 +29,20 @@ spec:
   tasks:
   - name: create-cluster
     params:
-      cluster-chart: $(params.cluster-chart)
-      cluster-catalog: $(params.cluster-catalog)
-      default-apps-chart: $(params.default-apps-chart)
-      default-apps-catalog: $(params.default-apps-catalog)
+    - name: provider
+      value: $(params.provider)
+    - name: installation
+      value: $(params.installation)
+    - name: repo-name
+      value: $(params.repo-name)
+    - name: cluster-chart
+      value: $(params.cluster-chart)
+    - name: cluster-catalog
+      value: $(params.cluster-catalog)
+    - name: default-apps-chart
+      value: $(params.default-apps-chart)
+    - name: default-apps-catalog
+      value: $(params.default-apps-catalog)
     taskRef:
       name: create-cluster-capi-pure
     workspaces:

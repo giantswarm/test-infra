@@ -28,7 +28,7 @@ spec:
   tasks:
   - name: create-cluster # Should always stay here unless there is a good reason.
     taskRef:
-      name: create-cluster-legacy
+      name: create-cluster-capi-hybrid
     workspaces:
     - name: cluster
       workspace: cluster

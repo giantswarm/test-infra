@@ -281,12 +281,18 @@ presubmits:
       serviceAccountName: test-runs
       timeout: 3h0m0s
       params:
-        provider: openstack
-        installation: gamma
-        cluster-chart: cluster-openstack
-        cluster-catalog: cluster-test
-        default-apps-chart: default-apps-openstack
-        default-apps-catalog: cluster
+      - name: provider
+        value: openstack
+      - name: installation
+        value: gamma
+      - name: cluster-chart
+        value: cluster-openstack
+      - name: cluster-catalog
+        value: cluster-test
+      - name: default-apps-chart
+        value: default-apps-openstack
+      - name: default-apps-catalog
+        value: cluster
       resources:
         - name: source-repo
           resourceRef:

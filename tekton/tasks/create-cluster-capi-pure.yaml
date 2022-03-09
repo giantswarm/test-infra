@@ -5,6 +5,8 @@ metadata:
   namespace: test-workloads
 spec:
   params:
+  - name: REPO_NAME
+    type: string
   - name: provider
     type: string
   - name: installation
@@ -35,8 +37,20 @@ spec:
   - name: create-cluster
     image: quay.io/giantswarm/kubectl-gs:2.3.0
     env:
-      - name: PROVIDER
-        value: $(params.provider)
+    - name: REPO_NAME
+      value: $(params.REPO_NAME)
+    - name: PROVIDER
+      value: $(params.provider)
+    - name: INSTALLATION
+      value: $(params.installations)
+    - name: CLUSTER_CATALOG
+      value: $(params.cluster-catalog)
+    - name: CLUSTER_CHART
+      value: $(params.cluster-chart)
+    - name: DEFAULT_APPS_CATALOG
+      value: $(params.default-apps-catalog)
+    - name: DEFAULT_APPS_CHART
+      value: $(params.default-apps-chart)
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
@@ -48,6 +62,18 @@ spec:
 
       export KUBECONFIG=/etc/kubeconfig/$PROVIDER
       cluster_id="tktn$(date +%s | cut -c5-10)"
+      repo_version=${$(git describe --tags --abbrev=0)/v/""}-$(git describe --always --abbrev=0)
+      
+      echo $repo_version
+      
+      version_flags = ""
+      if [ "$REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
+        version_flags="--default-apps-version $repo_version"
+      else
+        version_flags="--cluster-version $repo_version"
+      fi
+
+      echo $version_flags
 
       echo "generating template for cluster $cluster_id"
 
@@ -76,6 +102,9 @@ spec:
           --control-plane-boot-from-volume \
           --worker-boot-from-volume \
           --enable-long-names \
+          --cluster-catalog $CLUSTER_CATALOG \
+          --default-apps-catalog $DEFAULT_APPS_CATALOG \
+          $version_flags \
           --output /tmp/cluster.yaml
       else
         echo "provider $PROVIDER not supported"
