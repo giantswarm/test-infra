@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: cleanup-capi
+  name: cleanup-capi-pure
   namespace: test-workloads
 spec:
   volumes:

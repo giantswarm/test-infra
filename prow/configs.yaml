@@ -281,6 +281,8 @@ presubmits:
       serviceAccountName: test-runs
       timeout: 3h0m0s
       params:
+      - name: source-repo-name
+        value: cluster-openstack
       - name: provider
         value: openstack
       - name: installation

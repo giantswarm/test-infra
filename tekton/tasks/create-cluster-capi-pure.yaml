@@ -1,11 +1,11 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: create-cluster-openstack
+  name: create-cluster-capi-pure
   namespace: test-workloads
 spec:
   params:
-  - name: REPO_NAME
+  - name: source-repo-name
     type: string
   - name: provider
     type: string
@@ -37,8 +37,8 @@ spec:
   - name: create-cluster
     image: quay.io/giantswarm/kubectl-gs:2.3.0
     env:
-    - name: REPO_NAME
-      value: $(params.REPO_NAME)
+    - name: SOURCE_REPO_NAME
+      value: $(params.source-repo-name)
     - name: PROVIDER
       value: $(params.provider)
     - name: INSTALLATION
@@ -67,7 +67,7 @@ spec:
       echo $repo_version
       
       version_flags = ""
-      if [ "$REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
+      if [ "$SOURCE_REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
         version_flags="--default-apps-version $repo_version"
       else
         version_flags="--cluster-version $repo_version"

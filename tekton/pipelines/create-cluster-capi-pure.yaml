@@ -59,7 +59,7 @@ spec:
   finally:
   - name: cleanup
     taskRef:
-      name: cleanup-capi
+      name: cleanup-capi-pure
     workspaces:
       - name: cluster
         workspace: cluster
