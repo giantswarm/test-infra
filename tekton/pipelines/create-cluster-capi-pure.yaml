@@ -16,11 +16,7 @@ spec:
     type: string
   - name: installation
     type: string
-  - name: cluster-catalog
-    type: string
   - name: cluster-chart
-    type: string
-  - name: default-apps-catalog
     type: string
   - name: default-apps-chart
     type: string
@@ -35,17 +31,13 @@ spec:
       value: $(params.installation)
     - name: cluster-chart
       value: $(params.cluster-chart)
-    - name: cluster-catalog
-      value: $(params.cluster-catalog)
     - name: default-apps-chart
       value: $(params.default-apps-chart)
-    - name: default-apps-catalog
-      value: $(params.default-apps-catalog)
     taskRef:
       name: create-cluster-capi-pure
     workspaces:
-      - name: cluster
-        workspace: cluster
+    - name: cluster
+      workspace: cluster
     resources:
       inputs:
       - name: source-repo
@@ -57,13 +49,13 @@ spec:
     taskRef:
       name: wait-for-ready
     workspaces:
-      - name: cluster
-        workspace: cluster
+    - name: cluster
+      workspace: cluster
 
   finally:
   - name: cleanup
     taskRef:
       name: cleanup-capi-pure
     workspaces:
-      - name: cluster
-        workspace: cluster
+    - name: cluster
+      workspace: cluster

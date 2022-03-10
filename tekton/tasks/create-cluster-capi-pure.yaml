@@ -11,11 +11,7 @@ spec:
     type: string
   - name: installation
     type: string
-  - name: cluster-catalog
-    type: string
   - name: cluster-chart
-    type: string
-  - name: default-apps-catalog
     type: string
   - name: default-apps-chart
     type: string
@@ -34,8 +30,8 @@ spec:
   - name: cluster-id
     description: The ID of the created cluster.
   steps:
-  - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.3.0
+  - name: calculate-inputs
+    image: quay.io/giantswarm/standup:3.2.0
     env:
     - name: SOURCE_REPO_NAME
       value: $(params.source-repo-name)
@@ -43,27 +39,15 @@ spec:
       value: $(params.provider)
     - name: INSTALLATION
       value: $(params.installation)
-    - name: CLUSTER_CATALOG
-      value: $(params.cluster-catalog)
     - name: CLUSTER_CHART
       value: $(params.cluster-chart)
-    - name: DEFAULT_APPS_CATALOG
-      value: $(params.default-apps-catalog)
     - name: DEFAULT_APPS_CHART
       value: $(params.default-apps-chart)
-    volumeMounts:
-      - name: kubeconfig
-        mountPath: /etc/kubeconfig
     script: |
       #! /bin/bash
 
       set -e
       set -x
-
-      export KUBECONFIG=/etc/kubeconfig/$PROVIDER
-      cluster_id="tktn$(date +%s | cut -c5-10)"
-
-      echo "generating template for cluster $cluster_id"
 
       parent_tag=$(git describe --tags --abbrev=0 | sed -e "s/^v//")
       echo $parent_tag
@@ -72,14 +56,32 @@ spec:
       repo_version=${parent_tag}-${hash}
       echo $repo_version
       
-      version_flags = ""
       if [ "$SOURCE_REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
-        version_flags="--default-apps-version $repo_version"
+        app_flags="--default-apps-catalog cluster-test --default-apps-version $repo_version"
       else
-        version_flags="--cluster-version $repo_version"
+        app_flags="--cluster-catalog cluster-test --cluster-version $repo_version"
       fi
 
-      echo $version_flags
+      echo $app_flags
+      echo $app_flags > $(workspaces.cluster.path)/kubectl-gs-flags
+
+  - name: create-cluster
+    image: quay.io/giantswarm/kubectl-gs:2.3.0
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/bash
+
+      set -e
+      set -x
+
+      export KUBECONFIG=/etc/kubeconfig/$PROVIDER
+      cluster_id="tktn$(date +%s | cut -c5-10)"
+      extra_flags=$(cat $(workspaces.cluster.path)/kubectl-gs-flags)
+      echo $extra_flags
+
+      echo "generating template for cluster $cluster_id"
 
       if [ "$PROVIDER" = "openstack" ]; then
         kubectl-gs template cluster \
@@ -106,9 +108,7 @@ spec:
           --control-plane-boot-from-volume \
           --worker-boot-from-volume \
           --enable-long-names \
-          --cluster-catalog $CLUSTER_CATALOG \
-          --default-apps-catalog $DEFAULT_APPS_CATALOG \
-          $version_flags \
+          $extra_flags \
           --output /tmp/cluster.yaml
       else
         echo "provider $PROVIDER not supported"

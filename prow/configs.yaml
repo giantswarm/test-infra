@@ -289,12 +289,8 @@ presubmits:
         value: gamma
       - name: cluster-chart
         value: cluster-openstack
-      - name: cluster-catalog
-        value: cluster-test
       - name: default-apps-chart
         value: default-apps-openstack
-      - name: default-apps-catalog
-        value: cluster
       resources:
         - name: source-repo
           resourceRef:
