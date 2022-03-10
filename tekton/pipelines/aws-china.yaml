@@ -39,7 +39,7 @@ spec:
   finally:
   - name: cleanup
     taskRef:
-      name: cleanup
+      name: cleanup-capi-hybrid
     workspaces:
       - name: cluster
         workspace: cluster

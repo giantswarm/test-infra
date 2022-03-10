@@ -10,6 +10,8 @@ spec:
   workspaces:
   - name: cluster
   params:
+  - name: source-repo-name
+    type: string
   - name: provider
     type: string
   - name: installation
@@ -25,6 +27,8 @@ spec:
   tasks:
   - name: create-cluster
     params:
+    - name: source-repo-name
+      value: $(params.source-repo-name)
     - name: provider
       value: $(params.provider)
     - name: installation

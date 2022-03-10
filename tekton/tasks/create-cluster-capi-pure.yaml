@@ -55,15 +55,21 @@ spec:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
     script: |
-      #! /bin/sh
+      #! /bin/bash
 
       set -e
       set -x
 
       export KUBECONFIG=/etc/kubeconfig/$PROVIDER
       cluster_id="tktn$(date +%s | cut -c5-10)"
-      repo_version=${$(git describe --tags --abbrev=0)/v/""}-$(git describe --always --abbrev=0)
-      
+
+      echo "generating template for cluster $cluster_id"
+
+      parent_tag=$(git describe --tags --abbrev=0 | sed -e "s/^v//")
+      echo $parent_tag
+      hash=$(git describe --always --abbrev=0)
+      echo $hash
+      repo_version=${parent_tag}-${hash}
       echo $repo_version
       
       version_flags = ""
@@ -74,8 +80,6 @@ spec:
       fi
 
       echo $version_flags
-
-      echo "generating template for cluster $cluster_id"
 
       if [ "$PROVIDER" = "openstack" ]; then
         kubectl-gs template cluster \

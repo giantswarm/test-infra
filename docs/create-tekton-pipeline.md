@@ -56,7 +56,7 @@ spec:
   finally:
   - name: cleanup # Should always stay here to ensure the cluster is cleaned up afterwards.
     taskRef:
-      name: cleanup
+      name: cleanup-capi-hybrid
     workspaces:
     - name: cluster
       workspace: cluster

@@ -22,6 +22,11 @@ spec:
 
       set -e
 
+      if [ ! -f $(workspaces.cluster.path)/cluster-id ]; then
+        echo "cluster-id not found, nothing to clean up"
+        exit 0
+      fi
+
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
       cluster_id=$(cat $(workspaces.cluster.path)/cluster-id)
 
