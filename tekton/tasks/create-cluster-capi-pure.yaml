@@ -30,13 +30,21 @@ spec:
   - name: cluster-id
     description: The ID of the created cluster.
   steps:
+  - name: chown-source-repo
+    command:
+    - chown
+    - -R
+    - 1000:1000
+    - /workspace/source-repo
+    image: quay.io/giantswarm/standup:3.2.0
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
   - name: calculate-inputs
     image: quay.io/giantswarm/standup:3.2.0
     env:
     - name: SOURCE_REPO_NAME
       value: $(params.source-repo-name)
-    - name: PROVIDER
-      value: $(params.provider)
     - name: INSTALLATION
       value: $(params.installation)
     - name: CLUSTER_CHART
@@ -44,34 +52,35 @@ spec:
     - name: DEFAULT_APPS_CHART
       value: $(params.default-apps-chart)
     script: |
-      #! /bin/bash
+      #! /bin/sh
 
       set -e
       set -x
 
+      cd /workspace/source-repo
+      git fetch --unshallow
       parent_tag=$(git describe --tags --abbrev=0 | sed -e "s/^v//")
-      echo $parent_tag
       hash=$(git describe --always --abbrev=0)
-      echo $hash
       repo_version=${parent_tag}-${hash}
-      echo $repo_version
-      
+
       if [ "$SOURCE_REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
         app_flags="--default-apps-catalog cluster-test --default-apps-version $repo_version"
       else
         app_flags="--cluster-catalog cluster-test --cluster-version $repo_version"
       fi
 
-      echo $app_flags
       echo $app_flags > $(workspaces.cluster.path)/kubectl-gs-flags
 
   - name: create-cluster
     image: quay.io/giantswarm/kubectl-gs:2.3.0
+    env:
+    - name: PROVIDER
+      value: $(params.provider)
     volumeMounts:
     - name: kubeconfig
       mountPath: /etc/kubeconfig
     script: |
-      #! /bin/bash
+      #! /bin/sh
 
       set -e
       set -x
@@ -79,7 +88,6 @@ spec:
       export KUBECONFIG=/etc/kubeconfig/$PROVIDER
       cluster_id="tktn$(date +%s | cut -c5-10)"
       extra_flags=$(cat $(workspaces.cluster.path)/kubectl-gs-flags)
-      echo $extra_flags
 
       echo "generating template for cluster $cluster_id"
 
@@ -126,5 +134,3 @@ spec:
       kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig -o jsonpath='{.data.value}' | base64 -d > $(workspaces.cluster.path)/kubeconfig
 
       cat $(workspaces.cluster.path)/kubeconfig
-
-      exit $success
