@@ -292,18 +292,18 @@ presubmits:
       - name: default-apps-chart
         value: default-apps-openstack
       resources:
-        - name: source-repo
-          resourceRef:
-            name: PROW_IMPLICIT_GIT_REF
+      - name: source-repo
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
       workspaces:
-        - name: cluster
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Mi
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
     trigger: "/test create$"
     rerun_command: "/test create"
 
@@ -318,18 +318,29 @@ presubmits:
         name: create-cluster-capi-pure
       serviceAccountName: test-runs
       timeout: 3h0m0s
+      params:
+      - name: source-repo-name
+        value: default-apps-openstack
+      - name: provider
+        value: openstack
+      - name: installation
+        value: gamma
+      - name: cluster-chart
+        value: cluster-openstack
+      - name: default-apps-chart
+        value: default-apps-openstack
       resources:
-        - name: source-repo
-          resourceRef:
-            name: PROW_IMPLICIT_GIT_REF
+      - name: source-repo
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
       workspaces:
-        - name: cluster
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Mi
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
     trigger: "/test create$"
     rerun_command: "/test create"
