@@ -13,7 +13,7 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/kubectl-gs:2.3.0
+    image: quay.io/giantswarm/kubectl-gs:2.4.0
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
