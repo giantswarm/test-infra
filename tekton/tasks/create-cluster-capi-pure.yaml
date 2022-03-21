@@ -132,5 +132,3 @@ spec:
 
       while ! kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig; do echo "waiting for kubeconfig"; sleep 10; done
       kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig -o jsonpath='{.data.value}' | base64 -d > $(workspaces.cluster.path)/kubeconfig
-
-      cat $(workspaces.cluster.path)/kubeconfig
