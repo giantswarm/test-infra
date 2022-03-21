@@ -15,4 +15,4 @@ spec:
       standup wait \
         --kubeconfig $(workspaces.cluster.path)/kubeconfig \
         --provider $(cat $(workspaces.cluster.path)/provider) \
-        --nodes 3
+        --nodes 4

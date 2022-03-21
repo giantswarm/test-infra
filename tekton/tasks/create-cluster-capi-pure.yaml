@@ -111,7 +111,7 @@ spec:
           --control-plane-disk-size 50 \
           --worker-disk-size 50 \
           --control-plane-az gb-lon-1 \
-          --worker-replicas 2 \
+          --worker-replicas 3 \
           --bastion-boot-from-volume \
           --control-plane-boot-from-volume \
           --worker-boot-from-volume \
