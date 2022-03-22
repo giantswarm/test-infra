@@ -1,0 +1,134 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-cluster-capi-pure
+  namespace: test-workloads
+spec:
+  params:
+  - name: source-repo-name
+    type: string
+  - name: provider
+    type: string
+  - name: installation
+    type: string
+  - name: cluster-chart
+    type: string
+  - name: default-apps-chart
+    type: string
+  volumes:
+  - name: kubeconfig
+    secret:
+      secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  resources:
+    inputs:
+    - name: source-repo
+      type: git
+  results:
+  - name: cluster-id
+    description: The ID of the created cluster.
+  steps:
+  - name: chown-source-repo
+    command:
+    - chown
+    - -R
+    - 1000:1000
+    - /workspace/source-repo
+    image: quay.io/giantswarm/standup:3.2.0
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+  - name: calculate-inputs
+    image: quay.io/giantswarm/standup:3.2.0
+    env:
+    - name: SOURCE_REPO_NAME
+      value: $(params.source-repo-name)
+    - name: INSTALLATION
+      value: $(params.installation)
+    - name: CLUSTER_CHART
+      value: $(params.cluster-chart)
+    - name: DEFAULT_APPS_CHART
+      value: $(params.default-apps-chart)
+    script: |
+      #! /bin/sh
+
+      set -e
+      set -x
+
+      cd /workspace/source-repo
+      git fetch --unshallow
+      parent_tag=$(git describe --tags --abbrev=0 | sed -e "s/^v//")
+      hash=$(git describe --always --abbrev=0)
+      repo_version=${parent_tag}-${hash}
+
+      if [ "$SOURCE_REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
+        app_flags="--default-apps-catalog cluster-test --default-apps-version $repo_version"
+      else
+        app_flags="--cluster-catalog cluster-test --cluster-version $repo_version"
+      fi
+
+      echo $app_flags > $(workspaces.cluster.path)/kubectl-gs-flags
+
+  - name: create-cluster
+    image: quay.io/giantswarm/kubectl-gs:2.4.0
+    env:
+    - name: PROVIDER
+      value: $(params.provider)
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      set -e
+      set -x
+
+      export KUBECONFIG=/etc/kubeconfig/$PROVIDER
+      cluster_id="tktn$(date +%s | cut -c5-10)"
+      extra_flags=$(cat $(workspaces.cluster.path)/kubectl-gs-flags)
+
+      echo "generating template for cluster $cluster_id"
+
+      if [ "$PROVIDER" = "openstack" ]; then
+        kubectl-gs template cluster \
+          --provider openstack \
+          --organization multi-project \
+          --description "e2e test" \
+          --name $cluster_id \
+          --worker-failure-domain gb-lon-1 \
+          --cloud openstack \
+          --cloud-config cloud-config-giantswarm-2 \
+          --bastion-image 8f0ccaf8-501e-4760-97cc-fbb8b812eb50 \
+          --worker-image 857c9ff3-ac41-4aa3-bfde-2bb0cc4600f1 \
+          --control-plane-image 857c9ff3-ac41-4aa3-bfde-2bb0cc4600f1 \
+          --external-network-id cdbcb519-1f91-43fb-b0a9-312f0abf8f12 \
+          --node-cidr 10.6.0.0/24 \
+          --bastion-machine-flavor n1.tiny \
+          --control-plane-machine-flavor n1.small \
+          --worker-machine-flavor n1.small \
+          --control-plane-disk-size 50 \
+          --worker-disk-size 50 \
+          --control-plane-az gb-lon-1 \
+          --worker-replicas 3 \
+          --bastion-boot-from-volume \
+          --control-plane-boot-from-volume \
+          --worker-boot-from-volume \
+          --enable-long-names \
+          $extra_flags \
+          --output /tmp/cluster.yaml
+      else
+        echo "provider $PROVIDER not supported"
+        exit 1
+      fi
+
+      echo -n "${cluster_id}" > $(workspaces.cluster.path)/cluster-id
+      echo -n "openstack" > $(workspaces.cluster.path)/installation
+      echo -n "kvm" > $(workspaces.cluster.path)/provider
+      echo -n "${cluster_id}" > $(results.cluster-id.path)
+
+      kubectl apply -f /tmp/cluster.yaml
+
+      while ! kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig; do echo "waiting for kubeconfig"; sleep 10; done
+      kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig -o jsonpath='{.data.value}' | base64 -d > $(workspaces.cluster.path)/kubeconfig

@@ -3,8 +3,6 @@ kind: Task
 metadata:
   name: wait-for-ready
   namespace: test-workloads
-  labels:
-    app.kubernetes.io/name: "standup"
 spec:
   workspaces:
   - name: cluster
@@ -15,6 +13,6 @@ spec:
     script: |
       #! /bin/sh
       standup wait \
-      --kubeconfig $(workspaces.cluster.path)/kubeconfig \
-      --provider $(cat $(workspaces.cluster.path)/provider) \
-      --nodes 4
+        --kubeconfig $(workspaces.cluster.path)/kubeconfig \
+        --provider $(cat $(workspaces.cluster.path)/provider) \
+        --nodes 4

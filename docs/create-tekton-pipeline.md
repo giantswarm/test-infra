@@ -28,7 +28,7 @@ spec:
   tasks:
   - name: create-cluster # Should always stay here unless there is a good reason.
     taskRef:
-      name: create-cluster
+      name: create-cluster-capi-hybrid
     workspaces:
     - name: cluster
       workspace: cluster
@@ -56,7 +56,7 @@ spec:
   finally:
   - name: cleanup # Should always stay here to ensure the cluster is cleaned up afterwards.
     taskRef:
-      name: cleanup
+      name: cleanup-capi-hybrid
     workspaces:
     - name: cluster
       workspace: cluster

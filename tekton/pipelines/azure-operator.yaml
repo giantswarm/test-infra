@@ -31,7 +31,7 @@ spec:
   - name: create-cluster
     runAfter: [create-test-operator-release]
     taskRef:
-      name: create-cluster
+      name: create-cluster-capi-hybrid
     params:
     - name: release-id
       value: "$(tasks.create-test-operator-release.results.release-id)"
@@ -95,7 +95,7 @@ spec:
 
   - name: cleanup
     taskRef:
-      name: cleanup
+      name: cleanup-capi-hybrid
     workspaces:
       - name: cluster
         workspace: cluster

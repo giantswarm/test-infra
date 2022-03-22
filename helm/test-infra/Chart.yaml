@@ -1,8 +1,7 @@
 apiVersion: v1
 name: test-infra
 version: [[ .Version ]]
-appVersion: master
 description: Giant Swarm conformance testing stack.
 home: https://github.com/giantswarm/test-infra
 annotations:
-  config.giantswarm.io/version: test-infra
+  application.giantswarm.io/team: honeybadger

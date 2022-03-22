@@ -1,15 +1,10 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: cleanup
+  name: cleanup-capi-pure
   namespace: test-workloads
-  labels:
-    app.kubernetes.io/name: "standup"
 spec:
   volumes:
-    - name: endpoints-config
-      secret:
-        secretName: standup-endpoints-config
     - name: kubeconfig
       secret:
         secretName: standup-kubeconfig
@@ -18,16 +13,21 @@ spec:
     description: Cluster information is stored here.
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/standup:3.2.0
+    image: quay.io/giantswarm/kubectl-gs:2.4.0
     volumeMounts:
-      - name: endpoints-config
-        mountPath: /etc/endpoints-config
       - name: kubeconfig
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
 
-      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
+      set -e
 
-      kubectl -n org-giantswarm delete cluster.cluster.x-k8s.io $(cat $(workspaces.cluster.path)/cluster-id) || true
-      kubectl delete release $(cat $(workspaces.cluster.path)/release-id) || true
+      if [ ! -f $(workspaces.cluster.path)/cluster-id ]; then
+        echo "cluster-id not found, nothing to clean up"
+        exit 0
+      fi
+
+      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
+      cluster_id=$(cat $(workspaces.cluster.path)/cluster-id)
+
+      kubectl -n org-multi-project delete app ${cluster_id}-cluster ${cluster_id}-default-apps --ignore-not-found

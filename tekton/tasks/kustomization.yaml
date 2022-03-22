@@ -4,13 +4,14 @@ resources:
 - aws.yaml
 - aws-china.yaml
 - cis.yaml
-- cleanup.yaml
+- cleanup-capi-hybrid.yaml
+- cleanup-capi-pure.yaml
 - cncf.yaml
-- create-cluster.yaml
+- create-cluster-capi-hybrid.yaml
+- create-cluster-capi-pure.yaml
 - create-release.yaml
 - create-test-operator-release.yaml
 - e2e.yaml
-- hello-world.yaml
 - generate-workload-cluster-kubeconfig.yaml
 - get-latest-release.yaml
 - manage-sonobuoy-results.yaml

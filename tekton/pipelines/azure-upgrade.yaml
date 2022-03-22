@@ -41,7 +41,7 @@ spec:
   - name: create-cluster
     runAfter: [get-latest-release]
     taskRef:
-      name: create-cluster
+      name: create-cluster-capi-hybrid
     params:
     - name: release-id
       value: "$(tasks.get-latest-release.results.release-id)"
@@ -120,7 +120,7 @@ spec:
 
   - name: cleanup
     taskRef:
-      name: cleanup
+      name: cleanup-capi-hybrid
     workspaces:
       - name: cluster
         workspace: cluster
