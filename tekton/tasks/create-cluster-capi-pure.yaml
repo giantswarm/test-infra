@@ -130,6 +130,9 @@ spec:
           --release=v20.0.0-alpha1 \
           $extra_flags \
           --output /tmp/cluster.yaml
+      
+        echo -n "aws" > $(workspaces.cluster.path)/installation
+        echo -n "aws" > $(workspaces.cluster.path)/provider
       elif [ "$PROVIDER" = "azure" ]; then
         kubectl-gs template cluster \
           --provider $PROVIDER \
@@ -139,6 +142,9 @@ spec:
           --release=v20.0.0-alpha1 \
           $extra_flags \
           --output /tmp/cluster.yaml
+      
+        echo -n "azure" > $(workspaces.cluster.path)/installation
+        echo -n "azure" > $(workspaces.cluster.path)/provider
       elif [ "$PROVIDER" = "gcp" ]; then
         kubectl-gs template cluster \
           --provider $PROVIDER \
@@ -150,6 +156,9 @@ spec:
           --project capi-test-phoenix \
           $extra_flags \
           --output /tmp/cluster.yaml
+        
+        echo -n "gcp" > $(workspaces.cluster.path)/installation
+        echo -n "gcp" > $(workspaces.cluster.path)/provider
       else
         echo "provider $PROVIDER not supported"
         exit 1
