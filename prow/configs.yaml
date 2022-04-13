@@ -344,3 +344,155 @@ presubmits:
                 storage: 10Mi
     trigger: "/test create$"
     rerun_command: "/test create"
+
+  giantswarm/cluster-aws:
+  - name: create
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: create-cluster-capi-pure
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      params:
+      - name: source-repo-name
+        value: cluster-aws
+      - name: provider
+        value: aws
+      - name: installation
+        value: gaia
+      - name: cluster-chart
+        value: cluster-aws
+      - name: default-apps-chart
+        value: default-apps-aws
+      resources:
+      - name: source-repo
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+    trigger: "/test create$"
+    rerun_command: "/test create"
+
+  giantswarm/default-apps-aws:
+  - name: create
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: create-cluster-capi-pure
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      params:
+      - name: source-repo-name
+        value: default-apps-aws
+      - name: provider
+        value: aws
+      - name: installation
+        value: gaia
+      - name: cluster-chart
+        value: cluster-aws
+      - name: default-apps-chart
+        value: default-apps-aws
+      resources:
+      - name: source-repo
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+    trigger: "/test create$"
+    rerun_command: "/test create"
+
+  giantswarm/cluster-gcp:
+  - name: create
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: create-cluster-capi-pure
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      params:
+      - name: source-repo-name
+        value: cluster-gcp
+      - name: provider
+        value: gcp
+      - name: installation
+        value: gunther
+      - name: cluster-chart
+        value: cluster-gcp
+      - name: default-apps-chart
+        value: default-apps-gcp
+      resources:
+      - name: source-repo
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+    trigger: "/test create$"
+    rerun_command: "/test create"
+
+  giantswarm/default-apps-gcp:
+  - name: create
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: create-cluster-capi-pure
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      params:
+      - name: source-repo-name
+        value: default-apps-gcp
+      - name: provider
+        value: gcp
+      - name: installation
+        value: gunther
+      - name: cluster-chart
+        value: cluster-gcp
+      - name: default-apps-chart
+        value: default-apps-gcp
+      resources:
+      - name: source-repo
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+    trigger: "/test create$"
+    rerun_command: "/test create"
