@@ -344,3 +344,39 @@ presubmits:
                 storage: 10Mi
     trigger: "/test create$"
     rerun_command: "/test create"
+  - name: upgrade
+    agent: tekton-pipeline
+    max_concurrency: 1
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: upgrade-cluster-capi-pure
+      serviceAccountName: test-runs
+      timeout: 3h0m0s
+      params:
+      - name: source-repo-name
+        value: default-apps-openstack
+      - name: provider
+        value: openstack
+      - name: installation
+        value: gamma
+      - name: cluster-chart
+        value: cluster-openstack
+      - name: default-apps-chart
+        value: default-apps-openstack
+      resources:
+      - name: source-repo
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+      workspaces:
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+    trigger: "/test upgrade$"
+    rerun_command: "/test upgrade"

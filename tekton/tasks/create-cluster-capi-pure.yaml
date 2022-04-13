@@ -15,6 +15,9 @@ spec:
     type: string
   - name: default-apps-chart
     type: string
+  - name: released-version-only
+    type: string
+    default: false
   volumes:
   - name: kubeconfig
     secret:
@@ -51,6 +54,8 @@ spec:
       value: $(params.cluster-chart)
     - name: DEFAULT_APPS_CHART
       value: $(params.default-apps-chart)
+    - name: RELEASED_VERSION_ONLY
+      value: $(params.released-version-only)
     script: |
       #! /bin/sh
 
@@ -60,8 +65,12 @@ spec:
       cd /workspace/source-repo
       git fetch --unshallow
       parent_tag=$(git describe --tags --abbrev=0 | sed -e "s/^v//")
-      hash=$(git describe --always --abbrev=0)
-      repo_version=${parent_tag}-${hash}
+      if [ "$RELEASED_VERSION_ONLY" = "true"]; then
+        hash=$(git describe --always --abbrev=0)
+        repo_version=${parent_tag}-${hash}
+      else
+        repo_version=${parent_tag}
+      fi
 
       if [ "$SOURCE_REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
         app_flags="--default-apps-catalog cluster-test --default-apps-version $repo_version"
