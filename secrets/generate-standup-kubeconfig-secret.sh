@@ -4,6 +4,7 @@ declare -A provider_installations
 provider_installations[aws]=gaia
 provider_installations[aws-china]=giraffe
 provider_installations[azure]=godsmack
+provider_installations[gcp]=gunther
 provider_installations[kvm]=gorgoth
 provider_installations[openstack]=gamma
 provider_installations[vsphere]=gopher
@@ -19,7 +20,7 @@ function cleanup() {
 trap cleanup EXIT
 
 for service_account in "test-infra" "sonobuoy"; do
-  for provider in aws aws-china azure kvm openstack vsphere; do
+  for provider in aws aws-china azure gcp kvm openstack vsphere; do
       installation=${provider_installations[$provider]}
       echo "creating $provider kubeconfig for $service_account in $installation"
 
@@ -28,6 +29,9 @@ for service_account in "test-infra" "sonobuoy"; do
       if [ "$provider" = "openstack" ]; then
         # TODO: replace with opsctl create kubeconfig once supported
         lpass show "Shared-Team Rocket/CAPO\kubeconfigs/$installation.kubeconfig" --notes > $installation_kubeconfig
+      elif [ "$provider" = "gcp" ]; then
+        # TODO: replace with opsctl create kubeconfig once supported
+        lpass show "Shared-Team Phoenix/CAPG\kubeconfigs/$installation.kubeconfig" --notes > $installation_kubeconfig
       else
         KUBECONFIG=$installation_kubeconfig opsctl create kubeconfig -i $installation --certificate-common-name-prefix $service_account --ttl 30 > /dev/null
       fi
@@ -77,6 +81,7 @@ for service_account in "test-infra" "sonobuoy"; do
         --from-file=aws="$tmp_dir/aws-kubeconfig-$service_account" \
         --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
         --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
+        --from-file=gcp="$tmp_dir/gcp-kubeconfig-$service_account" \
         --from-file=kvm="$tmp_dir/kvm-kubeconfig-$service_account" \
         --from-file=openstack="$tmp_dir/openstack-kubeconfig-$service_account" \
         --from-file=vsphere="$tmp_dir/vsphere-kubeconfig-$service_account" \
@@ -89,6 +94,7 @@ for service_account in "test-infra" "sonobuoy"; do
       --from-file=aws="$tmp_dir/aws-kubeconfig-$service_account" \
       --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
       --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
+      --from-file=gcp="$tmp_dir/gcp-kubeconfig-$service_account" \
       --from-file=kvm="$tmp_dir/kvm-kubeconfig-$service_account" \
       --from-file=openstack="$tmp_dir/openstack-kubeconfig-$service_account" \
       --from-file=vsphere="$tmp_dir/vsphere-kubeconfig-$service_account" \
