@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: create-cluster-capi-pure
+  name: upgrade-cluster-capi-pure
   namespace: test-workloads
 spec:
   resources:
