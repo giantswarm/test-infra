@@ -53,6 +53,7 @@ spec:
       workspace: cluster
 
   - name: update-cluster
+    runAfter: [wait-for-creation]
     params:
     - name: source-repo-name
       value: $(params.source-repo-name)
@@ -77,7 +78,7 @@ spec:
         resource: source-repo
 
   - name: wait-for-upgrade
-    runAfter: [create-cluster]
+    runAfter: [update-cluster]
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
