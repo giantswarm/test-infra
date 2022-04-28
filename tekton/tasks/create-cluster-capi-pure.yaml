@@ -95,7 +95,13 @@ spec:
       set -x
 
       export KUBECONFIG=/etc/kubeconfig/$PROVIDER
-      cluster_id="tktn$(date +%s | cut -c5-10)"
+
+      if [ ! -f $(workspaces.cluster.path)/cluster-id ]; then
+        cluster_id="tktn$(date +%s | cut -c5-10)"
+      else
+        cluster_id=$(cat $(workspaces.cluster.path)/cluster-id)
+      fi
+
       extra_flags=$(cat $(workspaces.cluster.path)/kubectl-gs-flags)
 
       echo "generating template for cluster $cluster_id"
