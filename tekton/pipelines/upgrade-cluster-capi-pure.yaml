@@ -52,7 +52,7 @@ spec:
     - name: cluster
       workspace: cluster
 
-  - name: update-cluster
+  - name: upgrade-cluster
     runAfter: [wait-for-creation]
     params:
     - name: source-repo-name
@@ -78,7 +78,7 @@ spec:
         resource: source-repo
 
   - name: wait-for-upgrade
-    runAfter: [update-cluster]
+    runAfter: [upgrade-cluster]
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
