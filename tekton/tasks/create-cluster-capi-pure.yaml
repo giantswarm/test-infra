@@ -120,7 +120,7 @@ spec:
           --output /tmp/cluster.yaml
         
         echo -n "openstack" > $(workspaces.cluster.path)/installation
-        echo -n "kvm" > $(workspaces.cluster.path)/provider
+        echo -n "openstack" > $(workspaces.cluster.path)/provider
       elif [ "$PROVIDER" = "aws" ]; then
         kubectl-gs template cluster \
           --provider $PROVIDER \
