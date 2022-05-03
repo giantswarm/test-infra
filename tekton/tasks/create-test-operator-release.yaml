@@ -10,53 +10,53 @@ spec:
       description: Name of the pipeline running this task.
   resources:
     inputs:
-    - name: releases
-      type: git
-    - name: azure-operator
-      type: git
+      - name: releases
+        type: git
+      - name: azure-operator
+        type: git
   volumes:
-  - name: endpoints-config
-    secret:
-      secretName: standup-endpoints-config
-  - name: kubeconfig
-    secret:
-      secretName: standup-kubeconfig
+    - name: endpoints-config
+      secret:
+        secretName: standup-endpoints-config
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
   workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
+    - name: cluster
+      description: Cluster information is stored here.
   results:
-  - name: release-id
-    description: The ID of the created release.
+    - name: release-id
+      description: The ID of the created release.
   steps:
-  - name: chown-releases
-    command:
-    - chown
-    - -R
-    - 1000:1000
-    - /workspace
-    image: quay.io/giantswarm/standup:3.2.0
-    securityContext:
-      runAsUser: 0
-      runAsGroup: 0
-  - name: create-test-operator-release
-    image: quay.io/giantswarm/standup:3.2.0
-    env:
-      - name: PIPELINE_NAME
-        value: $(params.pipeline-name)
-    volumeMounts:
-      - name: endpoints-config
-        mountPath: /etc/endpoints-config
-      - name: kubeconfig
-        mountPath: /etc/kubeconfig
-    script: |
-      #! /bin/sh
-      standup create test-operator-release \
-      --config /etc/endpoints-config/config \
-      --kubeconfig /etc/kubeconfig \
-      --operator-path /workspace/azure-operator \
-      --releases-path /workspace/releases \
-      --output $(workspaces.cluster.path) \
-      --provider azure \
-      --pipeline $PIPELINE_NAME
+    - name: chown-releases
+      command:
+        - chown
+        - -R
+        - 1000:1000
+        - /workspace
+      image: quay.io/giantswarm/standup:3.3.0
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+    - name: create-test-operator-release
+      image: quay.io/giantswarm/standup:3.3.0
+      env:
+        - name: PIPELINE_NAME
+          value: $(params.pipeline-name)
+      volumeMounts:
+        - name: endpoints-config
+          mountPath: /etc/endpoints-config
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
+      script: |
+        #! /bin/sh
+        standup create test-operator-release \
+        --config /etc/endpoints-config/config \
+        --kubeconfig /etc/kubeconfig \
+        --operator-path /workspace/azure-operator \
+        --releases-path /workspace/releases \
+        --output $(workspaces.cluster.path) \
+        --provider azure \
+        --pipeline $PIPELINE_NAME
 
-      cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)
+        cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)

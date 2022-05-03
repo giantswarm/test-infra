@@ -12,20 +12,20 @@ spec:
       secret:
         secretName: standup-kubeconfig
   workspaces:
-  - name: cluster
-    description: Cluster information is stored here.
+    - name: cluster
+      description: Cluster information is stored here.
   steps:
-  - name: cleanup
-    image: quay.io/giantswarm/standup:3.2.0
-    volumeMounts:
-      - name: endpoints-config
-        mountPath: /etc/endpoints-config
-      - name: kubeconfig
-        mountPath: /etc/kubeconfig
-    script: |
-      #! /bin/sh
+    - name: cleanup
+      image: quay.io/giantswarm/standup:3.3.0
+      volumeMounts:
+        - name: endpoints-config
+          mountPath: /etc/endpoints-config
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
+      script: |
+        #! /bin/sh
 
-      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
+        export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
 
-      kubectl -n org-giantswarm delete cluster.cluster.x-k8s.io $(cat $(workspaces.cluster.path)/cluster-id) || true
-      kubectl delete release $(cat $(workspaces.cluster.path)/release-id) || true
+        kubectl -n org-giantswarm delete cluster.cluster.x-k8s.io $(cat $(workspaces.cluster.path)/cluster-id) || true
+        kubectl delete release $(cat $(workspaces.cluster.path)/release-id) || true
