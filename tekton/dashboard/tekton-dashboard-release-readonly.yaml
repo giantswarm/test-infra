@@ -280,8 +280,8 @@ spec:
         - args:
             - --port=9097
             - --logout-url=
-            - --pipelines-namespace=test-infra
-            - --triggers-namespace=test-infra
+            - --pipelines-namespace=tekton-pipelines
+            - --triggers-namespace=tekton-pipelines
             - --read-only=true
             - --log-level=info
             - --log-format=json
