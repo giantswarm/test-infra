@@ -134,7 +134,7 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-dashboard
   name: tekton-dashboard-info
-  namespace: tekton-pipelines
+  namespace: test-infra
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -236,7 +236,7 @@ spec:
         - args:
             - --port=9097
             - --logout-url=
-            - --pipelines-namespace=tekton-pipelines
+            - --pipelines-namespace=test-infra
             - --triggers-namespace=tekton-pipelines
             - --read-only=true
             - --log-level=info
