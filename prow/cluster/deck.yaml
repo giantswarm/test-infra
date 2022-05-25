@@ -142,6 +142,7 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
+  ingressClassName: nginx
   rules:
     - host: prow.giantswarm.io
       http:
