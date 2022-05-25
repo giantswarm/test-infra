@@ -21,10 +21,10 @@ metadata:
     app.kubernetes.io/name: core-interceptors
     app.kubernetes.io/component: interceptors
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.13.0"
+    app.kubernetes.io/version: "v0.20.0"
     app.kubernetes.io/part-of: tekton-triggers
     # tekton.dev/release value replaced with inputs.params.versionTag in triggers/tekton/publish.yaml
-    triggers.tekton.dev/release: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
 spec:
   replicas: 1
   selector:
@@ -39,17 +39,19 @@ spec:
         app.kubernetes.io/name: core-interceptors
         app.kubernetes.io/component: interceptors
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.13.0"
+        app.kubernetes.io/version: "v0.20.0"
         app.kubernetes.io/part-of: tekton-triggers
         app: tekton-triggers-core-interceptors
-        triggers.tekton.dev/release: "v0.13.0"
+        triggers.tekton.dev/release: "v0.20.0"
         # version value replaced with inputs.params.versionTag in triggers/tekton/publish.yaml
-        version: "v0.13.0"
+        version: "v0.20.0"
     spec:
       serviceAccountName: tekton-triggers-core-interceptors
       containers:
         - name: tekton-triggers-core-interceptors
-          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors:v0.13.0@sha256:f46d74a739476ca223dc3ff4954c95bb136e87699ee03c09ecca26e37c69a7d3"
+          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors:v0.20.0@sha256:e1aa91d6cbe54e5e80e9f9025e2ee1494db6f8207904dbc00f25bf36750cb914"
+          ports:
+            - containerPort: 8443
           args: ["-logtostderr", "-stderrthreshold", "INFO"]
           env:
             - name: SYSTEM_NAMESPACE
@@ -62,6 +64,19 @@ spec:
               value: config-observability-triggers
             - name: METRICS_DOMAIN
               value: tekton.dev/triggers
+            # assuming service and deployment names are same always for consistency
+            - name: INTERCEPTOR_TLS_SVC_NAME
+              value: tekton-triggers-core-interceptors
+            - name: INTERCEPTOR_TLS_SECRET_NAME
+              value: tekton-triggers-core-interceptors-certs
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
           securityContext:
             allowPrivilegeEscalation: false
             # User 65532 is the distroless nonroot user ID
@@ -78,18 +93,17 @@ metadata:
     app.kubernetes.io/name: tekton-triggers-core-interceptors
     app.kubernetes.io/component: interceptors
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.13.0"
+    app.kubernetes.io/version: "v0.20.0"
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
     app: tekton-triggers-core-interceptors
-    version: "v0.13.0"
+    version: "v0.20.0"
   name: tekton-triggers-core-interceptors
   namespace: tekton-pipelines
 spec:
   ports:
-    - name: "http"
-      port: 80
-      targetPort: 8082
+    - name: "https"
+      port: 8443
   selector:
     app.kubernetes.io/name: core-interceptors
     app.kubernetes.io/component: interceptors
@@ -154,5 +168,33 @@ spec:
       name: tekton-triggers-core-interceptors
       namespace: tekton-pipelines
       path: "gitlab"
+
+---
+# Copyright 2022 The Tekton Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tekton-triggers-core-interceptors-certs
+  namespace: tekton-pipelines
+  labels:
+    app.kubernetes.io/name: core-interceptors
+    app.kubernetes.io/component: interceptors
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-triggers
+    triggers.tekton.dev/release: "v0.20.0"
+# The data is populated at install time.
 
 ---
