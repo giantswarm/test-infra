@@ -20,8 +20,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.13.0"
-    version: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
+    version: "v0.20.0"
 spec:
   group: triggers.tekton.dev
   scope: Cluster
@@ -76,8 +76,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.13.0"
-    version: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
+    version: "v0.20.0"
 spec:
   group: triggers.tekton.dev
   scope: Cluster
@@ -91,9 +91,25 @@ spec:
       - tekton
       - tekton-triggers
   versions:
-    - name: v1alpha1
+    - name: v1beta1
       served: true
       storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+    - name: v1alpha1
+      served: true
+      storage: false
       schema:
         openAPIV3Schema:
           type: object
@@ -130,8 +146,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.13.0"
-    version: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
+    version: "v0.20.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
@@ -145,9 +161,43 @@ spec:
       - tekton
       - tekton-triggers
   versions:
-    - name: v1alpha1
+    - name: v1beta1
       served: true
       storage: true
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Address
+          type: string
+          jsonPath: .status.address.url
+        - name: Available
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Available')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Available')].reason"
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
+    - name: v1alpha1
+      served: true
+      storage: false
       schema:
         openAPIV3Schema:
           type: object
@@ -202,8 +252,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.13.0"
-    version: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
+    version: "v0.20.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
@@ -217,9 +267,25 @@ spec:
       - tekton
       - tekton-triggers
   versions:
-    - name: v1alpha1
+    - name: v1beta1
       served: true
       storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+    - name: v1alpha1
+      served: true
+      storage: false
       schema:
         openAPIV3Schema:
           type: object
@@ -258,8 +324,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.13.0"
-    version: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
+    version: "v0.20.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
@@ -273,9 +339,27 @@ spec:
       - tekton
       - tekton-triggers
   versions:
-    - name: v1alpha1
+    - name: v1beta1
       served: true
       storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
+    - name: v1alpha1
+      served: true
+      storage: false
       schema:
         openAPIV3Schema:
           type: object
@@ -314,8 +398,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.13.0"
-    version: "v0.13.0"
+    triggers.tekton.dev/release: "v0.20.0"
+    version: "v0.20.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
@@ -329,7 +413,7 @@ spec:
       - tekton
       - tekton-triggers
   versions:
-    - name: v1alpha1
+    - name: v1beta1
       served: true
       storage: true
       schema:
@@ -347,6 +431,21 @@ spec:
       # starts to increment
       subresources:
         status: {}
-
----
-
+    - name: v1alpha1
+      served: true
+      storage: false
+      schema:
+        openAPIV3Schema:
+          type: object
+          # One can use x-kubernetes-preserve-unknown-fields: true
+          # at the root of the schema (and inside any properties, additionalProperties)
+          # to get the traditional CRD behaviour that nothing is pruned, despite
+          # setting spec.preserveUnknownProperties: false.
+          #
+          # See https://kubernetes.io/blog/2019/06/20/crd-structural-schema/
+          # See issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      # Opt into the status subresource so metadata.generation
+      # starts to increment
+      subresources:
+        status: {}
