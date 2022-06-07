@@ -79,7 +79,7 @@ spec:
         IFS="§"
         for yml in $data
         do
-          if [ "$yml" == "" ] ; do continue; done
+          if [ "$yml" == "" ] ; then continue; done
           ok="false"
           for i in $(seq 1 5); do
             echo "$yml" | kubectl apply -f -
