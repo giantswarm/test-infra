@@ -75,18 +75,10 @@ spec:
       # This function splits a multi-document yaml file into single yaml manifests
       # and retries applying each manifest up to 5 times in case of failure.
       retry_single() {
-        x="$(cat $1)"
-        while [[ -n "$x" ]]
-        do
-          ary+=("${x%%---*}")
-          if [[ "$x" =~ --- ]]
-          then
-            x="${x#*---}"
-          else
-            x=''
-          fi
-        done
-        for yml in "${ary[@]}"
+       ; for token in `cat /tmp/release.yaml `; do echo $token; done
+        data="$(cat $1 | sed 's/---/§/g')"
+        IFS="§"
+        for yml in $data
         do
           ok="false"
           for i in $(seq 1 5); do
