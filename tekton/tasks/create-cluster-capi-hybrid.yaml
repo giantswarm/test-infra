@@ -73,6 +73,7 @@ spec:
 
       set +e
       # Try applying the cluster YAML 5 times to support transient failures in the apply process.
+      ok="false"
       for i in $(seq 1 5); do
         cat /tmp/cluster.yaml | kubectl apply -f -
         success=$?
@@ -84,17 +85,42 @@ spec:
         sleep 15
       done
 
-      # Try applying the cluster YAML 5 times to support transient failures in the apply process.
-      for i in $(seq 1 5); do
-        cat /tmp/nodepool.yaml | kubectl apply -f -
-        success=$?
-        if [ "$success" -eq "0" ]; then
-          ok="true"
-          break
-        fi
+      # This function splits a multi-document yaml file into single yaml manifests
+      # and retries applying each manifest up to 5 times in case of failure.
+      retry_single() {
+        x="$(cat $1)"
+        while [[ -n "$x" ]]
+        do
+          ary+=("${x%%---*}")
+          if [[ "$x" =~ --- ]]
+          then
+            x="${x#*---}"
+          else
+            x=''
+          fi
+        done
+        for yml in "${ary[@]}"
+        do
+          ok="false"
+          for i in $(seq 1 5); do
+            echo "$yml" | kubectl apply -f -
+            success=$?
+            if [ "$success" -eq "0" ]; then
+              ok="true"
+              break
+            fi
+          done
 
-        sleep 15
-      done
+          if [ "$ok" != "true" ]
+          then
+            echo "Failed to apply $1"
+            exit 1
+          fi
+        done
+      }
+
+      retry_single /tmp/cluster.yaml
+      retry_single /tmp/nodepool.yaml
 
   - name: legacy-get-kubeconfig
     image: quay.io/giantswarm/kubectl:1.22.3
