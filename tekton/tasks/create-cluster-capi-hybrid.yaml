@@ -72,19 +72,6 @@ spec:
         --output /tmp/nodepool.yaml
 
       set +e
-      # Try applying the cluster YAML 5 times to support transient failures in the apply process.
-      ok="false"
-      for i in $(seq 1 5); do
-        cat /tmp/cluster.yaml | kubectl apply -f -
-        success=$?
-        if [ "$success" -eq "0" ]; then
-          ok="true"
-          break
-        fi
-
-        sleep 15
-      done
-
       # This function splits a multi-document yaml file into single yaml manifests
       # and retries applying each manifest up to 5 times in case of failure.
       retry_single() {
