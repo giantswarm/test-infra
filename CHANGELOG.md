@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2022-06-08
+
 ### Added
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/giantswarm/compare/v0.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/giantswarm/test-infra/compare/v0.0.0...v0.1.0
