@@ -71,8 +71,35 @@ spec:
         $AZS \
         --output /tmp/nodepool.yaml
 
-      cat /tmp/cluster.yaml | kubectl apply -f -
-      cat /tmp/nodepool.yaml | kubectl apply -f -
+      set +e
+      # This function splits a multi-document yaml file into single yaml manifests
+      # and retries applying each manifest up to 5 times in case of failure.
+      retry_single() {
+        data="$(cat $1 | sed 's/---/§/g')"
+        IFS="§"
+        for yml in $data
+        do
+          if [ "$yml" == "" ] ; then continue; fi
+          ok="false"
+          for i in 1 2 3 4 5; do
+            echo "$yml" | kubectl --request-timeout=30s apply -f -
+            success=$?
+            if [ "$success" -eq "0" ]; then
+              ok="true"
+              break
+            fi
+          done
+
+          if [ "$ok" != "true" ]
+          then
+            echo "Failed to apply $1"
+            exit 1
+          fi
+        done
+      }
+
+      retry_single /tmp/cluster.yaml
+      retry_single /tmp/nodepool.yaml
 
   - name: legacy-get-kubeconfig
     image: quay.io/giantswarm/kubectl:1.22.3
