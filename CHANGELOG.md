@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2022-06-22
+
 ### Changed
 
 - Bump `sonobuoy` to v0.56.7-alpine-giantswarm.
@@ -16,4 +18,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/giantswarm/compare/v0.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/giantswarm/test-infra/compare/v0.0.0...v1.0.0
