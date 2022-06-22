@@ -2,12 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   name: tekton-trigger
   namespace: tekton-pipelines
 spec:
+  ingressClassName: nginx
   rules:
     - host: tekton-trigger.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:

@@ -152,9 +152,9 @@ metadata:
   labels:
     app: hook
   annotations:
-    kubernetes.io/ingress.class: "nginx"
     kubernetes.io/tls-acme: "true"
 spec:
+  ingressClassName: nginx
   rules:
     - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       http:

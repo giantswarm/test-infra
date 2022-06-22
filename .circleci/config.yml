@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  architect: giantswarm/architect@4.21.0
+  architect: giantswarm/architect@4.23.0
 
 jobs:
   build:
     docker:
-      - image: quay.io/giantswarm/architect:2.1.6
+      - image: quay.io/giantswarm/architect:6.5.0
     steps:
       - checkout
       - run:
