@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump `sonobuoy` to v0.56.7-alpine-giantswarm.
+- Bump `kubectl-gs` to 2.14.0.
+
 ### Added
 
 - Initial release.
