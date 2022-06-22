@@ -1321,7 +1321,9 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: 100
+        target:
+          type: AverageValue
+          averageUtilization: 100
 
 ---
 # Copyright 2020 The Tekton Authors
