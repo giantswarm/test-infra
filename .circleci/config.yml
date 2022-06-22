@@ -27,7 +27,11 @@ jobs:
 workflows:
   workflow:
     jobs:
-      - build
+      - build:
+        filters:
+          # Trigger job also on git tag.
+          tags:
+            only: /^v.*/
       - architect/push-to-app-catalog:
           context: architect
           name: push-to-app-catalog
