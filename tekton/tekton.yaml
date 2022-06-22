@@ -1295,7 +1295,7 @@ spec:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: tekton-pipelines-webhook
@@ -1321,7 +1321,9 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: 100
+        target:
+          type: AverageValue
+          averageUtilization: 100
 
 ---
 # Copyright 2020 The Tekton Authors
