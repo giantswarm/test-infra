@@ -11,6 +11,13 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
+  params:
+  - name: cluster-id
+    type: string
+    description: Name of the cluster
+  - name: organization
+    type: string
+    description: Organization that owns the cluster
   steps:
   - name: cleanup
     image: quay.io/giantswarm/kubectl-gs:2.14.0
@@ -22,12 +29,11 @@ spec:
 
       set -e
 
-      if [ ! -f $(workspaces.cluster.path)/cluster-id ]; then
+      if [ ! -f $(params.cluster-id) ]; then
         echo "cluster-id not found, nothing to clean up"
         exit 0
       fi
 
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
-      cluster_id=$(cat $(workspaces.cluster.path)/cluster-id)
 
-      kubectl -n org-multi-project delete app ${cluster_id}-cluster ${cluster_id}-default-apps --ignore-not-found
+      kubectl -n org-$(params.organization) delete app $(params.cluster-id)-cluster $(params.cluster-id)-default-apps --ignore-not-found
