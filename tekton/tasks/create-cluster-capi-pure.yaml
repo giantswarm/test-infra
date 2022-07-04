@@ -74,7 +74,7 @@ spec:
       echo $app_flags > $(workspaces.cluster.path)/kubectl-gs-flags
 
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.14.0
+    image: quay.io/giantswarm/kubectl-gs:2.16.0
     env:
     - name: PROVIDER
       value: $(params.provider)

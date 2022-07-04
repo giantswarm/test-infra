@@ -29,11 +29,6 @@ spec:
 
       set -e
 
-      if [ ! -f $(params.cluster-id) ]; then
-        echo "cluster-id not found, nothing to clean up"
-        exit 0
-      fi
-
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
 
-      kubectl -n org-$(params.organization) delete app $(params.cluster-id)-cluster $(params.cluster-id)-default-apps --ignore-not-found
+      kubectl -n org-$(params.organization) delete app $(params.cluster-id) $(params.cluster-id)-default-apps --ignore-not-found
