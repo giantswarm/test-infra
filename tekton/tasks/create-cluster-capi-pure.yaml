@@ -29,6 +29,8 @@ spec:
   results:
   - name: cluster-id
     description: The ID of the created cluster.
+  - name: organization
+    description: Organization that owns the cluster.
   steps:
   - name: chown-source-repo
     command:
@@ -72,7 +74,7 @@ spec:
       echo $app_flags > $(workspaces.cluster.path)/kubectl-gs-flags
 
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.14.0
+    image: quay.io/giantswarm/kubectl-gs:2.16.0
     env:
     - name: PROVIDER
       value: $(params.provider)
@@ -86,15 +88,17 @@ spec:
       set -x
 
       export KUBECONFIG=/etc/kubeconfig/$PROVIDER
-      cluster_id="tktn$(date +%s | cut -c5-10)"
+      cluster_id="t$(date +%s | cut -c7-10)"
+      organization=giantswarm
       extra_flags=$(cat $(workspaces.cluster.path)/kubectl-gs-flags)
 
       echo "generating template for cluster $cluster_id"
 
       if [ "$PROVIDER" = "openstack" ]; then
+        organization=multi-project
         kubectl-gs template cluster \
           --provider $PROVIDER \
-          --organization multi-project \
+          --organization $organization \
           --description "e2e test" \
           --name $cluster_id \
           --worker-failure-domain gb-lon-1 \
@@ -124,7 +128,7 @@ spec:
       elif [ "$PROVIDER" = "aws" ]; then
         kubectl-gs template cluster \
           --provider $PROVIDER \
-          --organization giantswarm \
+          --organization $organization \
           --description "e2e test" \
           --name $cluster_id \
           --release=v20.0.0-alpha1 \
@@ -136,7 +140,7 @@ spec:
       elif [ "$PROVIDER" = "azure" ]; then
         kubectl-gs template cluster \
           --provider $PROVIDER \
-          --organization giantswarm \
+          --organization $organization \
           --description "e2e test" \
           --name $cluster_id \
           --release=v20.0.0-alpha1 \
@@ -148,12 +152,13 @@ spec:
       elif [ "$PROVIDER" = "gcp" ]; then
         kubectl-gs template cluster \
           --provider $PROVIDER \
-          --organization giantswarm \
+          --organization $organization \
           --description "e2e test" \
           --name $cluster_id \
           --region europe-west6 \
+          --gcp-project giantswarm-352614 \
           --gcp-failure-domains=europe-west6-a \
-          --project capi-test-phoenix \
+          --gcp-machine-deployment-failure-domain=europe-west6-a \
           $extra_flags \
           --output /tmp/cluster.yaml
         
@@ -166,8 +171,9 @@ spec:
 
       echo -n "${cluster_id}" > $(workspaces.cluster.path)/cluster-id
       echo -n "${cluster_id}" > $(results.cluster-id.path)
+      echo -n "${organization}" > $(results.organization.path)
 
       kubectl apply -f /tmp/cluster.yaml
 
-      while ! kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig; do echo "waiting for kubeconfig"; sleep 10; done
-      kubectl get secrets -n org-multi-project ${cluster_id}-kubeconfig -o jsonpath='{.data.value}' | base64 -d > $(workspaces.cluster.path)/kubeconfig
+      while ! kubectl get secrets -n org-$organization ${cluster_id}-kubeconfig; do echo "waiting for kubeconfig"; sleep 10; done
+      kubectl get secrets -n org-$organization ${cluster_id}-kubeconfig -o jsonpath='{.data.value}' | base64 -d > $(workspaces.cluster.path)/kubeconfig

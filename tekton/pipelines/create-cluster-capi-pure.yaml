@@ -56,6 +56,11 @@ spec:
   - name: cleanup
     taskRef:
       name: cleanup-capi-pure
+    params:
+    - name: cluster-id
+      value: $(tasks.create-cluster.results.cluster-id)
+    - name: organization
+      value: $(tasks.create-cluster.results.organization)
     workspaces:
     - name: cluster
       workspace: cluster
