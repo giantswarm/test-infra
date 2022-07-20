@@ -4,6 +4,7 @@ resources:
   - add-pr-body.yaml
   - eventlistener.yaml
   - ingress.yaml
+  - interceptors.yaml
   - rbac.yaml
   - triggerbinding.yaml
   - triggertemplate.yaml
