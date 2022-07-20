@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump Tekton Triggers to v0.20.1
+
 ## [1.0.1] - 2022-07-20
 
 ### Fixed
