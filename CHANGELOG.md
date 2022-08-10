@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2022-08-10
+
 ### Changed
 
 - Only run cleanup of `create-cluster-capi-pure` runs if they were successful
@@ -34,7 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/giantswarm/test-infra/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/giantswarm/test-infra/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/giantswarm/test-infra/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/giantswarm/test-infra/compare/v0.0.0...v1.0.0
