@@ -54,6 +54,10 @@ spec:
 
   finally:
   - name: cleanup
+    when:
+    - input: $(tasks.status)
+      operator: in
+      values: ["Succeeded"]
     taskRef:
       name: cleanup-capi-pure
     params:

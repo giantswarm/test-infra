@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Only run cleanup of `create-cluster-capi-pure` runs if they were successful
+
 ## [1.0.2] - 2022-07-20
 
 ### Changed
