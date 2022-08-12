@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Trigger `create-cluster-capi-pure` pipeline even if `/test create` has spaces after the command.
+
 ## [1.1.0] - 2022-08-10
 
 ### Changed
