@@ -304,7 +304,7 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test create(\s|$)"
+    trigger: "/test create(\\s|$)"
     rerun_command: "/test create"
 
   giantswarm/default-apps-openstack:
@@ -342,7 +342,7 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test create(\s|$)"
+    trigger: "/test create(\\s|$)"
     rerun_command: "/test create"
 
   giantswarm/cluster-aws:
@@ -380,7 +380,7 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test create(\s|$)"
+    trigger: "/test create(\\s|$)"
     rerun_command: "/test create"
 
   giantswarm/default-apps-aws:
@@ -418,7 +418,7 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test create(\s|$)"
+    trigger: "/test create(\\s|$)"
     rerun_command: "/test create"
 
   giantswarm/cluster-gcp:
@@ -456,7 +456,7 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test create(\s|$)"
+    trigger: "/test create(\\s|$)"
     rerun_command: "/test create"
 
   giantswarm/default-apps-gcp:
@@ -494,5 +494,5 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test create(\s|$)"
+    trigger: "/test create(\\s|$)"
     rerun_command: "/test create"
