@@ -11,6 +11,5 @@ resources:
 - cis.yaml
 - cncf.yaml
 - create-cluster-capi-pure.yaml
-- debug-azure.yaml
 - heartbeat.yaml
 - upgrade-to-this-azure-operator.yaml
