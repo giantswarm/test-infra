@@ -12,7 +12,6 @@ resources:
 - create-release.yaml
 - create-test-operator-release.yaml
 - e2e.yaml
-- generate-workload-cluster-kubeconfig.yaml
 - get-latest-release.yaml
 - manage-sonobuoy-results.yaml
 - opsctl-deploy.yaml
