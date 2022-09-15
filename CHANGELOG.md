@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2022-09-15
+
 ### Fixed
 
 - Fixed interceptors after upgrading to 0.21.0.
@@ -78,7 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.4.1...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.4.2...HEAD
+[1.4.2]: https://github.com/giantswarm/test-infra/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/giantswarm/test-infra/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/giantswarm/test-infra/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/giantswarm/test-infra/compare/v1.3.0...v1.3.1
