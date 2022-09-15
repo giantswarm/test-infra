@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2022-09-15
+
 ### Changed
 
 - Allow connectivity from the MC where tekton runs its tasks to the workload cluster created on GCP.
@@ -52,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/giantswarm/test-infra/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/giantswarm/test-infra/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/giantswarm/test-infra/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/giantswarm/test-infra/compare/v1.0.2...v1.1.0
