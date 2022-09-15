@@ -26,20 +26,30 @@ spec:
         - kind: TriggerBinding
           ref: github-pr-binding
       interceptors:
-        - github:
-            eventTypes:
-              - issue_comment
-            secretRef:
-              secretKey: secretToken
+        - ref:
+            name: "github"
+            kind: ClusterInterceptor
+            apiVersion: triggers.tekton.dev
+          params:
+          - name: "secretRef"
+            value:
               secretName: github-secret
-        - cel:
-            filter: body.repository.full_name.startsWith('giantswarm/') &&
-              body.repository.name in ['sonobuoy-plugin'] &&
-              'pull_request' in body.issue &&
-              'url' in body.issue.pull_request &&
-              body.issue.state == 'open' &&
-              body.comment.body.matches('^/test($| [^]*[ ]*$)')
-            overlays:
+              secretKey: secretToken
+          - name: "eventTypes"
+            value: ["issue_comment"]
+        - ref:
+            name: cel
+          params:
+            - name: "filter"
+              value:
+                body.repository.full_name.startsWith('giantswarm/') &&
+                body.repository.name in ['sonobuoy-plugin'] &&
+                'pull_request' in body.issue &&
+                'url' in body.issue.pull_request &&
+                body.issue.state == 'open' &&
+                body.comment.body.matches('^/test($| [^]*[ ]*$)')
+            - name: "overlays"
+              value:
               - key: add_pr_body.pull_request_url
                 expression: body.issue.pull_request.url
         - webhook:
@@ -48,7 +58,10 @@ spec:
               kind: Service
               name: add-pr-body
               namespace: tekton-pipelines
-        - cel:
-            overlays:
+        - ref:
+            name: cel
+          params:
+            - name: "overlays"
+              value:
               - key: git_clone_depth
                 expression: "string(body.extensions.add_pr_body.pull_request_body.commits + 1.0)"
