@@ -26,12 +26,17 @@ spec:
         - kind: TriggerBinding
           ref: github-pr-binding
       interceptors:
-        - github:
-            eventTypes:
-              - issue_comment
-            secretRef:
-              secretKey: secretToken
+        - ref:
+            name: "github"
+            kind: ClusterInterceptor
+            apiVersion: triggers.tekton.dev
+          params:
+          - name: "secretRef"
+            value:
               secretName: github-secret
+              secretKey: secretToken
+          - name: "eventTypes"
+            value: ["issue_comment"]
         - cel:
             filter: body.repository.full_name.startsWith('giantswarm/') &&
               body.repository.name in ['sonobuoy-plugin'] &&
