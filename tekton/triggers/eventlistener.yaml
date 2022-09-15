@@ -41,12 +41,13 @@ spec:
             name: cel
           params:
             - name: "filter"
-              value: body.repository.full_name.startsWith('giantswarm/') &&
-              body.repository.name in ['sonobuoy-plugin'] &&
-              'pull_request' in body.issue &&
-              'url' in body.issue.pull_request &&
-              body.issue.state == 'open' &&
-              body.comment.body.matches('^/test($| [^]*[ ]*$)')
+              value:
+                body.repository.full_name.startsWith('giantswarm/') &&
+                body.repository.name in ['sonobuoy-plugin'] &&
+                'pull_request' in body.issue &&
+                'url' in body.issue.pull_request &&
+                body.issue.state == 'open' &&
+                body.comment.body.matches('^/test($| [^]*[ ]*$)')
             - name: "overlays"
               value:
               - key: add_pr_body.pull_request_url
