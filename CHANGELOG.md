@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Allow connectivity from the MC where tekton runs its tasks to the workload cluster created on GCP.
+
 ## [1.2.1] - 2022-08-19
 
 ### Fixed
