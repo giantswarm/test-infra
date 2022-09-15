@@ -41,7 +41,7 @@ spec:
             name: cel
           params:
             - name: "filter"
-              values : body.repository.full_name.startsWith('giantswarm/') &&
+              value: body.repository.full_name.startsWith('giantswarm/') &&
               body.repository.name in ['sonobuoy-plugin'] &&
               'pull_request' in body.issue &&
               'url' in body.issue.pull_request &&
