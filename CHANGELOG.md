@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed github eventlistener syntax after tekton triggers upgrade.
+
 ## [1.4.0] - 2022-09-15
 
 ### Changed
