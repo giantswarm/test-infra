@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: create-cluster-capi-pure
+  name: upgrade-cluster-capi-pure
   namespace: test-workloads
 spec:
   resources:
@@ -42,7 +42,6 @@ spec:
       inputs:
       - name: source-repo
         resource: source-repo
-
   - name: create-cluster
     params:
     - name: source-repo-name
@@ -53,16 +52,16 @@ spec:
       value: $(params.installation)
     - name: cluster-chart
       value: $(params.cluster-chart)
+    - name: cluster-app-chart-version
+      value: ""
+    - name: cluster-app-catalog
+      value: "cluster"
     - name: default-apps-chart
       value: $(params.default-apps-chart)
-    - name: cluster-app-chart-version
-      value: $(tasks.calculate-versions.results.cluster-app-chart-version)
-    - name: cluster-app-catalog
-      value: $(tasks.calculate-versions.results.cluster-app-catalog)
     - name: default-apps-chart-version
-      value: $(tasks.calculate-versions.results.default-apps-chart-version)
+      value: ""
     - name: default-apps-catalog
-      value: $(tasks.calculate-versions.results.default-apps-catalog)
+      value: "cluster"
     taskRef:
       name: create-cluster-capi-pure
     workspaces:
@@ -81,6 +80,32 @@ spec:
     workspaces:
     - name: cluster
       workspace: cluster
+
+  - name: upgrade-cluster
+    runAfter: [wait-for-ready]
+    taskRef:
+      name: upgrade-cluster-capi-pure
+    params:
+    - name: cluster-id
+      value: "$(tasks.create-cluster.results.cluster-id)"
+    - name: cluster-app-chart-version
+      value: "$(tasks.calculate-versions.results.cluster-app-chart-version)"
+    - name: provider
+      value: $(params.provider)
+    - name: organization
+      value: "$(tasks.create-cluster.results.organization)"
+    workspaces:
+      - name: cluster
+        workspace: cluster
+
+  - name: wait-for-ready-after-upgrade
+    runAfter: [upgrade-cluster]
+    timeout: 1h0m0s
+    taskRef:
+      name: wait-for-ready
+    workspaces:
+      - name: cluster
+        workspace: cluster
 
   finally:
   - name: cleanup

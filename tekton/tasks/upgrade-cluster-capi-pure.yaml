@@ -1,0 +1,47 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: upgrade-cluster-capi-pure
+  namespace: test-workloads
+spec:
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: standup-kubeconfig
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  params:
+  - name: cluster-id
+    type: string
+    description: Cluster ID for the cluster that will be upgraded.
+  - name: provider
+    type: string
+  - name: organization
+    type: string
+  - name: cluster-app-chart-version
+    type: string
+    description: Version for the cluster app.
+  - name: cluster-app-catalog
+    type: string
+    default: cluster-test
+    description: App catalog to use for the cluster app.
+  steps:
+  - name: upgrade-cluster
+    image: quay.io/giantswarm/standup:3.2.0
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: /etc/kubeconfig
+    script: |
+      #! /bin/sh
+
+      set -eo pipefail
+      
+      echo "$(date): Upgrading cluster $(params.cluster-id) to $(params.cluster-app-chart-version)"
+      kubectl --kubeconfig /etc/kubeconfig/$(params.provider) patch apps -n org-$(params.organization) $(params.cluster-id) --type json -p '[{"op": "replace", "path": "/spec/version", "value": $(params.cluster-app-chart-version)}, {"op": "replace", "path": "/spec/catalog", "value": $(params.cluster-app-catalog)}]'
+
+      while [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o json | jq -r '.status.version'` != "$(params.cluster-app-chart-version)" ] || [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o json | jq -r '.status.release.status'` != "deployed" ]
+      do
+        echo "$(date): App for cluster '$(params.cluster-id)' still uses old version or has failed"
+        sleep 10
+      done
