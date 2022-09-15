@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump tekton pipelines to release 0.39.0. 
+- Bump tekton dsahboard to release 0.29.2. 
+- Bump tekton triggers to release 0.21.0. 
+
 ## [1.3.1] - 2022-09-15
 
 ### Fixed
