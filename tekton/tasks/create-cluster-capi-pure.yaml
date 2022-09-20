@@ -13,15 +13,7 @@ spec:
     type: string
   - name: cluster-chart
     type: string
-  - name: cluster-app-chart-version
-    type: string
-  - name: cluster-app-catalog
-    type: string
   - name: default-apps-chart
-    type: string
-  - name: default-apps-chart-version
-    type: string
-  - name: default-apps-catalog
     type: string
   volumes:
   - name: kubeconfig
@@ -40,15 +32,52 @@ spec:
   - name: organization
     description: Organization that owns the cluster.
   steps:
+  - name: chown-source-repo
+    command:
+    - chown
+    - -R
+    - 1000:1000
+    - /workspace/source-repo
+    image: quay.io/giantswarm/standup:3.2.0
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+  - name: calculate-inputs
+    image: quay.io/giantswarm/standup:3.2.0
+    env:
+    - name: SOURCE_REPO_NAME
+      value: $(params.source-repo-name)
+    - name: INSTALLATION
+      value: $(params.installation)
+    - name: CLUSTER_CHART
+      value: $(params.cluster-chart)
+    - name: DEFAULT_APPS_CHART
+      value: $(params.default-apps-chart)
+    script: |
+      #! /bin/sh
+
+      set -e
+      set -x
+
+      cd /workspace/source-repo
+      git fetch --unshallow
+      parent_tag=$(git describe --tags --abbrev=0 | sed -e "s/^v//")
+      hash=$(git describe --always --abbrev=0)
+      repo_version=${parent_tag}-${hash}
+
+      if [ "$SOURCE_REPO_NAME" = "$DEFAULT_APPS_CHART" ]; then
+        app_flags="--default-apps-catalog cluster-test --default-apps-version $repo_version"
+      else
+        app_flags="--cluster-catalog cluster-test --cluster-version $repo_version"
+      fi
+
+      echo $app_flags > $(workspaces.cluster.path)/kubectl-gs-flags
+
   - name: create-cluster
     image: quay.io/giantswarm/kubectl-gs:2.16.0
     env:
     - name: PROVIDER
       value: $(params.provider)
-    - name: CLUSTER_APP_CHART_VERSION
-      value: $(params.cluster-app-chart-version)
-    - name: DEFAULT_APPS_CHART_VERSION
-      value: $(params.default-apps-chart-version)
     volumeMounts:
     - name: kubeconfig
       mountPath: /etc/kubeconfig
@@ -61,15 +90,7 @@ spec:
       export KUBECONFIG=/etc/kubeconfig/$PROVIDER
       cluster_id="t$(date +%s | cut -c7-10)"
       organization=giantswarm
-
-      extra_flags=""
-      if [ ! -z "$CLUSTER_APP_CHART_VERSION" ]; then
-        extra_flags="${extra_flags} --cluster-catalog cluster-test --cluster-version $CLUSTER_APP_CHART_VERSION"
-      fi
-
-      if [ ! -z "$DEFAULT_APPS_CHART_VERSION" ]; then
-        extra_flags="${extra_flags} --default-apps-catalog cluster-test --default-apps-version $DEFAULT_APPS_CHART_VERSION"
-      fi
+      extra_flags=$(cat $(workspaces.cluster.path)/kubectl-gs-flags)
 
       echo "generating template for cluster $cluster_id"
 
