@@ -20,8 +20,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    triggers.tekton.dev/release: "v0.21.0"
+    version: "v0.21.0"
 spec:
   group: triggers.tekton.dev
   scope: Cluster
@@ -76,8 +76,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    triggers.tekton.dev/release: "v0.21.0"
+    version: "v0.21.0"
 spec:
   group: triggers.tekton.dev
   scope: Cluster
@@ -146,8 +146,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    triggers.tekton.dev/release: "v0.21.0"
+    version: "v0.21.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
@@ -252,8 +252,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    triggers.tekton.dev/release: "v0.21.0"
+    version: "v0.21.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
@@ -324,8 +324,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    triggers.tekton.dev/release: "v0.21.0"
+    version: "v0.21.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
@@ -398,8 +398,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
-    triggers.tekton.dev/release: "v0.20.0"
-    version: "v0.20.0"
+    triggers.tekton.dev/release: "v0.21.0"
+    version: "v0.21.0"
 spec:
   group: triggers.tekton.dev
   scope: Namespaced
