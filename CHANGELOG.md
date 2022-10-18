@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.2] - 2022-10-18
+
 ### Fixed
 
 - Remove unnecessary parameters from `upgrade-cluster-capi-pure` pipeline.
@@ -106,7 +108,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.6.2...HEAD
+[1.6.2]: https://github.com/giantswarm/test-infra/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/giantswarm/test-infra/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/giantswarm/test-infra/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/giantswarm/test-infra/compare/v1.4.2...v1.5.0
