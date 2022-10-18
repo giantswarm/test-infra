@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove unnecessary parameters from `upgrade-cluster-capi-pure` pipeline.
+
 ## [1.6.1] - 2022-10-18
 
 ### Fixed
