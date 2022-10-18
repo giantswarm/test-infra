@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Restore GitHub `eventlistener` config that was released in `v1.4.1`
+
 ## [1.6.0] - 2022-09-20
 
 ### Changed
