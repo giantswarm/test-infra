@@ -12,4 +12,5 @@ resources:
 - cncf.yaml
 - create-cluster-capi-pure.yaml
 - heartbeat.yaml
+- upgrade-cluster-capi-pure.yaml
 - upgrade-to-this-azure-operator.yaml
