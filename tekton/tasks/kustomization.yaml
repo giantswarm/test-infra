@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - aws.yaml
 - aws-china.yaml
+- calculate-versions.yaml
 - cis.yaml
 - cleanup-capi-hybrid.yaml
 - cleanup-capi-pure.yaml
@@ -17,5 +18,6 @@ resources:
 - opsctl-deploy.yaml
 - opsctl-undeploy.yaml
 - upgrade-cluster.yaml
+- upgrade-cluster-capi-pure.yaml
 - upload-to-s3-bucket.yaml
 - wait-for-ready.yaml

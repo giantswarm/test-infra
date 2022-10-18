@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Add missing pipelines and tasks to `kustomize`.
+
 ### Changed
 
-- Restore GitHub `eventlistener` config that was released in `v1.4.1`
+- Restore GitHub `eventlistener` config that was released in `v1.4.1`.
 
 ## [1.6.0] - 2022-09-20
 
