@@ -74,7 +74,7 @@ spec:
       echo $app_flags > $(workspaces.cluster.path)/kubectl-gs-flags
 
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.16.0
+    image: quay.io/giantswarm/kubectl-gs:2.25.0
     env:
     - name: PROVIDER
       value: $(params.provider)
@@ -122,7 +122,7 @@ spec:
           --enable-long-names \
           $extra_flags \
           --output /tmp/cluster.yaml
-        
+
         echo -n "openstack" > $(workspaces.cluster.path)/installation
         echo -n "kvm" > $(workspaces.cluster.path)/provider
       elif [ "$PROVIDER" = "aws" ]; then
@@ -134,7 +134,7 @@ spec:
           --release=v20.0.0-alpha1 \
           $extra_flags \
           --output /tmp/cluster.yaml
-      
+
         echo -n "aws" > $(workspaces.cluster.path)/installation
         echo -n "aws" > $(workspaces.cluster.path)/provider
       elif [ "$PROVIDER" = "azure" ]; then
@@ -146,7 +146,7 @@ spec:
           --release=v20.0.0-alpha1 \
           $extra_flags \
           --output /tmp/cluster.yaml
-      
+
         echo -n "azure" > $(workspaces.cluster.path)/installation
         echo -n "azure" > $(workspaces.cluster.path)/provider
       elif [ "$PROVIDER" = "gcp" ]; then
@@ -161,9 +161,20 @@ spec:
           --gcp-machine-deployment-failure-domain=europe-west6-a \
           $extra_flags \
           --output /tmp/cluster.yaml
-        
+
         echo -n "gcp" > $(workspaces.cluster.path)/installation
         echo -n "gcp" > $(workspaces.cluster.path)/provider
+      elif [ "$PROVIDER" = "capa" ]; then
+        kubectl-gs template cluster \
+          --provider $PROVIDER \
+          --organization $organization \
+          --description "e2e test" \
+          --name $cluster_id \
+          $extra_flags \
+          --output /tmp/cluster.yaml
+
+        echo -n "capa" > $(workspaces.cluster.path)/installation
+        echo -n "capa" > $(workspaces.cluster.path)/provider
       else
         echo "provider $PROVIDER not supported"
         exit 1
