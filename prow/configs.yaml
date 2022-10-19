@@ -360,9 +360,9 @@ presubmits:
       - name: source-repo-name
         value: cluster-aws
       - name: provider
-        value: aws
+        value: capa
       - name: installation
-        value: gaia
+        value: golem
       - name: cluster-chart
         value: cluster-aws
       - name: default-apps-chart
@@ -396,9 +396,9 @@ presubmits:
         - name: source-repo-name
           value: cluster-aws
         - name: provider
-          value: aws
+          value: capa
         - name: installation
-          value: gaia
+          value: golem
         - name: cluster-chart
           value: cluster-aws
         - name: default-apps-chart
@@ -434,9 +434,9 @@ presubmits:
       - name: source-repo-name
         value: default-apps-aws
       - name: provider
-        value: aws
+        value: capa
       - name: installation
-        value: gaia
+        value: golem
       - name: cluster-chart
         value: cluster-aws
       - name: default-apps-chart
@@ -470,9 +470,9 @@ presubmits:
         - name: source-repo-name
           value: default-apps-aws
         - name: provider
-          value: aws
+          value: capa
         - name: installation
-          value: gaia
+          value: golem
         - name: cluster-chart
           value: cluster-aws
         - name: default-apps-chart
