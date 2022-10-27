@@ -21,6 +21,27 @@ spec:
   - name: default-apps-chart
     type: string
   tasks:
+  - name: calculate-versions
+    params:
+    - name: source-repo-name
+      value: $(params.source-repo-name)
+    - name: provider
+      value: $(params.provider)
+    - name: installation
+      value: $(params.installation)
+    - name: cluster-chart
+      value: $(params.cluster-chart)
+    - name: default-apps-chart
+      value: $(params.default-apps-chart)
+    taskRef:
+      name: calculate-versions
+    workspaces:
+      - name: cluster
+        workspace: cluster
+    resources:
+      inputs:
+        - name: source-repo
+          resource: source-repo
   - name: create-cluster
     params:
     - name: source-repo-name
@@ -33,6 +54,14 @@ spec:
       value: $(params.cluster-chart)
     - name: default-apps-chart
       value: $(params.default-apps-chart)
+    - name: cluster-app-chart-version
+      value: $(tasks.calculate-versions.results.cluster-app-chart-version)
+    - name: cluster-app-catalog
+      value: $(tasks.calculate-versions.results.cluster-app-catalog)
+    - name: default-apps-chart-version
+      value: $(tasks.calculate-versions.results.default-apps-chart-version)
+    - name: default-apps-catalog
+      value: $(tasks.calculate-versions.results.default-apps-catalog)
     taskRef:
       name: create-cluster-capi-pure
     workspaces:
