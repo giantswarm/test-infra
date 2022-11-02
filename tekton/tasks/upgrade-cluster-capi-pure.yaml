@@ -43,5 +43,7 @@ spec:
       while [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o json | jq -r '.status.version'` != "$(params.cluster-app-chart-version)" ] || [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o json | jq -r '.status.release.status'` != "deployed" ]
       do
         echo "$(date): App for cluster '$(params.cluster-id)' still uses old version or has failed"
+        echo "$(date): Version: $(kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o jsonpath='{.status.version}')"
+        echo "$(date): Status: $(kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o jsonpath='{.status.release.status}')"
         sleep 10
       done

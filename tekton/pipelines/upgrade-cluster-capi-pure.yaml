@@ -52,8 +52,16 @@ spec:
       value: $(params.installation)
     - name: cluster-chart
       value: $(params.cluster-chart)
+    - name: cluster-app-chart-version
+      value: ""
+    - name: cluster-app-catalog
+      value: "cluster"
     - name: default-apps-chart
       value: $(params.default-apps-chart)
+    - name: default-apps-chart-version
+      value: ""
+    - name: default-apps-catalog
+      value: "cluster"
     taskRef:
       name: create-cluster-capi-pure
     workspaces:
