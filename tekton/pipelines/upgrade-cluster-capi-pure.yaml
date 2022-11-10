@@ -90,6 +90,8 @@ spec:
       value: "$(tasks.create-cluster.results.cluster-id)"
     - name: cluster-app-chart-version
       value: "$(tasks.calculate-versions.results.cluster-app-chart-version)"
+    - name: default-apps-chart-version
+      value: "$(tasks.calculate-versions.results.default-apps-chart-version)"
     - name: provider
       value: $(params.provider)
     - name: organization
