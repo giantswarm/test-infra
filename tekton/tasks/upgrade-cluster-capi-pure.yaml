@@ -26,6 +26,9 @@ spec:
     type: string
     default: cluster-test
     description: App catalog to use for the cluster app.
+  - name: default-apps-chart-version
+    type: string
+    description: Version for the default-apps app.
   steps:
   - name: upgrade-cluster
     image: quay.io/giantswarm/standup:3.2.0
@@ -37,13 +40,21 @@ spec:
 
       set -eo pipefail
       
-      echo "$(date): Upgrading cluster $(params.cluster-id) to $(params.cluster-app-chart-version)"
-      kubectl --kubeconfig /etc/kubeconfig/$(params.provider) patch apps -n org-$(params.organization) $(params.cluster-id) --type json -p '[{"op": "replace", "path": "/spec/version", "value": $(params.cluster-app-chart-version)}, {"op": "replace", "path": "/spec/catalog", "value": $(params.cluster-app-catalog)}]'
+      if [ -z "$(params.cluster-app-chart-version)" ]; then
+        appName="$(params.cluster-id)-default-apps"
+        appVersionToUpgradeTo="$(params.default-apps-chart-version)"
+      else
+        appName="$(params.cluster-id)"
+        appVersionToUpgradeTo="$(params.cluster-app-chart-version)"
+      fi
 
-      while [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o json | jq -r '.status.version'` != "$(params.cluster-app-chart-version)" ] || [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o json | jq -r '.status.release.status'` != "deployed" ]
+      echo "$(date): Upgrading '$appName' App to version '$appVersionToUpgradeTo'"
+      kubectl --kubeconfig /etc/kubeconfig/$(params.provider) patch apps -n org-$(params.organization) $appName --type json -p '[{"op": "replace", "path": "/spec/version", "value": "'${appVersionToUpgradeTo}'"}, {"op": "replace", "path": "/spec/catalog", "value": $(params.cluster-app-catalog)}]'
+
+      while [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $appName -o json | jq -r '.status.version'` != "$appVersionToUpgradeTo" ] || [ `kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $appName -o json | jq -r '.status.release.status'` != "deployed" ]
       do
-        echo "$(date): App for cluster '$(params.cluster-id)' still uses old version or has failed"
-        echo "$(date): Version: $(kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o jsonpath='{.status.version}')"
-        echo "$(date): Status: $(kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $(params.cluster-id) -o jsonpath='{.status.release.status}')"
+        echo "$(date): App '$appName' still uses old version or has failed"
+        echo "$(date): Version: $(kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $appName -o jsonpath='{.status.version}')"
+        echo "$(date): Status: $(kubectl --kubeconfig /etc/kubeconfig/$(params.provider) get apps -n org-$(params.organization) $appName -o jsonpath='{.status.release.status}')"
         sleep 10
       done
