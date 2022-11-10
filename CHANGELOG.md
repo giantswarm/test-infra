@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix capi upgrade test to actually upgrade default-apps app when running it from default-apps repo.
+
 ## [1.8.0] - 2022-11-07
 
 ### Changed
