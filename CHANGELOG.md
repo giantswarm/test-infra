@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Updated kubectl-gs to v2.29.0 which changes the format of the volumes for CAPG
+
 ## [1.8.1] - 2022-11-10
 
 ### Fixed
