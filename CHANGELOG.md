@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use 'alpine' to download suonobuoy plugin.
+
 ## [1.11.0] - 2023-01-12
+
+### Changed
+
+- Retry 5 times downloading sonobuoy plugin.
 
 ## [1.10.0] - 2023-01-11
 
