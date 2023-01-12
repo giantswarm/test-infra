@@ -3,7 +3,7 @@
 declare -A provider_installations
 provider_installations[aws]=gaia
 provider_installations[aws-china]=giraffe
-provider_installations[azure]=godsmack
+provider_installations[azure]=gremlin
 provider_installations[gcp]=gunther
 provider_installations[kvm]=gorgoth
 provider_installations[openstack]=gamma
