@@ -24,7 +24,7 @@ spec:
     default: "master"
   steps:
     - name: download-sonobuoy-plugin
-      image: busybox
+      image: alpine
       script: |
         #!/bin/sh
 
