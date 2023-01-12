@@ -28,7 +28,7 @@ spec:
       script: |
         #!/bin/sh
 
-        for i in 1 2 3 4 5; do
+        for i in $(seq 1 5); do
           wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/$(params.plugin-branch)/giantswarm-plugin.yaml
           success=$?
           if [ "$success" -eq "0" ]; then
