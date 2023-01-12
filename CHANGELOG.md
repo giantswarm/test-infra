@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.12.0] - 2023-01-12
+
 ### Changed
 
 - Use 'alpine' to download suonobuoy plugin.
@@ -154,7 +156,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/giantswarm/test-infra/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/giantswarm/test-infra/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/giantswarm/test-infra/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/giantswarm/test-infra/compare/v1.8.1...v1.9.0
