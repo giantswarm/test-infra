@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.0] - 2023-02-02
+
 ### Changed
 
 - Update kubectl-gs to v2.32.0 which uses objects for `CAPA` machine pools instead of arrays
@@ -160,7 +162,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.13.0...HEAD
+[1.13.0]: https://github.com/giantswarm/test-infra/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/giantswarm/test-infra/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/giantswarm/test-infra/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/giantswarm/test-infra/compare/v1.9.0...v1.10.0
