@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update kubectl-gs to v2.32.0 which uses objects for `CAPA` machine pools instead of arrays
+
 ## [1.12.0] - 2023-01-12
 
 ### Changed

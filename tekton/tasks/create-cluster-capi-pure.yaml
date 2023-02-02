@@ -41,7 +41,7 @@ spec:
     description: Organization that owns the cluster.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.29.5
+    image: quay.io/giantswarm/kubectl-gs:2.32.0
     env:
     - name: PROVIDER
       value: $(params.provider)
