@@ -31,7 +31,7 @@ spec:
     description: Version for the default-apps app.
   steps:
   - name: upgrade-cluster
-    image: quay.io/giantswarm/standup:3.4.1
+    image: quay.io/giantswarm/standup:3.4.2
     volumeMounts:
     - name: kubeconfig
       mountPath: /etc/kubeconfig
