@@ -33,12 +33,12 @@ spec:
     - -R
     - 1000:1000
     - /workspace
-    image: quay.io/giantswarm/standup:3.2.0
+    image: quay.io/giantswarm/standup:3.4.0
     securityContext:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: quay.io/giantswarm/standup:3.2.0
+    image: quay.io/giantswarm/standup:3.4.0
     env:
       - name: PIPELINE_NAME
         value: $(params.pipeline-name)

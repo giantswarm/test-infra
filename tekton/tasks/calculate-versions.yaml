@@ -46,12 +46,12 @@ spec:
     - -R
     - 1000:1000
     - /workspace/source-repo
-    image: quay.io/giantswarm/standup:3.2.0
+    image: quay.io/giantswarm/standup:3.4.0
     securityContext:
       runAsUser: 0
       runAsGroup: 0
   - name: calculate-inputs
-    image: quay.io/giantswarm/standup:3.2.0
+    image: quay.io/giantswarm/standup:3.4.0
     env:
     - name: SOURCE_REPO_NAME
       value: $(params.source-repo-name)
