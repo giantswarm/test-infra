@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.16.0] - 2023-03-15
+
 ### Changed
 
 - Bump standup to 3.4.2.
@@ -178,7 +180,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.15.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/giantswarm/test-infra/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/giantswarm/test-infra/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/giantswarm/test-infra/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/giantswarm/test-infra/compare/v1.12.0...v1.13.0
