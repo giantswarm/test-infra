@@ -20,7 +20,7 @@ spec:
     description: Organization that owns the cluster
   steps:
   - name: cleanup
-    image: quay.io/giantswarm/kubectl-gs:2.29.5
+    image: quay.io/giantswarm/kubectl-gs:2.34.0
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
