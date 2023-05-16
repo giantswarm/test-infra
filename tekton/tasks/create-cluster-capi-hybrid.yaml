@@ -111,12 +111,6 @@ spec:
     script: |
       #!/bin/sh
 
-      if echo $(params.release-id) | grep "v20.0.0"
-      then
-        echo "Release $(params.release-id) is a CAPI release"
-        exit 0
-      fi
-
       export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
       for i in $(seq 1 20); do
         cluster_id=$(cat $(workspaces.cluster.path)/cluster-id)
@@ -124,33 +118,6 @@ spec:
         success=$?
         if [ "$success" -eq "0" ]; then
           echo "${json}"| jq -r .data.kubeConfig | base64 -d >$(workspaces.cluster.path)/kubeconfig
-          break
-        fi
-        sleep 5
-      done
-      exit $success
-
-  - name: capi-get-kubeconfig
-    image: quay.io/giantswarm/clusterctl:0.4.2
-    volumeMounts:
-      - name: endpoints-config
-        mountPath: /etc/endpoints-config
-      - name: kubeconfig
-        mountPath: /etc/kubeconfig
-    script: |
-      #! /bin/sh
-
-      if [[ "$(params.release-id)" != "v20.0.0"* ]]
-      then
-        echo "Release $(params.release-id) is not a CAPI release"
-        exit 0
-      fi
-
-      export KUBECONFIG=/etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation)
-      for i in $(seq 1 20); do
-        clusterctl -n org-giantswarm get kubeconfig $(cat $(workspaces.cluster.path)/cluster-id) >$(workspaces.cluster.path)/kubeconfig
-        success=$?
-        if [ "$success" -eq "0" ]; then
           break
         fi
         sleep 5
