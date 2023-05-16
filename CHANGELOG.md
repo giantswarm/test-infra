@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Bump `kubect-gs` to `v2.34.0`.
+- Bump `kubectl-gs` to `v2.34.0`.
+- Make `create-cluster-capi-hybrid` work with vintage release v20.
+
+### Fixed
+
+- Fix kubeconfig generation script.
 
 ## [1.16.0] - 2023-03-15
 
