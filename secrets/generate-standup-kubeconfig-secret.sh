@@ -80,6 +80,8 @@ for service_account in "test-infra" "sonobuoy"; do
         --dry-run=client -o yaml \
         > "$script_dir/standup-kubeconfig-secret.yaml"
 
+      echo "Please apply $script_dir/standup-kubeconfig-secret.yaml to gorilla/rfjh2"
+
   else
     kubectl create secret generic $service_account-kubeconfig \
       -n test-workloads \
@@ -89,6 +91,8 @@ for service_account in "test-infra" "sonobuoy"; do
       --from-file=capa="$tmp_dir/capa-kubeconfig-$service_account" \
       --dry-run=client -o yaml \
       > "$script_dir/$service_account-kubeconfig-secret.yaml"
+
+      echo "Please apply $script_dir/$service_account-kubeconfig-secret.yaml to gorilla/rfjh2"
 
   fi
 
