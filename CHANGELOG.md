@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump `kubectl-gs` to `v2.37.0`.
+
 ## [1.17.0] - 2023-05-16
 
 ### Changed
