@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use bash script to create releases to avoid using old Release CR in `standup` and support `dependsOn` feature.
+
 ## [1.18.0] - 2023-05-17
 
 ### Changed

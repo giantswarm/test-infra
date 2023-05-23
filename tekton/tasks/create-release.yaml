@@ -38,7 +38,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: quay.io/giantswarm/standup:3.4.2
+    image: quay.io/giantswarm/kubectl-gs:2.37.0
     env:
       - name: PIPELINE_NAME
         value: $(params.pipeline-name)
@@ -49,11 +49,57 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      standup create release \
-      --config /etc/endpoints-config/config \
-      --kubeconfig /etc/kubeconfig \
-      --releases /workspace/releases \
-      --output $(workspaces.cluster.path) \
-      --pipeline "${PIPELINE_NAME}"
+      set -e
 
-      cat $(workspaces.cluster.path)/release-id > $(results.release-id.path)
+      apk add --no-cache git yq
+
+      cd /workspace/releases
+      git config --global --add safe.directory /workspace/releases
+
+      log () {
+        echo "$(date +'%F %T') - $@"
+      }
+
+      output="$(workspaces.cluster.path)/release-id"
+      provider="${PIPELINE_NAME}"
+      export KUBECONFIG="/etc/kubeconfig/${provider}"
+
+      log "Detecting release version to be tested from PR"
+
+      git fetch --unshallow origin master
+      base="$(git merge-base HEAD origin/master)"
+      line="$(git diff --name-status "${base}" --diff-filter=A --no-renames HEAD|grep release.yaml|head -n1|awk '{print $2}')"
+      release="$(echo "${line}"|cut -d"/" -f2)"
+
+      check="$(echo "${release}" | sed 's/v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+/ok/')"
+
+      if [ "${check}" != "ok" ]
+      then
+        log "Cannot detect release to be tested from git repo"
+        exit 1
+      fi
+
+      log "Found release to be tested: ${provider}/${release}"
+
+      new="$(echo "${release}-$(date +'%s')$(echo $RANDOM | md5sum | head -c 5)")"
+
+      log "Creating release ${new} using ${release} as source"
+
+      yaml="$(cat "${provider}/${release}/release.yaml" | yq -M ".metadata.name=\"${new}\"" | yq -M .metadata.labels.testing="\"true\"")"
+
+      echo "${yaml}" | kubectl apply -f -
+
+      echo "${new}" >$output
+
+      ready=""
+      while [ "${ready}" != "true" ]
+      do
+        log "Release is not ready yet (looking for .status.ready field to be 'ready', was '$ready')"
+        ready="$(kubectl get release $new -o yaml | yq .status.ready)"
+        sleep 10
+      done
+
+      log "Release is ready"
+
+      echo -n "${new}" > $(results.release-id.path)
+      echo "$provider"> $(workspaces.cluster.path)/installation
