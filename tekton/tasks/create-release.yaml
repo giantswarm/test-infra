@@ -61,22 +61,27 @@ spec:
       }
 
       output="$(workspaces.cluster.path)/release-id"
-      provider="${PIPELINE_NAME}"
-      export KUBECONFIG="/etc/kubeconfig/${provider}"
 
       log "Detecting release version to be tested from PR"
 
       git fetch --unshallow origin master
       base="$(git merge-base HEAD origin/master)"
       line="$(git diff --name-status "${base}" --diff-filter=A --no-renames HEAD|grep release.yaml|head -n1|awk '{print $2}')"
+      provider="$(echo "${line}"|cut -d"/" -f1)"
       release="$(echo "${line}"|cut -d"/" -f2)"
 
       check="$(echo "${release}" | sed 's/v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+/ok/')"
-
       if [ "${check}" != "ok" ]
       then
         log "Cannot detect release to be tested from git repo"
         exit 1
+      fi
+
+      check="$(echo "${provider}"  | sed 's/azure/ok/' | sed 's/aws/ok/')"
+      if [ "${check}" != "ok" ]
+      then
+        log "Invalid provider detected. Got '$provider', but only 'aws' and 'azure' are supported."
+        exit 2
       fi
 
       log "Found release to be tested: ${provider}/${release}"
@@ -84,6 +89,8 @@ spec:
       new="$(echo "${release}-$(date +'%s')$(echo $RANDOM | md5sum | head -c 5)")"
 
       log "Creating release ${new} using ${release} as source"
+
+      export KUBECONFIG="/etc/kubeconfig/${provider}"
 
       yaml="$(cat "${provider}/${release}/release.yaml" | yq -M ".metadata.name=\"${new}\"" | yq -M .metadata.labels.testing="\"true\"")"
 
