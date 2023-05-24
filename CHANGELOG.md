@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.19.1] - 2023-05-24
+
 ### Fixed
 
 - Detect provider from git diff in `create release`.
@@ -207,7 +209,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.19.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.19.1...HEAD
+[1.19.1]: https://github.com/giantswarm/test-infra/compare/v1.19.0...v1.19.1
 [1.19.0]: https://github.com/giantswarm/test-infra/compare/v1.18.0...v1.19.0
 [1.18.0]: https://github.com/giantswarm/test-infra/compare/v1.17.0...v1.18.0
 [1.17.0]: https://github.com/giantswarm/test-infra/compare/v1.16.0...v1.17.0
