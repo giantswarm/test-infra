@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Bump sonobuoy image to `quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm`.
 
+### Fixed
+
+- Ignore wip releases in `get-latest-release`.
+
 ## [1.19.1] - 2023-05-24
 
 ### Fixed
