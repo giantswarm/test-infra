@@ -26,6 +26,6 @@ spec:
         mountPath: /etc/kubeconfig
     script: |
       #! /bin/sh
-      LATEST_STABLE_RELEASE=$(kubectl --kubeconfig $(params.kubeconfig-path) get releases -o json | jq -r '[.items | sort_by(.metadata.name) | reverse[] | select(.metadata.name | test("v1[0-9]*\\.[0-9]*\\.[0-9]*$")) ][].metadata.name' | head -n1)
+      LATEST_STABLE_RELEASE=$(kubectl --kubeconfig $(params.kubeconfig-path) get releases -o json | jq -r '[.items | sort_by(.metadata.name) | reverse[] | select(.metadata.name | test("v1[0-9]*\\.[0-9]*\\.[0-9]*$")) | select(.spec.state != "wip") ][].metadata.name' | head -n1)
 
       echo -n ${LATEST_STABLE_RELEASE} > $(results.release-id.path)
