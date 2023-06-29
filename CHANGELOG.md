@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.21.0] - 2023-06-29
+
 ### Changed
 
 - Unified `azure`, `aws` and `aws-china` tests. They all use `sonobuoy-plugin` to run the tests.
@@ -232,7 +234,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.20.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.21.0...HEAD
+[1.21.0]: https://github.com/giantswarm/test-infra/compare/v1.20.0...v1.21.0
 [1.20.0]: https://github.com/giantswarm/test-infra/compare/v1.19.1...v1.20.0
 [1.19.1]: https://github.com/giantswarm/test-infra/compare/v1.19.0...v1.19.1
 [1.19.0]: https://github.com/giantswarm/test-infra/compare/v1.18.0...v1.19.0
