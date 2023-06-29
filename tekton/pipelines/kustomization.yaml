@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - aws-china.yaml
 - aws-china-upgrade.yaml
+- aws-upgrade.yaml
 - aws.yaml
 - azure-upgrade.yaml
 - azure.yaml
