@@ -40,7 +40,7 @@ spec:
       # Generate template for control plane.
       kubectl-gs template cluster \
         --kubeconfig /etc/kubeconfig/$(cat $(workspaces.cluster.path)/installation) \
-        --provider $(cat $(workspaces.cluster.path)/installation) \
+        --provider $(cat $(workspaces.cluster.path)/provider) \
         --release $(params.release-id) \
         --organization giantswarm \
         --description "e2e test" \
@@ -59,9 +59,13 @@ spec:
       then
         AZS="--availability-zones eu-central-1a"
       fi
+      if [ $(cat $(workspaces.cluster.path)/installation) == "aws-china" ]
+      then
+        AZS="--availability-zones cn-north-1a"
+      fi
 
       kubectl-gs template nodepool \
-        --provider $(cat $(workspaces.cluster.path)/installation) \
+        --provider $(cat $(workspaces.cluster.path)/provider) \
         --release $(params.release-id) \
         --organization giantswarm \
         --cluster-name "${cluster_id}" \

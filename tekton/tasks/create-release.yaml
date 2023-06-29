@@ -51,6 +51,8 @@ spec:
       #! /bin/sh
       set -e
 
+      echo "Pipeline Name: ${PIPELINE_NAME}"
+
       apk add --no-cache git yq
 
       cd /workspace/releases
@@ -90,7 +92,7 @@ spec:
 
       log "Creating release ${new} using ${release} as source"
 
-      export KUBECONFIG="/etc/kubeconfig/${provider}"
+      export KUBECONFIG="/etc/kubeconfig/${PIPELINE_NAME}"
 
       yaml="$(cat "${provider}/${release}/release.yaml" | yq -M ".metadata.name=\"${new}\"" | yq -M .metadata.labels.testing="\"true\"")"
 
@@ -109,4 +111,6 @@ spec:
       log "Release is ready"
 
       echo -n "${new}" > $(results.release-id.path)
-      echo "$provider"> $(workspaces.cluster.path)/installation
+
+      echo "${PIPELINE_NAME}"> $(workspaces.cluster.path)/installation
+      echo "${provider}"> $(workspaces.cluster.path)/provider

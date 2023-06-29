@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Unified `azure`, `aws` and `aws-china` tests. They all use `sonobuoy-plugin` to run the tests.
+
+### Added
+
+- Add `aws-upgrade` test to test upgrade using `sonobuoy-plugin`.
+- Add `aws-china-upgrade` test to test upgrade using `sonobuoy-plugin`.
+
+### Deleted
+
+- Delete `upgrade-to-this-azure-operator` unused test.
+
 ## [1.20.0] - 2023-06-27
 
 ### Changed
