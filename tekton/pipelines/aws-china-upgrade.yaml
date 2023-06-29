@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: aws-e2e
+  name: aws-china-upgrade
   namespace: test-workloads
 spec:
   resources:
@@ -24,16 +24,27 @@ spec:
       workspace: cluster
     resources:
       inputs:
-      - name: releases
-        resource: releases
+        - name: releases
+          resource: releases
+
+  - name: get-latest-release
+    runAfter: [create-release]
+    taskRef:
+      name: get-latest-release
+    params:
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/aws-china"
+    workspaces:
+      - name: cluster
+        workspace: cluster
 
   - name: create-cluster
-    runAfter: [create-release]
+    runAfter: [get-latest-release]
     taskRef:
       name: create-cluster-capi-hybrid
     params:
     - name: release-id
-      value: "$(tasks.create-release.results.release-id)"
+      value: "$(tasks.get-latest-release.results.release-id)"
     workspaces:
       - name: cluster
         workspace: cluster
@@ -47,28 +58,43 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: test-aws
+  - name: upgrade-cluster
     runAfter: [wait-for-ready]
+    taskRef:
+      name: upgrade-cluster
+    params:
+      - name: cluster-id
+        value: "$(tasks.create-cluster.results.cluster-id)"
+      - name: kubeconfig-path
+        value: "/etc/kubeconfig/aws-china"
+      - name: release-id
+        value: "$(tasks.create-release.results.release-id)"
+    workspaces:
+    - name: cluster
+      workspace: cluster
+
+  - name: test-aws-china
+    runAfter: [upgrade-cluster]
     taskRef:
       name: e2e
     params:
     - name: provider
       value: "aws"
     - name: kubeconfig-path
-      value: "/etc/kubeconfig/aws"
+      value: "/etc/kubeconfig/aws-china"
     - name: plugin-branch
-      value: "legacy"
+      value: "master"
     workspaces:
     - name: cluster
       workspace: cluster
 
   - name: manage-sonobuoy-results
-    runAfter: [test-aws]
+    runAfter: [test-aws-china]
     taskRef:
       name: manage-sonobuoy-results
     params:
       - name: kubeconfig-path
-        value: "/etc/kubeconfig/aws"
+        value: "/etc/kubeconfig/aws-china"
       - name: sonobuoy-namespace
         value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
     workspaces:
