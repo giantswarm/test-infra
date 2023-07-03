@@ -7,7 +7,6 @@ resources:
 - aws.yaml
 - azure-upgrade.yaml
 - azure.yaml
-- capz.yaml
 - cis.yaml
 - cncf.yaml
 - create-cluster-capi-pure.yaml
