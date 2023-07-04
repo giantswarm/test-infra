@@ -1,14 +1,14 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: cncf
+  name: e2e
   namespace: test-workloads
 spec:
   resources:
-  - name: releases
-    type: git
+    - name: releases
+      type: git
   workspaces:
-  - name: cluster
+    - name: cluster
   params:
     - name: PROW_JOB_ID
       type: string
@@ -41,8 +41,8 @@ spec:
     taskRef:
       name: create-release
     workspaces:
-    - name: cluster
-      workspace: cluster
+      - name: cluster
+        workspace: cluster
     resources:
       inputs:
       - name: releases
@@ -62,8 +62,8 @@ spec:
       - name: RELEASE
         value: "$(tasks.create-release.results.release)"
     workspaces:
-    - name: cluster
-      workspace: cluster
+      - name: cluster
+        workspace: cluster
 
   - name: wait-for-ready
     runAfter: [create-cluster]
@@ -77,47 +77,51 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: run-tests
+  - name: test
     runAfter: [wait-for-ready]
-    timeout: 5h0m0s
     taskRef:
-      name: cncf
+      name: e2e
     params:
+      - name: plugin-branch
+        value: "master"
       - name: PROVIDER
         value: "$(tasks.detect-test-env.results.provider)"
       - name: MC_KUBECONFIG
         value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
     workspaces:
-    - name: cluster
-      workspace: cluster
+      - name: cluster
+        workspace: cluster
 
   - name: manage-sonobuoy-results
-    runAfter: [run-tests]
+    runAfter: [test]
     taskRef:
       name: manage-sonobuoy-results
     params:
       - name: sonobuoy-namespace
         value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
       - name: kubeconfig
-        value: "$(workspaces.cluster.path)/kubeconfig"
+        value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
     workspaces:
       - name: cluster
         workspace: cluster
 
-  - name: upload-to-s3-bucket
-    runAfter: [manage-sonobuoy-results]
+  finally:
+  - name: upload-to-s3-bucket # executed only when tests fail
+    when:
+      - input: $(tasks.manage-sonobuoy-results.status)
+        operator: in
+        values: ["Failed"]
     taskRef:
       name: upload-to-s3-bucket
     params:
-    - name: prow-job-id
-      value: "$(params.PROW_JOB_ID)"
-    - name: file-to-upload
-      value: $(workspaces.cluster.path)/sonobuoy-results.tar
+      - name: prow-job-id
+        value: "$(params.PROW_JOB_ID)"
+      - name: file-to-upload
+        value: $(workspaces.cluster.path)/sonobuoy-results.tar
     workspaces:
-    - name: cluster
-      workspace: cluster
+      - name: cluster
+        workspace: cluster
 
-  finally:
   - name: cleanup
     taskRef:
       name: cleanup-capi-hybrid
@@ -125,5 +129,5 @@ spec:
       - name: MC_KUBECONFIG
         value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
     workspaces:
-    - name: cluster
-      workspace: cluster
+      - name: cluster
+        workspace: cluster

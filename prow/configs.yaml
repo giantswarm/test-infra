@@ -42,6 +42,7 @@ presubmits:
                 storage: 10Mi
     trigger: "/test cis"
     rerun_command: "/test cis"
+
   - name: cncf
     agent: tekton-pipeline
     max_concurrency: 3
@@ -67,92 +68,17 @@ presubmits:
                 storage: 10Mi
     trigger: "/test cncf"
     rerun_command: "/test cncf"
-  - name: aws
-    agent: tekton-pipeline
-    max_concurrency: 3
-    always_run: false
-    skip_report: false
-    pipeline_run_spec:
-      pipelineRef:
-        name: aws
-      serviceAccountName: test-runs
-      timeout: 5h0m0s
-      resources:
-        - name: releases
-          resourceRef:
-            name: PROW_IMPLICIT_GIT_REF
-      workspaces:
-        - name: cluster
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Mi
-    trigger: "/test aws$"
-    rerun_command: "/test aws"
-  - name: aws-china
-    agent: tekton-pipeline
-    max_concurrency: 3
-    always_run: false
-    skip_report: false
-    pipeline_run_spec:
-      pipelineRef:
-        name: aws-china
-      serviceAccountName: test-runs
-      timeout: 5h0m0s
-      resources:
-        - name: releases
-          resourceRef:
-            name: PROW_IMPLICIT_GIT_REF
-      workspaces:
-        - name: cluster
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Mi
-    trigger: "/test aws-china"
-    rerun_command: "/test aws-china"
-  - name: azure
-    agent: tekton-pipeline
-    max_concurrency: 5
-    always_run: false
-    skip_report: false
-    pipeline_run_spec:
-      pipelineRef:
-        name: azure
-      serviceAccountName: test-runs
-      timeout: 3h0m0s
-      resources:
-        - name: releases
-          resourceRef:
-            name: PROW_IMPLICIT_GIT_REF
-      workspaces:
-        - name: cluster
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Mi
-    trigger: "/test azure$"
-    rerun_command: "/test azure"
 
-  - name: capz
+  - name: e2e
     agent: tekton-pipeline
-    max_concurrency: 5
+    max_concurrency: 3
     always_run: false
     skip_report: false
     pipeline_run_spec:
       pipelineRef:
-        name: capz
+        name: e2e
       serviceAccountName: test-runs
-      timeout: 3h0m0s
+      timeout: 5h0m0s
       resources:
         - name: releases
           resourceRef:
@@ -166,8 +92,37 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test capz"
-    rerun_command: "/test capz"
+    trigger: "/test aws|azure|e2e$"
+    rerun_command: "/test e2e"
+
+  - name: e2e-china
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: e2e
+      serviceAccountName: test-runs
+      timeout: 5h0m0s
+      resources:
+        - name: releases
+          resourceRef:
+            name: PROW_IMPLICIT_GIT_REF
+      params:
+        - name: REGION
+          value: china
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test aws-china|e2e-china"
+    rerun_command: "/test e2e-china"
 
   - name: azure-upgrade
     agent: tekton-pipeline
@@ -246,105 +201,6 @@ presubmits:
                   storage: 10Mi
     trigger: "/test aws-china-upgrade$"
     rerun_command: "/test aws-china-upgrade"
-
-  giantswarm/prometheus-meta-operator:
-  - name: heartbeat
-    agent: tekton-pipeline
-    max_concurrency: 1
-    always_run: false
-    skip_report: false
-    pipeline_run_spec:
-      pipelineRef:
-        name: heartbeat
-      serviceAccountName: test-runs
-      timeout: 3h0m0s
-      workspaces:
-        - name: cluster
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Mi
-    trigger: "/test heartbeat"
-    rerun_command: "/test heartbeat"
-
-  giantswarm/cluster-openstack:
-  - name: create
-    agent: tekton-pipeline
-    max_concurrency: 1
-    always_run: false
-    skip_report: false
-    pipeline_run_spec:
-      pipelineRef:
-        name: create-cluster-capi-pure
-      serviceAccountName: test-runs
-      timeout: 3h0m0s
-      params:
-      - name: source-repo-name
-        value: cluster-openstack
-      - name: provider
-        value: openstack
-      - name: installation
-        value: gamma
-      - name: cluster-chart
-        value: cluster-openstack
-      - name: default-apps-chart
-        value: default-apps-openstack
-      resources:
-      - name: source-repo
-        resourceRef:
-          name: PROW_IMPLICIT_GIT_REF
-      workspaces:
-      - name: cluster
-        volumeClaimTemplate:
-          spec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 10Mi
-    trigger: "/test create(\\s|$)"
-    rerun_command: "/test create"
-
-  giantswarm/default-apps-openstack:
-  - name: create
-    agent: tekton-pipeline
-    max_concurrency: 1
-    always_run: false
-    skip_report: false
-    pipeline_run_spec:
-      pipelineRef:
-        name: create-cluster-capi-pure
-      serviceAccountName: test-runs
-      timeout: 3h0m0s
-      params:
-      - name: source-repo-name
-        value: default-apps-openstack
-      - name: provider
-        value: openstack
-      - name: installation
-        value: gamma
-      - name: cluster-chart
-        value: cluster-openstack
-      - name: default-apps-chart
-        value: default-apps-openstack
-      resources:
-      - name: source-repo
-        resourceRef:
-          name: PROW_IMPLICIT_GIT_REF
-      workspaces:
-      - name: cluster
-        volumeClaimTemplate:
-          spec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 10Mi
-    trigger: "/test create(\\s|$)"
-    rerun_command: "/test create"
 
   giantswarm/cluster-aws:
   - name: create

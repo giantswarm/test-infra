@@ -7,12 +7,35 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
+  params:
+  - name: PROVIDER
+    type: string
+    default: ""
+    description: Name of the provider (either 'aws' or 'azure')
+  - name: REGION
+    type: string
+    default: "default"
+    description: Name of the AWS provider (can be 'default', meaning frankfurt, or 'china')
+  - name: MC_KUBECONFIG
+    type: string
+    description: "Path of kubeconfig file to access test management cluster"
   steps:
   - name: run-tests
     image: quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
     env:
-      - name: "KUBECONFIG_PATH"
+      - name: PROVIDER
+        value: $(params.PROVIDER)
+      - name: REGION
+        value: $(params.REGION)
+      - name: MC_KUBECONFIG
+        value: $(params.MC_KUBECONFIG)
+      - name: "WC_KUBECONFIG"
         value: $(workspaces.cluster.path)/kubeconfig
     script: |
       #! /bin/sh
-      /sonobuoy run --kubeconfig "${KUBECONFIG_PATH}" --mode=certified-conformance --wait
+      echo "Provider: '${PROVIDER}'"
+      echo "Region: '${REGION}'"
+      echo "MC Kubeconfig path: '${MC_KUBECONFIG}'"
+      echo "WC Kubeconfig path: '${WC_KUBECONFIG}'"
+
+      /sonobuoy run --kubeconfig "${WC_KUBECONFIG}" --mode=certified-conformance --wait

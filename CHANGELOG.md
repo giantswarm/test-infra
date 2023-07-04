@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use one single tekton pipeline and customize behaviour using params for `aws`, `azure` and `aws-china` tests.
+
+### Removed
+
+- Remove `capz` test.
+
 ## [1.21.0] - 2023-06-29
 
 ### Changed
@@ -18,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `aws-upgrade` test to test upgrade using `sonobuoy-plugin`.
 - Add `aws-china-upgrade` test to test upgrade using `sonobuoy-plugin`.
 
-### Deleted
+### Removed
 
 - Delete `upgrade-to-this-azure-operator` unused test.
 
