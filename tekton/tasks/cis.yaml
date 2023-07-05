@@ -11,12 +11,13 @@ spec:
   - name: run-tests
     image: quay.io/giantswarm/sonobuoy:v0.56.7-alpine-giantswarm
     env:
-      - name: "KUBECONFIG_PATH"
-        value: $(workspaces.cluster.path)/kubeconfig
+      - name: WC_KUBECONFIG
+        value: "$(workspaces.cluster.path)/kubeconfig"
     script: |
       #! /bin/sh
+
       /sonobuoy run \
-        --kubeconfig "${KUBECONFIG_PATH}" \
+        --kubeconfig "${WC_KUBECONFIG}" \
         --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml \
         --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml \
         --plugin-env kube-bench-master.KUBERNETES_VERSION=1.19 --plugin-env kube-bench-node.KUBERNETES_VERSION=1.19 \

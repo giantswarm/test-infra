@@ -77,6 +77,9 @@ spec:
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
+    params:
+      - name: PROVIDER
+        value: "$(params.provider)"
     workspaces:
     - name: cluster
       workspace: cluster
@@ -105,6 +108,9 @@ spec:
     timeout: 1h0m0s
     taskRef:
       name: wait-for-ready
+    params:
+      - name: PROVIDER
+        value: "$(params.provider)"
     workspaces:
       - name: cluster
         workspace: cluster

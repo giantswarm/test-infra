@@ -5,14 +5,23 @@ metadata:
   namespace: test-workloads
 spec:
   params:
-    - name: pipeline-name
+    - name: PROVIDER
       type: string
-      default: "generic"
-      description: Name of the pipeline running this task.
+      default: ""
+      description: Name of the provider (either 'aws' or 'azure')
+    - name: MC_KUBECONFIG
+      type: string
+      description: "Path of kubeconfig file to access test management cluster"
+    - name: RELEASE
+      type: string
+      description: "Name of the legacy GS release (example: 19.1.0)"
   resources:
     inputs:
     - name: releases
       type: git
+  results:
+  - name: release
+    description: ID of the temporary release used in this test
   volumes:
   - name: endpoints-config
     secret:
@@ -23,9 +32,6 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
-  results:
-  - name: release-id
-    description: The ID of the created release.
   steps:
   - name: chown-releases
     command:
@@ -40,8 +46,12 @@ spec:
   - name: create-release
     image: quay.io/giantswarm/kubectl-gs:2.37.0
     env:
-      - name: PIPELINE_NAME
-        value: $(params.pipeline-name)
+      - name: PROVIDER
+        value: $(params.PROVIDER)
+      - name: KUBECONFIG
+        value: $(params.MC_KUBECONFIG)
+      - name: RELEASE
+        value: $(params.RELEASE)
     volumeMounts:
       - name: endpoints-config
         mountPath: /etc/endpoints-config
@@ -51,66 +61,34 @@ spec:
       #! /bin/sh
       set -e
 
-      echo "Pipeline Name: ${PIPELINE_NAME}"
-
-      apk add --no-cache git yq
-
-      cd /workspace/releases
-      git config --global --add safe.directory /workspace/releases
-
       log () {
         echo "$(date +'%F %T') - $@"
       }
 
-      output="$(workspaces.cluster.path)/release-id"
+      echo "Provider: '${PROVIDER}'"
+      echo "MC Kubeconfig path: '${KUBECONFIG}'"
+      echo "RELEASE: '${RELEASE}'"
 
-      log "Detecting release version to be tested from PR"
+      apk add --no-cache git yq
 
-      git fetch --unshallow origin master
-      base="$(git merge-base HEAD origin/master)"
-      line="$(git diff --name-status "${base}" --diff-filter=A --no-renames HEAD|grep release.yaml|head -n1|awk '{print $2}')"
-      provider="$(echo "${line}"|cut -d"/" -f1)"
-      release="$(echo "${line}"|cut -d"/" -f2)"
+      cd /workspace/releases
 
-      check="$(echo "${release}" | sed 's/v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+/ok/')"
-      if [ "${check}" != "ok" ]
-      then
-        log "Cannot detect release to be tested from git repo"
-        exit 1
-      fi
+      new="$(echo "${RELEASE}-$(date +'%s')$(echo $RANDOM | md5sum | head -c 5)")"
 
-      check="$(echo "${provider}"  | sed 's/azure/ok/' | sed 's/aws/ok/')"
-      if [ "${check}" != "ok" ]
-      then
-        log "Invalid provider detected. Got '$provider', but only 'aws' and 'azure' are supported."
-        exit 2
-      fi
+      log "Creating release ${new} using ${RELEASE} as source"
 
-      log "Found release to be tested: ${provider}/${release}"
-
-      new="$(echo "${release}-$(date +'%s')$(echo $RANDOM | md5sum | head -c 5)")"
-
-      log "Creating release ${new} using ${release} as source"
-
-      export KUBECONFIG="/etc/kubeconfig/${PIPELINE_NAME}"
-
-      yaml="$(cat "${provider}/${release}/release.yaml" | yq -M ".metadata.name=\"${new}\"" | yq -M .metadata.labels.testing="\"true\"")"
+      yaml="$(cat "${PROVIDER}/${RELEASE}/release.yaml" | yq -M ".metadata.name=\"${new}\"" | yq -M .metadata.labels.testing="\"true\"")"
 
       echo "${yaml}" | kubectl apply -f -
 
-      echo "${new}" >$output
+      echo -n "${new}" >$(results.release.path)
 
       ready=""
       while [ "${ready}" != "true" ]
       do
-        log "Release is not ready yet (looking for .status.ready field to be 'ready', was '$ready')"
+        log "Release is not ready yet (looking for .status.ready field to be 'true', was '$ready')"
         ready="$(kubectl get release $new -o yaml | yq .status.ready)"
         sleep 10
       done
 
       log "Release is ready"
-
-      echo -n "${new}" > $(results.release-id.path)
-
-      echo "${PIPELINE_NAME}"> $(workspaces.cluster.path)/installation
-      echo "${provider}"> $(workspaces.cluster.path)/provider

@@ -8,12 +8,6 @@ spec:
     - name: cluster
       description: Cluster information is stored here.
   params:
-  - name: provider
-    type: string
-    description: Provider where workload cluster will be created.
-  - name: kubeconfig-path
-    type: string
-    description: Management Cluster kubeconfig path.
   - name: test-deletion
     type: string
     description: Whether or not test deletion of clusters.
@@ -22,6 +16,13 @@ spec:
     type: string
     description: Branch of the plugin repository to use.
     default: "master"
+  - name: PROVIDER
+    type: string
+    default: ""
+    description: Name of the provider (either 'aws' or 'azure')
+  - name: MC_KUBECONFIG
+    type: string
+    description: "Path of kubeconfig file to access test management cluster"
   steps:
     - name: download-sonobuoy-plugin
       image: alpine
@@ -41,24 +42,24 @@ spec:
     - name: run-tests
       image: quay.io/giantswarm/sonobuoy:v0.56.7-alpine-giantswarm
       env:
-        - name: TC_KUBECONFIG_PATH
-          value: $(workspaces.cluster.path)/kubeconfig
-        - name: KUBECONFIG_PATH
-          value: $(params.kubeconfig-path)
-        - name: CLUSTER_ID_PATH
-          value: $(workspaces.cluster.path)/cluster-id
         - name: PROVIDER
-          value: $(params.provider)
+          value: $(params.PROVIDER)
+        - name: MC_KUBECONFIG
+          value: $(params.MC_KUBECONFIG)
+        - name: WC_KUBECONFIG
+          value: "$(workspaces.cluster.path)/kubeconfig"
         - name: TEST_DELETION
           value: $(params.test-deletion)
+        - name: CLUSTER_ID_PATH
+          value: $(workspaces.cluster.path)/cluster-id
       script: |
         #! /bin/sh
         /sonobuoy run \
-            --kubeconfig "${KUBECONFIG_PATH}" \
+            --kubeconfig "${MC_KUBECONFIG}" \
             --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
             --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml \
-            --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${TC_KUBECONFIG_PATH}")" \
-            --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${KUBECONFIG_PATH}")" \
+            --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${WC_KUBECONFIG}")" \
+            --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${MC_KUBECONFIG}")" \
             --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")" \
             --plugin-env giantswarm.PROVIDER="${PROVIDER}" \
             --plugin-env giantswarm.TEST_DELETION="${TEST_DELETION}" \

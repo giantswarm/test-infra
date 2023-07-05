@@ -1,0 +1,95 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: detect-test-env
+  namespace: test-workloads
+spec:
+  workspaces:
+  - name: cluster
+    description: Cluster information is stored here.
+  params:
+    - name: REGION
+      type: string
+      default: "default"
+  resources:
+    inputs:
+    - name: releases
+      type: git
+  results:
+  - name: provider
+    description: The name of the provider being tested, either 'aws' or 'azure'
+  - name: region
+    description: The region to run the test on, either 'default' or 'china' (AWS only).
+  - name: mc-kubeconfig
+    description: The path of the mc kubeconfig
+  - name: release
+    description: The legacy GS release as detected from the PR changes.
+  steps:
+  - name: chown-releases
+    command:
+    - chown
+    - -R
+    - 1000:1000
+    - /workspace/releases
+    image: quay.io/giantswarm/standup:3.4.2
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+  - name: calculate-inputs
+    image: quay.io/giantswarm/kubectl-gs:2.37.0
+    env:
+    - name: REGION
+      value: $(params.REGION)
+    script: |
+      #! /bin/sh
+
+      set -e
+
+      apk add --no-cache git yq
+
+      cd /workspace/releases
+      git config --global --add safe.directory /workspace/releases
+
+      log () {
+        echo "$(date +'%F %T') - $@"
+      }
+
+      log "Detecting provider and release version to be tested from PR"
+
+      git fetch --unshallow origin master
+      base="$(git merge-base HEAD origin/master)"
+      line="$(git diff --name-status "${base}" --diff-filter=A --no-renames HEAD|grep release.yaml|head -n1|awk '{print $2}')"
+      provider="$(echo "${line}"|cut -d"/" -f1)"
+      release="$(echo "${line}"|cut -d"/" -f2)"
+
+      check="$(echo "${release}" | sed 's/v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+/ok/')"
+      if [ "${check}" != "ok" ]
+      then
+        log "Cannot detect release to be tested from git repo"
+        exit 1
+      fi
+
+      check="$(echo "${provider}"  | sed 's/azure/ok/' | sed 's/aws/ok/')"
+      if [ "${check}" != "ok" ]
+      then
+        log "Invalid provider detected. Got '$provider', but only 'aws' and 'azure' are supported."
+        exit 2
+      fi
+
+      region=""
+      kubeconfig="/etc/kubeconfig/${provider}"
+      if [ "${provider}" == "aws" ] && [ "${REGION}" == "china" ]
+      then
+        region="china"
+        kubeconfig="/etc/kubeconfig/aws-china"
+      fi
+
+      echo "Provider: '${provider}'"
+      echo "Region: '${region}'"
+      echo "MC Kubeconfig path: '${kubeconfig}'"
+      echo "Release under test: '${release}'"
+
+      echo -n "${provider}" > $(results.provider.path)
+      echo -n "${region}" > $(results.region.path)
+      echo -n "${kubeconfig}" > $(results.mc-kubeconfig.path)
+      echo -n "${release}" > $(results.release.path)

@@ -93,7 +93,7 @@ spec:
     taskRef:
       name: manage-sonobuoy-results
     params:
-      - name: kubeconfig-path
+      - name: kubeconfig
         value: "/etc/kubeconfig/aws"
       - name: sonobuoy-namespace
         value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"

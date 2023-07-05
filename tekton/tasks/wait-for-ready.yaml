@@ -7,12 +7,23 @@ spec:
   workspaces:
   - name: cluster
     description: Cluster information is stored here.
+  params:
+  - name: PROVIDER
+    type: string
+    default: ""
+    description: Name of the provider (either 'aws' or 'azure')
   steps:
   - name: wait-for-ready
     image: quay.io/giantswarm/standup:3.4.2
+    env:
+      - name: PROVIDER
+        value: $(params.PROVIDER)
+      - name: WC_KUBECONFIG
+        value: "$(workspaces.cluster.path)/kubeconfig"
     script: |
       #! /bin/sh
+
       standup wait \
-        --kubeconfig $(workspaces.cluster.path)/kubeconfig \
-        --provider $(cat $(workspaces.cluster.path)/provider) \
+        --kubeconfig "${WC_KUBECONFIG}" \
+        --provider "${PROVIDER}" \
         --nodes 4
