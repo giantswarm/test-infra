@@ -96,8 +96,6 @@ spec:
     taskRef:
       name: manage-sonobuoy-results
     params:
-      - name: sonobuoy-namespace
-        value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
       - name: kubeconfig
         value: "$(workspaces.cluster.path)/kubeconfig"
     workspaces:
