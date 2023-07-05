@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.0] - 2023-07-05
+
 ### Changed
 
 - Use one single tekton pipeline and customize behaviour using params for `aws`, `azure` and `aws-china` tests.
@@ -242,7 +244,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.21.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.22.0...HEAD
+[1.22.0]: https://github.com/giantswarm/test-infra/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/giantswarm/test-infra/compare/v1.20.0...v1.21.0
 [1.20.0]: https://github.com/giantswarm/test-infra/compare/v1.19.1...v1.20.0
 [1.19.1]: https://github.com/giantswarm/test-infra/compare/v1.19.0...v1.19.1
