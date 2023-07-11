@@ -12,54 +12,86 @@ spec:
   - name: cluster
     description: Cluster information is stored here.
   params:
-  - name: cluster-id
+  - name: MC_KUBECONFIG
     type: string
-    description: Cluster ID for the cluster that will be upgraded.
-  - name: kubeconfig-path
+    description: "Path of kubeconfig file to access test management cluster"
+  - name: RELEASE
     type: string
-    description: Kubeconfig path for the cluster where sonobuoy will run.
-  - name: release-id
-    type: string
-    description: Release ID that the cluster will be upgraded to.
+    description: Release ID to use when creating the cluster.
   steps:
   - name: upgrade-cluster
     image: quay.io/giantswarm/standup:3.4.2
     volumeMounts:
     - name: kubeconfig
       mountPath: /etc/kubeconfig
+    env:
+    - name: KUBECONFIG
+      value: $(params.MC_KUBECONFIG)
+    - name: CLUSTER_ID_PATH
+      value: $(workspaces.cluster.path)/cluster-id
+    - name: RELEASE
+      value: $(params.RELEASE)
+    - name: WC_KUBECONFIG
+      value: "$(workspaces.cluster.path)/kubeconfig"
     script: |
       #! /bin/sh
 
       set -eo pipefail
 
-      CLUSTER_NAMESPACE=$(kubectl --kubeconfig $(params.kubeconfig-path) get clusters -A | grep $(params.cluster-id) | awk '{print $1}')
+      CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")"
 
-      echo "$(date): Upgrading cluster $(params.cluster-id) to $(params.release-id)"
-      RELEASE_ID="$(params.release-id)"
-      # Remove initial "v" from RELEASE_ID
-      release="$(echo "${RELEASE_ID#"v"}")"
+      CLUSTER_NAMESPACE=$(kubectl get clusters -A | grep ${CLUSTER_ID} | awk '{print $1}')
 
-      # Wait for the Cluster Creating condition to be false
-      while kubectl --kubeconfig $(params.kubeconfig-path) get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Creating" and .status=="True")'>/dev/null
-      do
-        echo "$(date): Cluster '$(params.cluster-id)' still has Creating condition set to True"
-        sleep 10
-      done
+      echo "$(date): Upgrading cluster ${CLUSTER_ID} to ${RELEASE}"
+      # Remove initial "v" from RELEASE
+      release="$(echo "${RELEASE#"v"}")"
+
+      kubectl_retry() {
+        set +e
+        for i in 1 2 3 4 5; do
+          kubectl $@ && break
+          echo "Command 'kubectl $@' failed, trying again in 60 seconds"
+          sleep 1
+        done
+        set -e
+      }
+
+      # label all worker nodes with "old=true" to be able to detect when all nodes have been rolled.
+      kubectl_retry --kubeconfig ${WC_KUBECONFIG} label no -l node-role.kubernetes.io/worker="" old=true
+
+      total="$(kubectl --kubeconfig ${WC_KUBECONFIG} get no -l node-role.kubernetes.io/worker="" -o json |jq '.items |length')"
 
       # Update cluster label to trigger upgrade
-      kubectl --kubeconfig $(params.kubeconfig-path) -n${CLUSTER_NAMESPACE} patch cluster/$(params.cluster-id) -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge
-
-      # Wait for the operator to pick up the change and start upgrading
-      while ! kubectl --kubeconfig $(params.kubeconfig-path) get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="True")'>/dev/null
+      # Cluster conditions might not be clear yet, so we retry a few times
+      set +e
+      for i in $(seq 1 10)
       do
-        echo "$(date): Cluster '$(params.cluster-id)' is not Upgrading yet"
-        sleep 10
+        kubectl -n${CLUSTER_NAMESPACE} patch cluster/${CLUSTER_ID} -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge && break
+        echo "Error triggering the upgrade, retrying in 5 minutes"
+        sleep 300
       done
 
-      # Wait for the upgrade to finish
-      while ! kubectl --kubeconfig $(params.kubeconfig-path) get clusters -n${CLUSTER_NAMESPACE} $(params.cluster-id) -o json | jq -e '.status.conditions[] | select(.type=="Upgrading" and .status=="False")'>/dev/null
-      do
-        echo "$(date): Cluster $(params.cluster-id) is still upgrading"
-        sleep 10
+      while : ; do
+        outdated="$(kubectl --kubeconfig ${WC_KUBECONFIG} get no -l old==true -o json)"
+
+        if [ $? -ne 0 ]
+        then
+          echo "Unable to connect to kubernetes API, waiting"
+          sleep 10
+          continue
+        fi
+
+        outdated=$(echo "${outdated}" | jq '.items |length')
+
+        echo "${outdated}/${total} worker nodes are pending update/rolling"
+
+        if [ "${outdated}" -gt 0 ]
+        then
+          sleep 10
+        else
+          break
+        fi
       done
+
+      echo "Upgrade completed"
 
