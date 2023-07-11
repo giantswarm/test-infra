@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use one single tekton pipeline and customize behaviour using params for `aws`, `azure` and `aws-china` tests.
+- Use one single tekton pipeline and customize behaviour using params for `aws-upgrade`, `azure-upgrade` and `aws-china-upgrade` tests.
 
 ### Removed
 

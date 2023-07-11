@@ -12,7 +12,7 @@ spec:
   - name: cluster
     description: Cluster information is stored here.
   params:
-  - name: kubeconfig-path
+  - name: MC_KUBECONFIG
     type: string
     description: Kubeconfig path for the Management Cluster containing releases.
   results:
@@ -24,8 +24,11 @@ spec:
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
+    env:
+      - name: KUBECONFIG
+        value: $(params.MC_KUBECONFIG)
     script: |
       #! /bin/sh
-      LATEST_STABLE_RELEASE=$(kubectl --kubeconfig $(params.kubeconfig-path) get releases -o json | jq -r '[.items | sort_by(.metadata.name) | reverse[] | select(.metadata.name | test("v1[0-9]*\\.[0-9]*\\.[0-9]*$")) | select(.spec.state != "wip") ][].metadata.name' | head -n1)
+      LATEST_STABLE_RELEASE=$(kubectl get releases -o json | jq -r '[.items | sort_by(.metadata.name) | reverse[] | select(.metadata.name | test("v1[0-9]*\\.[0-9]*\\.[0-9]*$")) | select(.spec.state != "wip") ][].metadata.name' | head -n1)
 
       echo -n ${LATEST_STABLE_RELEASE} > $(results.release-id.path)

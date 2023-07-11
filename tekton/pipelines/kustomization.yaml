@@ -1,9 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- aws-china-upgrade.yaml
-- aws-upgrade.yaml
-- azure-upgrade.yaml
+- upgrade.yaml
 - cis.yaml
 - cncf.yaml
 - create-cluster-capi-pure.yaml

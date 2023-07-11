@@ -124,14 +124,14 @@ presubmits:
     trigger: "/test aws-china|e2e-china"
     rerun_command: "/test e2e-china"
 
-  - name: azure-upgrade
+  - name: upgrade
     agent: tekton-pipeline
     max_concurrency: 5
     always_run: false
     skip_report: false
     pipeline_run_spec:
       pipelineRef:
-        name: azure-upgrade
+        name: upgrade
       serviceAccountName: test-runs
       timeout: 3h0m0s
       resources:
@@ -147,23 +147,26 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test azure-upgrade$"
-    rerun_command: "/test azure-upgrade"
+    trigger: "/test upgrade$"
+    rerun_command: "/test upgrade"
 
-  - name: aws-upgrade
+  - name: upgrade-china
     agent: tekton-pipeline
     max_concurrency: 5
     always_run: false
     skip_report: false
     pipeline_run_spec:
       pipelineRef:
-        name: aws-upgrade
+        name: upgrade
       serviceAccountName: test-runs
       timeout: 3h0m0s
       resources:
         - name: releases
           resourceRef:
             name: PROW_IMPLICIT_GIT_REF
+      params:
+        - name: REGION
+          value: china
       workspaces:
         - name: cluster
           volumeClaimTemplate:
@@ -173,34 +176,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test aws-upgrade$"
-    rerun_command: "/test aws-upgrade"
-
-  - name: aws-china-upgrade
-    agent: tekton-pipeline
-    max_concurrency: 5
-    always_run: false
-    skip_report: false
-    pipeline_run_spec:
-      pipelineRef:
-        name: aws-china-upgrade
-      serviceAccountName: test-runs
-      timeout: 3h0m0s
-      resources:
-        - name: releases
-          resourceRef:
-            name: PROW_IMPLICIT_GIT_REF
-      workspaces:
-        - name: cluster
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Mi
-    trigger: "/test aws-china-upgrade$"
-    rerun_command: "/test aws-china-upgrade"
+    trigger: "/test upgrade-china$"
+    rerun_command: "/test upgrade-china"
 
   giantswarm/cluster-aws:
   - name: create
