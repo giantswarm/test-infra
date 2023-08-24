@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Remove prow configuration for CAPI repositories, as they will use the new tekton infra.
+
 ## [1.23.0] - 2023-07-11
 
 ### Changed
