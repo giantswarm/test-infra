@@ -168,8 +168,6 @@ presubmits:
           resourceRef:
             name: PROW_IMPLICIT_GIT_REF
       params:
-        - name: REGION
-          value: china
         - name: CLUSTER_FLAVOUR
           value: eni
       workspaces:
