@@ -4,6 +4,4 @@ resources:
 - upgrade.yaml
 - cis.yaml
 - cncf.yaml
-- create-cluster-capi-pure.yaml
 - e2e.yaml
-- upgrade-cluster-capi-pure.yaml
