@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Remove prow configuration for CAPI repositories, as they will use the new tekton infra.
+- Remove 'create-cluster-capi-pure' and 'upgrade-cluster-capi-pure' pipelines and unused tasks.
 
 ## [1.23.0] - 2023-07-11
 
