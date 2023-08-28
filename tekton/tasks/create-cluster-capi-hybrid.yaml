@@ -26,6 +26,10 @@ spec:
   - name: MC_KUBECONFIG
     type: string
     description: "Path of kubeconfig file to access test management cluster"
+  - name: CLUSTER_FLAVOUR
+    type: string
+    default: "default"
+    description: The cluster flavour. Either 'default' or 'eni' (only used in AWS).
   results:
   - name: cluster-id
     description: The ID of the created cluster.
@@ -41,6 +45,8 @@ spec:
         value: $(params.MC_KUBECONFIG)
       - name: RELEASE
         value: $(params.RELEASE)
+      - name: CLUSTER_FLAVOUR
+        value: $(params.CLUSTER_FLAVOUR)
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
@@ -53,6 +59,10 @@ spec:
       echo "Region: '${REGION}'"
       echo "MC Kubeconfig path: '${KUBECONFIG}'"
       echo "Release: '${RELEASE}'"
+      echo "Flavour: '${CLUSTER_FLAVOUR}'
+
+      echo "WIP"
+      exit 1
 
       # Generate template for control plane.
       kubectl-gs template cluster \
