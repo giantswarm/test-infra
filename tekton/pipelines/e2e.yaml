@@ -53,7 +53,7 @@ spec:
 #        resource: releases
 
   - name: create-cluster
-    runAfter: [create-release]
+#    runAfter: [create-release]
     taskRef:
       name: create-cluster-capi-hybrid
     params:
