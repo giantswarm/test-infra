@@ -59,7 +59,7 @@ spec:
       echo "Region: '${REGION}'"
       echo "MC Kubeconfig path: '${KUBECONFIG}'"
       echo "Release: '${RELEASE}'"
-      echo "Flavour: '${CLUSTER_FLAVOUR}'
+      echo "Flavour: '${CLUSTER_FLAVOUR}'"
 
       echo "WIP"
       exit 1
