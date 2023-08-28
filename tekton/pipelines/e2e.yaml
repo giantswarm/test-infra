@@ -34,26 +34,26 @@ spec:
       inputs:
       - name: releases
         resource: releases
-#  - name: create-release
-#    params:
-#      - name: PROVIDER
-#        value: "$(tasks.detect-test-env.results.provider)"
-#      - name: MC_KUBECONFIG
-#        value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
-#      - name: RELEASE
-#        value: "$(tasks.detect-test-env.results.release)"
-#    taskRef:
-#      name: create-release
-#    workspaces:
-#      - name: cluster
-#        workspace: cluster
-#    resources:
-#      inputs:
-#      - name: releases
-#        resource: releases
+  - name: create-release
+    params:
+      - name: PROVIDER
+        value: "$(tasks.detect-test-env.results.provider)"
+      - name: MC_KUBECONFIG
+        value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
+      - name: RELEASE
+        value: "$(tasks.detect-test-env.results.release)"
+    taskRef:
+      name: create-release
+    workspaces:
+      - name: cluster
+        workspace: cluster
+    resources:
+      inputs:
+      - name: releases
+        resource: releases
 
   - name: create-cluster
-#    runAfter: [create-release]
+    runAfter: [create-release]
     taskRef:
       name: create-cluster-capi-hybrid
     params:
@@ -64,8 +64,7 @@ spec:
       - name: MC_KUBECONFIG
         value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
       - name: RELEASE
-      #  value: "$(tasks.create-release.results.release)"
-        value: "v19.0.1"
+        value: "$(tasks.create-release.results.release)"
       - name: CLUSTER_FLAVOUR
         value: "$(params.CLUSTER_FLAVOUR)"
     workspaces:

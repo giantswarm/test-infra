@@ -61,9 +61,6 @@ spec:
       echo "Release: '${RELEASE}'"
       echo "Flavour: '${CLUSTER_FLAVOUR}'"
 
-      echo "WIP"
-      exit 1
-
       # Generate template for control plane.
       kubectl-gs template cluster \
         --provider "${PROVIDER}" \
@@ -71,6 +68,28 @@ spec:
         --organization giantswarm \
         --description "e2e test" \
         --output /tmp/cluster.yaml
+
+      case $CLUSTER_FLAVOUR in
+        default)
+          ;;
+        eni)
+          if [ "${PROVIDER}" != "aws" ]
+          then
+            echo "The 'eni' flavour is only available for aws releases."
+            exit 1
+          fi
+
+          apk add --no-cache yq
+
+          # Annotate Cluster CR from /tmp/cluster.yml with cilium.giantswarm.io/ipam-mode=eni
+          yq -i e 'select(.kind == "Cluster").metadata.annotations["cilium.giantswarm.io/ipam-mode"] = "eni"' /tmp/cluster.yaml
+
+          ;;
+        *)
+          echo "Invalid cluster flavour '$CLUSTER_FLAVOUR'"
+          exit 1
+          ;;
+      esac
 
       # Extract cluster name from template.
       cluster_id=$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d" " -f6)

@@ -16,6 +16,10 @@ spec:
       type: string
       default: "default"
       description: Region to run the test on. Can be either 'china' or 'default' (aws only).
+    - name: CLUSTER_FLAVOUR
+      type: string
+      default: "default"
+      description: The cluster flavour. Either 'default' or 'eni' (only used in AWS).
   tasks:
   - name: detect-test-env
     taskRef:
@@ -61,6 +65,8 @@ spec:
         value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
       - name: RELEASE
         value: "$(tasks.create-release.results.release)"
+      - name: CLUSTER_FLAVOUR
+        value: "$(params.CLUSTER_FLAVOUR)"
     workspaces:
     - name: cluster
       workspace: cluster
