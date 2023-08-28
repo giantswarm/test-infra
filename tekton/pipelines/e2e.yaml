@@ -41,7 +41,7 @@ spec:
 #      - name: MC_KUBECONFIG
 #        value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
 #      - name: RELEASE
-à        value: "$(tasks.detect-test-env.results.release)"
+#        value: "$(tasks.detect-test-env.results.release)"
 #    taskRef:
 #      name: create-release
 #    workspaces:
