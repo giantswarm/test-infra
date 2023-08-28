@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.0] - 2023-08-28
+
 ### Removed
 
 - Remove prow configuration for CAPI repositories, as they will use the new tekton infra.
@@ -255,7 +257,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.23.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.24.0...HEAD
+[1.24.0]: https://github.com/giantswarm/test-infra/compare/v1.23.0...v1.24.0
 [1.23.0]: https://github.com/giantswarm/test-infra/compare/v1.22.0...v1.23.0
 [1.22.0]: https://github.com/giantswarm/test-infra/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/giantswarm/test-infra/compare/v1.20.0...v1.21.0
