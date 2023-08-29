@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Allow testing clusters in `eni` mode on AWS.
+
 ## [1.24.0] - 2023-08-28
 
 ### Removed

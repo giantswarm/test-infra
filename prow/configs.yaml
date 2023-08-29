@@ -69,6 +69,35 @@ presubmits:
     trigger: "/test cncf"
     rerun_command: "/test cncf"
 
+  - name: cncf-eni
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: cncf
+      serviceAccountName: test-runs
+      timeout: 10h0m0s
+      resources:
+      - name: releases
+        resourceRef:
+          name: PROW_IMPLICIT_GIT_REF
+      params:
+      - name: CLUSTER_FLAVOUR
+        value: eni
+      workspaces:
+      - name: cluster
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+    trigger: "/test cncf"
+    rerun_command: "/test cncf"
+
   - name: e2e
     agent: tekton-pipeline
     max_concurrency: 3
@@ -123,6 +152,35 @@ presubmits:
                   storage: 10Mi
     trigger: "/test aws-china|e2e-china"
     rerun_command: "/test e2e-china"
+
+  - name: e2e-eni
+    agent: tekton-pipeline
+    max_concurrency: 3
+    always_run: false
+    skip_report: false
+    pipeline_run_spec:
+      pipelineRef:
+        name: e2e
+      serviceAccountName: test-runs
+      timeout: 5h0m0s
+      resources:
+        - name: releases
+          resourceRef:
+            name: PROW_IMPLICIT_GIT_REF
+      params:
+        - name: CLUSTER_FLAVOUR
+          value: eni
+      workspaces:
+        - name: cluster
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Mi
+    trigger: "/test aws-eni|e2e-eni"
+    rerun_command: "/test e2e-eni"
 
   - name: upgrade
     agent: tekton-pipeline

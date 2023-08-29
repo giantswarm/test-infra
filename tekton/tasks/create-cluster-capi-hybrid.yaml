@@ -26,6 +26,10 @@ spec:
   - name: MC_KUBECONFIG
     type: string
     description: "Path of kubeconfig file to access test management cluster"
+  - name: CLUSTER_FLAVOUR
+    type: string
+    default: "default"
+    description: The cluster flavour. Either 'default' or 'eni' (only used in AWS).
   results:
   - name: cluster-id
     description: The ID of the created cluster.
@@ -41,6 +45,8 @@ spec:
         value: $(params.MC_KUBECONFIG)
       - name: RELEASE
         value: $(params.RELEASE)
+      - name: CLUSTER_FLAVOUR
+        value: $(params.CLUSTER_FLAVOUR)
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
@@ -53,6 +59,7 @@ spec:
       echo "Region: '${REGION}'"
       echo "MC Kubeconfig path: '${KUBECONFIG}'"
       echo "Release: '${RELEASE}'"
+      echo "Flavour: '${CLUSTER_FLAVOUR}'"
 
       # Generate template for control plane.
       kubectl-gs template cluster \
@@ -61,6 +68,28 @@ spec:
         --organization giantswarm \
         --description "e2e test" \
         --output /tmp/cluster.yaml
+
+      case $CLUSTER_FLAVOUR in
+        default)
+          ;;
+        eni)
+          if [ "${PROVIDER}" != "aws" ]
+          then
+            echo "The 'eni' flavour is only available for aws releases."
+            exit 1
+          fi
+
+          apk add --no-cache yq
+
+          # Annotate Cluster CR from /tmp/cluster.yml with cilium.giantswarm.io/ipam-mode=eni
+          yq -i e 'select(.kind == "Cluster").metadata.annotations["cilium.giantswarm.io/ipam-mode"] = "eni"' /tmp/cluster.yaml
+
+          ;;
+        *)
+          echo "Invalid cluster flavour '$CLUSTER_FLAVOUR'"
+          exit 1
+          ;;
+      esac
 
       # Extract cluster name from template.
       cluster_id=$(cat /tmp/cluster.yaml | grep cluster.x-k8s.io/cluster-name | head -n1 | cut -d" " -f6)
