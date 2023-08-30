@@ -67,7 +67,7 @@ spec:
 
   - name: wait-for-ready
     runAfter: [create-cluster]
-    timeout: h0m0s
+    timeout: 2h0m0s
     taskRef:
       name: wait-for-ready
     params:
