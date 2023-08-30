@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Raise `wait-for-ready` timeout to 2h to leave broken apps enough time to install.
+
 ## [1.25.0] - 2023-08-29
 
 ### Added
