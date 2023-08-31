@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed trigger for `cncf` and `cncf-eni` tests.
+
 ## [1.26.0] - 2023-08-30
 
 ### Changed
