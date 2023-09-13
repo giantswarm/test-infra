@@ -40,7 +40,7 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test cis"
+    trigger: "/test cis$"
     rerun_command: "/test cis"
 
   - name: cncf
@@ -95,8 +95,8 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test cncf-eni$"
-    rerun_command: "/test cncf-eni"
+    trigger: "/test cncf( cni=eni)?$"
+    rerun_command: "/test cncf cni=eni"
 
   - name: e2e
     agent: tekton-pipeline
@@ -121,7 +121,7 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test aws|azure|e2e$"
+    trigger: "/test e2e$"
     rerun_command: "/test e2e"
 
   - name: e2e-china
@@ -150,8 +150,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test aws-china|e2e-china"
-    rerun_command: "/test e2e-china"
+    trigger: "/test e2e( region=china)?$"
+    rerun_command: "/test e2e region=china"
 
   - name: e2e-eni
     agent: tekton-pipeline
@@ -179,8 +179,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test aws-eni|e2e-eni"
-    rerun_command: "/test e2e-eni"
+    trigger: "/test e2e( cni=eni)?$"
+    rerun_command: "/test e2e cni=eni"
 
   - name: upgrade
     agent: tekton-pipeline

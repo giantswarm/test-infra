@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Make triggering via github comment a bit smarter.
+
 ## [1.26.1] - 2023-08-31
 
 ### Fixed
