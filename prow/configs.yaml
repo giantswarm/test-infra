@@ -66,8 +66,8 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test cncf$"
-    rerun_command: "/test cncf"
+    trigger: "/test cncf( region=default)?( flavour=default)?( region=default)?$"
+    rerun_command: "/test cncf region=default flavour=default"
 
   - name: cncf-eni
     agent: tekton-pipeline
@@ -95,8 +95,8 @@ presubmits:
             resources:
               requests:
                 storage: 10Mi
-    trigger: "/test cncf( cni=eni)?$"
-    rerun_command: "/test cncf cni=eni"
+    trigger: "/test cncf( region=default)?( flavour=eni)?( region=default)?$"
+    rerun_command: "/test cncf region=default flavour=eni"
 
   - name: e2e
     agent: tekton-pipeline
@@ -121,8 +121,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test e2e$"
-    rerun_command: "/test e2e"
+    trigger: "/test e2e( region=default)?( flavour=default)?( region=default)?$"
+    rerun_command: "/test e2e region=default flavour=default"
 
   - name: e2e-china
     agent: tekton-pipeline
@@ -150,8 +150,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test e2e( region=china)?$"
-    rerun_command: "/test e2e region=china"
+    trigger: "/test e2e( region=china)?( flavour=default)?( region=china)?$"
+    rerun_command: "/test e2e region=china flavour=default"
 
   - name: e2e-eni
     agent: tekton-pipeline
@@ -179,8 +179,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test e2e( cni=eni)?$"
-    rerun_command: "/test e2e cni=eni"
+    trigger: "/test e2e( region=default)?( flavour=eni)?( region=default)?$"
+    rerun_command: "/test e2e region=default flavour=eni"
 
   - name: upgrade
     agent: tekton-pipeline
@@ -205,8 +205,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test upgrade$"
-    rerun_command: "/test upgrade"
+    trigger: "/test upgrade( region=default)?( flavour=default)?( region=default)?$"
+    rerun_command: "/test upgrade region=default flavour=default"
 
   - name: upgrade-china
     agent: tekton-pipeline
@@ -234,8 +234,8 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test upgrade( region=china)?$"
-    rerun_command: "/test upgrade region=china"
+    trigger: "/test upgrade( region=china)?( flavour=default)?( region=china)?$"
+    rerun_command: "/test upgrade region=china flavour=default"
 
   - name: upgrade-eni
     agent: tekton-pipeline
@@ -263,5 +263,5 @@ presubmits:
               resources:
                 requests:
                   storage: 10Mi
-    trigger: "/test upgrade( cni=eni)?$"
-    rerun_command: "/test upgrade cni=eni"
+    trigger: "/test upgrade( region=default)?( flavour=eni)?( region=default)?$"
+    rerun_command: "/test upgrade region=default flavour=eni"

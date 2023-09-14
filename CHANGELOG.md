@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added explicit trigger params `region` and `flavour` for all triggers.
+
 ## [1.27.0] - 2023-09-13
 
 ### Changed
