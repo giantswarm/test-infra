@@ -5,6 +5,7 @@ metadata:
   name: release-manager
 rules:
   - apiGroups:
+      - cluster.k8s.io
       - cluster.x-k8s.io
       - infrastructure.giantswarm.io
       - provider.giantswarm.io

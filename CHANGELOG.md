@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `cluster.k8s.io` to `release-manager` ClusterRole.
+
 ## [1.28.0] - 2023-09-14
 
 ### Changed
