@@ -154,7 +154,7 @@ spec:
       retry_single /tmp/nodepool.yaml
 
   - name: legacy-get-kubeconfig
-    image: quay.io/giantswarm/kubectl:1.22.3
+    image: quay.io/giantswarm/kubectl:1.28.2
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
