@@ -35,7 +35,7 @@ spec:
     description: The ID of the created cluster.
   steps:
   - name: create-cluster
-    image: quay.io/giantswarm/kubectl-gs:2.37.0
+    image: quay.io/giantswarm/kubectl-gs:2.41.1
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
@@ -154,7 +154,7 @@ spec:
       retry_single /tmp/nodepool.yaml
 
   - name: legacy-get-kubeconfig
-    image: quay.io/giantswarm/kubectl:1.22.3
+    image: quay.io/giantswarm/kubectl-gs:2.41.1
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
@@ -174,13 +174,12 @@ spec:
 
       for i in $(seq 1 20); do
         cluster_id=$(cat $(workspaces.cluster.path)/cluster-id)
-        json="$(kubectl -n ${cluster_id} get secret ${cluster_id}-kubeconfig -o json)"
+        kubectl-gs login --workload-cluster ${cluster_id} --cluster-admin --certificate-group system:masters --certificate-ttl 8h --insecure-namespace --self-contained $(workspaces.cluster.path)/kubeconfig
         success=$?
         if [ "$success" -eq "0" ]; then
-          echo "${json}"| jq -r .data.kubeConfig | base64 -d >$(workspaces.cluster.path)/kubeconfig
-
           break
         fi
+        echo "Failed logging in"
         sleep 5
       done
       exit $success
