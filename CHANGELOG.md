@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `cluster.k8s.io` to `release-manager` ClusterRole.
 
+### Changed
+
+- Bump kubectl-gs image to 2.41.1
+- Use kubectl-gs to get kubeconfig
+
 ## [1.28.0] - 2023-09-14
 
 ### Changed
