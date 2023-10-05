@@ -21,7 +21,7 @@ spec:
       description: "Path of kubeconfig file to access cluster"
   steps:
     - name: manage-sonobuoy-results
-      image: quay.io/giantswarm/sonobuoy:v0.56.7-alpine-giantswarm
+      image: quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
       env:
         - name: KUBECONFIG
           value: $(params.kubeconfig)
