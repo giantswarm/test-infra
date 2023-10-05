@@ -18,7 +18,7 @@ spec:
     description: The path to the file that needs to get uploaded to the s3 bucket.
   steps:
   - name: upload-to-s3-bucket
-    image: quay.io/giantswarm/awscli:2.0.24
+    image: quay.io/giantswarm/awscli:2.7.35
     env:
       - name: "AWS_ACCESS_KEY_ID"
         valueFrom:
