@@ -3,7 +3,7 @@
 declare -A provider_installations
 provider_installations[aws]=gaia
 provider_installations[aws-china]=giraffe
-provider_installations[azure]=gremlin
+#provider_installations[azure]=gremlin
 provider_installations[capa]=grizzly
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
