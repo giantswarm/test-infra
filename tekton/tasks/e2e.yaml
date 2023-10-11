@@ -43,6 +43,12 @@ spec:
         export CP_KUBECONFIG="$(cat $CP_KUBECONFIG_PATH)"
         export TC_KUBECONFIG="$(cat $TC_KUBECONFIG_PATH)"
         /app/run_go_test.sh
+
+        if [ $? -ne 0 ]
+        then
+          echo "e2e tests failed"
+          exit 1
+        fi
       volumeMounts:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
