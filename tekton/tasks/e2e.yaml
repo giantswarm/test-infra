@@ -29,9 +29,9 @@ spec:
       env:
         - name: PROVIDER
           value: $(params.PROVIDER)
-        - name: MC_KUBECONFIG
+        - name: CP_KUBECONFIG
           value: $(params.MC_KUBECONFIG)
-        - name: WC_KUBECONFIG
+        - name: TC_KUBECONFIG
           value: "$(workspaces.cluster.path)/kubeconfig"
         - name: TEST_DELETION
           value: $(params.test-deletion)
