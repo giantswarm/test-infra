@@ -29,9 +29,9 @@ spec:
       env:
         - name: PROVIDER
           value: $(params.PROVIDER)
-        - name: CP_KUBECONFIG
+        - name: CP_KUBECONFIG_PATH
           value: $(params.MC_KUBECONFIG)
-        - name: TC_KUBECONFIG
+        - name: TC_KUBECONFIG_PATH
           value: "$(workspaces.cluster.path)/kubeconfig"
         - name: TEST_DELETION
           value: $(params.test-deletion)
@@ -39,6 +39,8 @@ spec:
           value: $(workspaces.cluster.path)/cluster-id
       script: |
         #!/bin/sh
+        export CP_KUBECONFIG="$(cat $CP_KUBECONFIG_PATH)"
+        export TC_KUBECONFIG="$(cat $TC_KUBECONFIG_PATH)"
         /app/run_go_test.sh
       volumeMounts:
         - mountPath: /etc/kubeconfig
