@@ -39,6 +39,7 @@ spec:
           value: $(workspaces.cluster.path)/cluster-id
       script: |
         #!/bin/sh
+        export CLUSTER_ID="$(cat $CLUSTER_ID_PATH)"
         export CP_KUBECONFIG="$(cat $CP_KUBECONFIG_PATH)"
         export TC_KUBECONFIG="$(cat $TC_KUBECONFIG_PATH)"
         /app/run_go_test.sh
