@@ -44,7 +44,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: quay.io/giantswarm/kubectl-gs:2.41.1
+    image: quay.io/giantswarm/kubectl-gs:2.43.0
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
