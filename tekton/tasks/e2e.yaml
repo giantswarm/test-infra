@@ -24,47 +24,31 @@ spec:
     type: string
     description: "Path of kubeconfig file to access test management cluster"
   steps:
-    - name: download-sonobuoy-plugin
-      image: alpine
-      script: |
-        #!/bin/sh
-
-        for i in $(seq 1 5); do
-          wget -O $(workspaces.cluster.path)/giantswarm-plugin.yaml https://raw.githubusercontent.com/giantswarm/sonobuoy-plugin/$(params.plugin-branch)/giantswarm-plugin.yaml
-          success=$?
-          if [ "$success" -eq "0" ]; then
-            exit 0
-          fi
-          sleep 5
-        done
-
-        exit 1
     - name: run-tests
-      image: quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
+      image: quay.io/giantswarm/sonobuoy-plugin:latest
       env:
         - name: PROVIDER
           value: $(params.PROVIDER)
-        - name: MC_KUBECONFIG
+        - name: CP_KUBECONFIG_PATH
           value: $(params.MC_KUBECONFIG)
-        - name: WC_KUBECONFIG
+        - name: TC_KUBECONFIG_PATH
           value: "$(workspaces.cluster.path)/kubeconfig"
         - name: TEST_DELETION
           value: $(params.test-deletion)
         - name: CLUSTER_ID_PATH
           value: $(workspaces.cluster.path)/cluster-id
       script: |
-        #! /bin/sh
-        /sonobuoy run \
-            --kubeconfig "${MC_KUBECONFIG}" \
-            --namespace "$(cat "${CLUSTER_ID_PATH}")-sonobuoy" \
-            --plugin $(workspaces.cluster.path)/giantswarm-plugin.yaml \
-            --plugin-env giantswarm.TC_KUBECONFIG="$(cat "${WC_KUBECONFIG}")" \
-            --plugin-env giantswarm.CP_KUBECONFIG="$(cat "${MC_KUBECONFIG}")" \
-            --plugin-env giantswarm.CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")" \
-            --plugin-env giantswarm.PROVIDER="${PROVIDER}" \
-            --plugin-env giantswarm.TEST_DELETION="${TEST_DELETION}" \
-            --mode=certified-conformance \
-            --wait
+        #!/bin/sh
+        export CLUSTER_ID="$(cat $CLUSTER_ID_PATH)"
+        export CP_KUBECONFIG="$(cat $CP_KUBECONFIG_PATH)"
+        export TC_KUBECONFIG="$(cat $TC_KUBECONFIG_PATH)"
+        /app/run_go_test.sh
+
+        if [ $? -ne 0 ]
+        then
+          echo "e2e tests failed"
+          exit 1
+        fi
       volumeMounts:
         - mountPath: /etc/kubeconfig
           name: kubeconfig

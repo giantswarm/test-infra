@@ -98,42 +98,15 @@ spec:
       - name: cluster
         workspace: cluster
 
-  - name: manage-sonobuoy-results
-    runAfter: [test]
-    taskRef:
-      name: manage-sonobuoy-results
-    params:
-      - name: sonobuoy-namespace
-        value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
-      - name: kubeconfig
-        value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
-    workspaces:
-      - name: cluster
-        workspace: cluster
-
   finally:
-  - name: upload-to-s3-bucket # executed only when tests fail
-    when:
-      - input: $(tasks.manage-sonobuoy-results.status)
-        operator: in
-        values: ["Failed"]
-    taskRef:
-      name: upload-to-s3-bucket
-    params:
-      - name: prow-job-id
-        value: "$(params.PROW_JOB_ID)"
-      - name: file-to-upload
-        value: $(workspaces.cluster.path)/sonobuoy-results.tar
-    workspaces:
-      - name: cluster
-        workspace: cluster
-
   - name: cleanup
     taskRef:
       name: cleanup-capi-hybrid
     params:
       - name: MC_KUBECONFIG
         value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
+      - name: RELEASE
+        value: "$(tasks.create-release.results.release)"
     workspaces:
       - name: cluster
         workspace: cluster

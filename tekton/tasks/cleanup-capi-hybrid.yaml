@@ -15,12 +15,17 @@ spec:
   - name: MC_KUBECONFIG
     type: string
     description: "Path of kubeconfig file to access test management cluster"
+  - name: RELEASE
+    type: string
+    description: Release ID to use when creating the cluster.
   steps:
   - name: cleanup
     image: quay.io/giantswarm/standup:3.4.2
     env:
       - name: KUBECONFIG
         value: $(params.MC_KUBECONFIG)
+      - name: RELEASE
+        value: $(params.RELEASE)
     volumeMounts:
       - name: kubeconfig
         mountPath: /etc/kubeconfig
@@ -30,6 +35,7 @@ spec:
       echo "Provider: '${PROVIDER}'"
       echo "Region: '${REGION}'"
       echo "MC Kubeconfig path: '${KUBECONFIG}'"
+      echo "Release: '${RELEASE}'"
 
       kubectl -n org-giantswarm delete cluster.cluster.x-k8s.io $(cat $(workspaces.cluster.path)/cluster-id) || true
-      kubectl delete release $(cat $(workspaces.cluster.path)/release-id) || true
+      kubectl delete release $RELEASE || true
