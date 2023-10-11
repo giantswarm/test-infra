@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Run sonobuoy plugin directly, not using sonobuoy runner. 
+
 ## [1.29.0] - 2023-10-05
 
 ### Added

@@ -119,6 +119,8 @@ spec:
     params:
       - name: MC_KUBECONFIG
         value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
+      - name: RELEASE
+        value: "$(tasks.create-release.results.release)"
     workspaces:
     - name: cluster
       workspace: cluster
