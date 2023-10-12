@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.31.0] - 2023-10-12
+
 ### Fixed
 
 - Use `cluster flavour` setting during upgrade test.
@@ -309,7 +311,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.30.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.31.0...HEAD
+[1.31.0]: https://github.com/giantswarm/test-infra/compare/v1.30.0...v1.31.0
 [1.30.0]: https://github.com/giantswarm/test-infra/compare/v1.29.0...v1.30.0
 [1.29.0]: https://github.com/giantswarm/test-infra/compare/v1.28.0...v1.29.0
 [1.28.0]: https://github.com/giantswarm/test-infra/compare/v1.27.0...v1.28.0
