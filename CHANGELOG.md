@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Use `cluster flavour` setting during upgrade test.
+- Don't get sonobuoy results in upgrade test.
+
 ## [1.30.0] - 2023-10-11
 
 ### Changed

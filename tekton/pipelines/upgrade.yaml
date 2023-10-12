@@ -16,6 +16,10 @@ spec:
     type: string
     default: "default"
     description: Region to run the test on. Can be either 'china' or 'default' (aws only).
+  - name: CLUSTER_FLAVOUR
+    type: string
+    default: "default"
+    description: The cluster flavour. Either 'default' or 'eni' (only used in AWS).
   tasks:
   - name: detect-test-env
     taskRef:
@@ -72,6 +76,8 @@ spec:
         value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
       - name: RELEASE
         value: "$(tasks.get-latest-release.results.release-id)"
+      - name: CLUSTER_FLAVOUR
+        value: "$(params.CLUSTER_FLAVOUR)"
     workspaces:
       - name: cluster
         workspace: cluster
@@ -116,36 +122,7 @@ spec:
     - name: cluster
       workspace: cluster
 
-  - name: manage-sonobuoy-results
-    runAfter: [e2e]
-    taskRef:
-      name: manage-sonobuoy-results
-    params:
-      - name: sonobuoy-namespace
-        value: "$(tasks.create-cluster.results.cluster-id)-sonobuoy"
-      - name: kubeconfig
-        value: "$(tasks.detect-test-env.results.mc-kubeconfig)"
-    workspaces:
-      - name: cluster
-        workspace: cluster
-
   finally:
-  - name: upload-to-s3-bucket # executed only when tests fail
-    when:
-      - input: $(tasks.manage-sonobuoy-results.status)
-        operator: in
-        values: ["Failed"]
-    taskRef:
-      name: upload-to-s3-bucket
-    params:
-      - name: prow-job-id
-        value: "$(params.PROW_JOB_ID)"
-      - name: file-to-upload
-        value: $(workspaces.cluster.path)/sonobuoy-results.tar
-    workspaces:
-      - name: cluster
-        workspace: cluster
-
   - name: cleanup
     taskRef:
       name: cleanup-capi-hybrid
