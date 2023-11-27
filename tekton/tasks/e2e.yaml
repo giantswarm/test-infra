@@ -23,10 +23,6 @@ spec:
   - name: MC_KUBECONFIG
     type: string
     description: "Path of kubeconfig file to access test management cluster"
-  volumes:
-  - name: github-token
-    secret:
-      secretName: github-token
   steps:
     - name: run-tests
       image: quay.io/giantswarm/sonobuoy-plugin:latest
@@ -63,3 +59,6 @@ spec:
     - name: kubeconfig
       secret:
         secretName: sonobuoy-kubeconfig
+    - name: github-token
+      secret:
+        secretName: github-token
