@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `OPSCTL_GITHUB_TOKEN` to e2e task to avoid github rate limiting.
+
 ## [1.31.0] - 2023-10-12
 
 ### Fixed

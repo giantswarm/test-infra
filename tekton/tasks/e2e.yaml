@@ -23,6 +23,10 @@ spec:
   - name: MC_KUBECONFIG
     type: string
     description: "Path of kubeconfig file to access test management cluster"
+  volumes:
+  - name: github-token
+    secret:
+      secretName: github-token
   steps:
     - name: run-tests
       image: quay.io/giantswarm/sonobuoy-plugin:latest
@@ -42,6 +46,7 @@ spec:
         export CLUSTER_ID="$(cat $CLUSTER_ID_PATH)"
         export CP_KUBECONFIG="$(cat $CP_KUBECONFIG_PATH)"
         export TC_KUBECONFIG="$(cat $TC_KUBECONFIG_PATH)"
+        export OPSCTL_GITHUB_TOKEN="$(cat /etc/github-token/secret)"
         /app/run_go_test.sh
 
         if [ $? -ne 0 ]
@@ -52,6 +57,8 @@ spec:
       volumeMounts:
         - mountPath: /etc/kubeconfig
           name: kubeconfig
+        - name: github-token
+          mountPath: /etc/github-token
   volumes:
     - name: kubeconfig
       secret:
