@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Changed
+
+- Remove PSPs and add PolicyException.
+
 ## [Unreleased]
 
 ## [1.32.0] - 2023-11-27
@@ -24,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Run sonobuoy plugin directly, not using sonobuoy runner. 
+- Run sonobuoy plugin directly, not using sonobuoy runner.
 
 ## [1.29.0] - 2023-10-05
 
@@ -260,9 +264,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Bump tekton pipelines to release 0.39.0. 
-- Bump tekton dsahboard to release 0.29.2. 
-- Bump tekton triggers to release 0.21.0. 
+- Bump tekton pipelines to release 0.39.0.
+- Bump tekton dsahboard to release 0.29.2.
+- Bump tekton triggers to release 0.21.0.
 
 ## [1.3.1] - 2022-09-15
 
