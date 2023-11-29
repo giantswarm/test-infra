@@ -6,3 +6,4 @@ resources:
   - tasks
   - triggers
   - tekton.yaml
+  - kyverno-policy-exception.yaml
