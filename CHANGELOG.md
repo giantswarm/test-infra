@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.33.1] - 2023-12-01
+
 ## [1.33.0] - 2023-11-29
 
 ## [1.32.0] - 2023-11-27
@@ -323,7 +325,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.33.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.33.1...HEAD
+[1.33.1]: https://github.com/giantswarm/test-infra/compare/v1.33.0...v1.33.1
 [1.33.0]: https://github.com/giantswarm/test-infra/compare/v1.32.0...v1.33.0
 [1.32.0]: https://github.com/giantswarm/test-infra/compare/v1.31.0...v1.32.0
 [1.31.0]: https://github.com/giantswarm/test-infra/compare/v1.30.0...v1.31.0
