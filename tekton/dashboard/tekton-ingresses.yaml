@@ -57,6 +57,7 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
+  ingressClassName: nginx
   rules:
     - host: tekton.giantswarm.io
       http:
