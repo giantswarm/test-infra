@@ -13,7 +13,7 @@ spec:
     - autogen-adding-capabilities-strict
     - require-drop-all
     - autogen-require-drop-all
-- policyName: restrict-seccomp-strict
+  - policyName: restrict-seccomp-strict
     ruleNames:
     - check-seccomp-strict
     - autogen-check-seccomp-strict
