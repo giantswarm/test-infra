@@ -61,6 +61,10 @@ spec:
             - --serve-metrics=true
           ports:
             - containerPort: 8888
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - name: cache
               mountPath: /cache

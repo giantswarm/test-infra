@@ -94,6 +94,10 @@ spec:
           ports:
             - name: http
               containerPort: 8888
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - name: oauth
               mountPath: /etc/github

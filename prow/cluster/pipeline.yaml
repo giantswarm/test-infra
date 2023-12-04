@@ -59,6 +59,10 @@ spec:
         image: gcr.io/k8s-prow/pipeline:v20200813-535fb53bd1
         args:
         - --config=/etc/config/configs.yaml
+        securityContext:
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
         volumeMounts:
           - name: configs
             mountPath: /etc/config

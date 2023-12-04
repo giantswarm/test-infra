@@ -106,6 +106,10 @@ spec:
             - --github-endpoint=http://ghproxy
             - --github-endpoint=https://api.github.com
             - --github-token-path=/etc/github/oauth
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - name: configs
               mountPath: /etc/config
