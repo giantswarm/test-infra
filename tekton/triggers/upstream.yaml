@@ -884,6 +884,9 @@ spec:
         version: "v0.20.1"
     spec:
       serviceAccountName: tekton-triggers-controller
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: tekton-triggers-controller
           image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller:v0.20.1@sha256:d55339c0970402a6049d7f629ae960451b86880099d2d28cc0bd148c755392e4"
@@ -907,6 +910,10 @@ spec:
             allowPrivilegeEscalation: false
             # User 65532 is the distroless nonroot user ID
             runAsUser: 65532
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
 
 ---
 # Copyright 2019 The Tekton Authors
@@ -998,6 +1005,9 @@ spec:
         version: "v0.20.1"
     spec:
       serviceAccountName: tekton-triggers-webhook
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: webhook
           # This is the Go import path for the binary that is containerized
@@ -1027,5 +1037,9 @@ spec:
             allowPrivilegeEscalation: false
             # User 65532 is the distroless nonroot user ID
             runAsUser: 65532
+            runAsNonRoot: true
+            capabilities:
+              drop:
+              - ALL
 
 ---

@@ -13,6 +13,9 @@ spec:
       labels:
         app: add-pr-body
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: gcr.io/tekton-releases/dogfooding/add-pr-body-37196dbb1230b7cd43fd605aeb3ecda6@sha256:12120c1cb9235d548c2f7bed45932870a508abaa9c8f53077ccb2db34b38e3cb
           imagePullPolicy: Always
@@ -20,6 +23,10 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 65532
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
       serviceAccountName: add-pr-body-bot
 
 ---

@@ -47,6 +47,9 @@ spec:
         version: "v0.20.1"
     spec:
       serviceAccountName: tekton-triggers-core-interceptors
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: tekton-triggers-core-interceptors
           image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors:v0.20.1@sha256:65a1dbc19056050b0ca1b1a59122e1d90d2c955222ccee5e3987389a76da16ba"
@@ -82,9 +85,10 @@ spec:
             # User 65532 is the distroless nonroot user ID
             runAsUser: 65532
             runAsGroup: 65532
+            runAsNonRoot: true
             capabilities:
               drop:
-                - all
+                - ALL
 ---
 apiVersion: v1
 kind: Service
