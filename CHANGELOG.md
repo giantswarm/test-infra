@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.35.0] - 2023-12-04
+
 ### Changed
 
 - Fix PSS for tekton-triggers.
@@ -339,7 +341,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.34.1...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.35.0...HEAD
+[1.35.0]: https://github.com/giantswarm/test-infra/compare/v1.34.1...v1.35.0
 [1.34.1]: https://github.com/giantswarm/test-infra/compare/v1.34.0...v1.34.1
 [1.34.0]: https://github.com/giantswarm/test-infra/compare/v1.33.1...v1.34.0
 [1.33.1]: https://github.com/giantswarm/test-infra/compare/v1.33.0...v1.33.1
