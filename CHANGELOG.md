@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove PSPs and add PolicyException.
 - Fix PSS for prow.
+- Fix PSS for tekton.
 
 ## [Unreleased]
 

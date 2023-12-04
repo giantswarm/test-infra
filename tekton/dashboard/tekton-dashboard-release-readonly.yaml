@@ -266,6 +266,9 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
+        allowPrivileveEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
       serviceAccountName: tekton-dashboard
       volumes: []
 ---
