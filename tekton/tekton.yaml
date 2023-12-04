@@ -1145,7 +1145,6 @@ spec:
             # User 65532 is the distroless nonroot user ID
             runAsUser: 65532
             runAsGroup: 65532
-            allowPrivileveEscalation: false
             seccompProfile:
               type: RuntimeDefault
           ports:
@@ -1376,9 +1375,6 @@ spec:
             # User 65532 is the distroless nonroot user ID
             runAsUser: 65532
             runAsGroup: 65532
-            allowPrivileveEscalation: false
-            seccompProfile:
-              type: RuntimeDefaulton: false
             seccompProfile:
               type: RuntimeDefault
           ports:
