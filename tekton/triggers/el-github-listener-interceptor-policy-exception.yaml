@@ -3,6 +3,8 @@ kind: PolicyException
 metadata:
   name: el-github-listener-interceptor-exceptions
   namespace: tekton-pipelines
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
 spec:
   exceptions:
   - policyName: disallow-capabilities-strict
