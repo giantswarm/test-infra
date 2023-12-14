@@ -16,6 +16,10 @@ spec:
     - run-as-non-root
     - autogen-run-as-non-root
     - autogen-cronjob-run-as-non-root
+  - policyName: require-run-as-non-root-user
+    ruleNames:
+    - run-as-non-root-user
+    - autogen-run-as-non-root-user
   - policyName: restrict-volume-types
     ruleNames:
     - restricted-volumes
