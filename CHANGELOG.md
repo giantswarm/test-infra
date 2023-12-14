@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Set root user for `wait-for-ready` task.
+
 ## [1.36.0] - 2023-12-14
 
 ### Changed
