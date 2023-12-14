@@ -49,4 +49,4 @@ spec:
         - test-infra
         - test-workloads
         names:
-        - *
+        - '*'
