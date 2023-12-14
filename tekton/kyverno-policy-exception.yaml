@@ -29,6 +29,14 @@ spec:
     - autogen-cronjob-require-drop-all
     - autogen-adding-capabilities-strict
     - autogen-cronjob-adding-capabilities-strict
+  - policyName: disallow-privilege-escalation
+    ruleNames:
+    - privilege-escalation
+    - autogen-privilege-escalation
+  - policyName: restrict-seccomp-strict
+    ruleNames:
+    - check-seccomp-strict
+    - autogen-check-seccomp-strict
   match:
     any:
     - resources:
@@ -36,7 +44,9 @@ spec:
         - Deployment
         - ReplicaSet
         - Pod
-        names:
-          - "*"
+        - StatefulSet
         namespaces:
         - test-infra
+        - test-workloads
+        names:
+        - *
