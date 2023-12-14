@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - dashboard
   - pipelines
-  - pss
+  - pss.yaml
   - tasks
   - triggers
   - tekton.yaml
