@@ -4,7 +4,7 @@ declare -A provider_installations
 provider_installations[aws]=gaia
 provider_installations[aws-china]=giraffe
 #provider_installations[azure]=gremlin
-provider_installations[capa]=grizzly
+#provider_installations[capa]=grizzly
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 tmp_dir="$script_dir/tmp"
@@ -17,7 +17,7 @@ function cleanup() {
 trap cleanup EXIT
 
 for service_account in "test-infra" "sonobuoy"; do
-  for provider in aws aws-china azure capa; do
+  for provider in aws aws-china; do
       installation=${provider_installations[$provider]}
       echo "creating $provider kubeconfig for $service_account in $installation"
 
@@ -28,7 +28,7 @@ for service_account in "test-infra" "sonobuoy"; do
         lpass show "Shared-Team Phoenix/CAPA\kubeconfigs/$installation.kubeconfig" --notes > $installation_kubeconfig
       else
         rm -f $installation_kubeconfig
-        opsctl login $installation --method clientcert --certificate-common-name-prefix $service_account --ttl 365 --self-contained $installation_kubeconfig > /dev/null
+        KUBECONFIG=$installation_kubeconfig opsctl login $installation --method clientcert --certificate-common-name-prefix $service_account --ttl 365 > /dev/null
       fi
 
       # Get the installation server
@@ -75,8 +75,6 @@ for service_account in "test-infra" "sonobuoy"; do
         -n test-workloads \
         --from-file=aws="$tmp_dir/aws-kubeconfig-$service_account" \
         --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
-        --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
-        --from-file=capa="$tmp_dir/capa-kubeconfig-$service_account" \
         --dry-run=client -o yaml \
         > "$script_dir/standup-kubeconfig-secret.yaml"
 
@@ -87,8 +85,6 @@ for service_account in "test-infra" "sonobuoy"; do
       -n test-workloads \
       --from-file=aws="$tmp_dir/aws-kubeconfig-$service_account" \
       --from-file=aws-china="$tmp_dir/aws-china-kubeconfig-$service_account" \
-      --from-file=azure="$tmp_dir/azure-kubeconfig-$service_account" \
-      --from-file=capa="$tmp_dir/capa-kubeconfig-$service_account" \
       --dry-run=client -o yaml \
       > "$script_dir/$service_account-kubeconfig-secret.yaml"
 
