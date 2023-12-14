@@ -29,7 +29,7 @@ spec:
         - Deployment
         - ReplicaSet
         - Pod
-        - Statefulset
+        - StatefulSet
         namespaces:
         - test-infra
         - test-workloads
