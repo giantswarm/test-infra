@@ -21,6 +21,8 @@ spec:
   steps:
   - name: upgrade-cluster
     image: quay.io/giantswarm/standup:3.4.2
+    securityContext:
+      runAsUser: 0
     volumeMounts:
     - name: kubeconfig
       mountPath: /etc/kubeconfig
