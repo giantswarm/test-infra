@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.38.0] - 2024-01-17
+
 ### Changed
 
 - Add policy exception for sonobuoy.
@@ -375,7 +377,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.37.1...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.38.0...HEAD
+[1.38.0]: https://github.com/giantswarm/test-infra/compare/v1.37.1...v1.38.0
 [1.37.1]: https://github.com/giantswarm/test-infra/compare/v1.37.0...v1.37.1
 [1.37.0]: https://github.com/giantswarm/test-infra/compare/v1.36.2...v1.37.0
 [1.36.2]: https://github.com/giantswarm/test-infra/compare/v1.36.0...v1.36.2
