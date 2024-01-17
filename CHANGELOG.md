@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add policy exception for sonobuoy.
+
 ## [1.37.1] - 2024-01-17
 
 ### Changed

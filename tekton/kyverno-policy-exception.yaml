@@ -52,5 +52,6 @@ spec:
         namespaces:
         - test-infra
         - test-workloads
+        - sonobuoy
         names:
         - '*'
