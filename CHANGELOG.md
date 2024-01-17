@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.37.1] - 2024-01-17
+
 ### Changed
 
 - Run cncf test as root user - this time for real.
@@ -369,7 +371,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.37.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.37.1...HEAD
+[1.37.1]: https://github.com/giantswarm/test-infra/compare/v1.37.0...v1.37.1
 [1.37.0]: https://github.com/giantswarm/test-infra/compare/v1.36.2...v1.37.0
 [1.36.2]: https://github.com/giantswarm/test-infra/compare/v1.36.0...v1.36.2
 [1.36.0]: https://github.com/giantswarm/test-infra/compare/v1.35.0...v1.36.0
