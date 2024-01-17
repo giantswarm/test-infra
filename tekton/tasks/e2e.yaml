@@ -26,9 +26,6 @@ spec:
   steps:
     - name: run-tests
       image: quay.io/giantswarm/sonobuoy-plugin:latest
-      securityContext:
-        runAsUser: 0
-        runAsGroup: 0
       env:
         - name: PROVIDER
           value: $(params.PROVIDER)

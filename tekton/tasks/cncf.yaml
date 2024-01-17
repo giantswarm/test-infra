@@ -22,6 +22,9 @@ spec:
   steps:
   - name: run-tests
     image: quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
