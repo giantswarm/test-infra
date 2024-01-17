@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Run cncf test as root user.
+
 ## [1.36.2] - 2023-12-18
 
 ### Changed
