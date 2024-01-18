@@ -41,4 +41,65 @@ spec:
       echo "MC Kubeconfig path: '${MC_KUBECONFIG}'"
       echo "WC Kubeconfig path: '${WC_KUBECONFIG}'"
 
+      PSS=$(cat <<-END
+      apiVersion: kyverno.io/v2alpha1
+      kind: PolicyException
+      metadata:
+        name: sonobuoy-policy-exceptions
+        namespace: giantswarm
+      spec:
+        background: true
+        exceptions:
+        - policyName: disallow-host-path
+          ruleNames:
+          - host-path
+          - autogen-host-path
+          - autogen-cronjob-host-path
+        - policyName: require-run-as-nonroot
+          ruleNames:
+          - run-as-non-root
+          - autogen-run-as-non-root
+          - autogen-cronjob-run-as-non-root
+        - policyName: require-run-as-non-root-user
+          ruleNames:
+          - run-as-non-root-user
+          - autogen-run-as-non-root-user
+        - policyName: restrict-volume-types
+          ruleNames:
+          - restricted-volumes
+          - autogen-restricted-volumes
+          - autogen-cronjob-restricted-volumes
+        - policyName: disallow-capabilities-strict
+          ruleNames:
+          - require-drop-all
+          - adding-capabilities-strict
+          - autogen-require-drop-all
+          - autogen-cronjob-require-drop-all
+          - autogen-adding-capabilities-strict
+          - autogen-cronjob-adding-capabilities-strict
+        - policyName: disallow-privilege-escalation
+          ruleNames:
+          - privilege-escalation
+          - autogen-privilege-escalation
+        - policyName: restrict-seccomp-strict
+          ruleNames:
+          - check-seccomp-strict
+          - autogen-check-seccomp-strict
+        match:
+          any:
+          - resources:
+              kinds:
+              - Deployment
+              - ReplicaSet
+              - Pod
+              - StatefulSet
+              namespaces:
+              - sonobuoy
+              names:
+              - '*'
+      END
+      )
+
+      echo "$PSS" | kubectl --kubeconfig "${WC_KUBECONFIG}" apply -f -
+
       /sonobuoy run --kubeconfig "${WC_KUBECONFIG}" --mode=certified-conformance --wait
