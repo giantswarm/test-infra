@@ -64,7 +64,8 @@ spec:
         - CronJob
         - DaemonSet
         namespaceSelector:
-          matchLabels:
-            e2e-run: '*'
+          matchExpressions:
+          - key: e2e-run
+            operator: Exists
         names:
         - '*'
