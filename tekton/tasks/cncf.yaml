@@ -20,25 +20,13 @@ spec:
     type: string
     description: "Path of kubeconfig file to access test management cluster"
   steps:
-  - name: run-tests
-    image: quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
-    securityContext:
-      runAsUser: 0
-      runAsGroup: 0
+  - name: create-pss-exception
+    image: quay.io/giantswarm/kubectl-gs:2.43.0
     env:
-      - name: PROVIDER
-        value: $(params.PROVIDER)
-      - name: REGION
-        value: $(params.REGION)
-      - name: MC_KUBECONFIG
-        value: $(params.MC_KUBECONFIG)
       - name: "WC_KUBECONFIG"
         value: $(workspaces.cluster.path)/kubeconfig
     script: |
       #! /bin/sh
-      echo "Provider: '${PROVIDER}'"
-      echo "Region: '${REGION}'"
-      echo "MC Kubeconfig path: '${MC_KUBECONFIG}'"
       echo "WC Kubeconfig path: '${WC_KUBECONFIG}'"
 
       PSS=$(cat <<-END
@@ -101,5 +89,25 @@ spec:
       )
 
       echo "$PSS" | kubectl --kubeconfig "${WC_KUBECONFIG}" apply -f -
+  - name: run-tests
+    image: quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+    env:
+      - name: PROVIDER
+        value: $(params.PROVIDER)
+      - name: REGION
+        value: $(params.REGION)
+      - name: MC_KUBECONFIG
+        value: $(params.MC_KUBECONFIG)
+      - name: "WC_KUBECONFIG"
+        value: $(workspaces.cluster.path)/kubeconfig
+    script: |
+      #! /bin/sh
+      echo "Provider: '${PROVIDER}'"
+      echo "Region: '${REGION}'"
+      echo "MC Kubeconfig path: '${MC_KUBECONFIG}'"
+      echo "WC Kubeconfig path: '${WC_KUBECONFIG}'"
 
       /sonobuoy run --kubeconfig "${WC_KUBECONFIG}" --mode=certified-conformance --wait

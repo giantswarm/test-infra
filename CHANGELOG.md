@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Use dedicated step for PSS exception creation.
+
 ## [1.39.0] - 2024-01-18
 
 ### Changed
