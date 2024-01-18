@@ -85,6 +85,19 @@ spec:
               - sonobuoy
               names:
               - '*'
+          - resources:
+              kinds:
+              - Deployment
+              - ReplicaSet
+              - Pod
+              - StatefulSet
+              - CronJob
+              - DaemonSet
+              namespaceSelector:
+                matchLabels:
+                  e2e-run: '*'
+              names:
+              - '*'
       END
       )
 
