@@ -38,41 +38,78 @@ spec:
       spec:
         background: true
         exceptions:
-        - policyName: disallow-host-path
+        - policyName: disallow-capabilities
           ruleNames:
-          - host-path
-          - autogen-host-path
-          - autogen-cronjob-host-path
-        - policyName: require-run-as-nonroot
-          ruleNames:
-          - run-as-non-root
-          - autogen-run-as-non-root
-          - autogen-cronjob-run-as-non-root
-        - policyName: require-run-as-non-root-user
-          ruleNames:
-          - run-as-non-root-user
-          - autogen-run-as-non-root-user
-        - policyName: restrict-volume-types
-          ruleNames:
-          - restricted-volumes
-          - autogen-restricted-volumes
-          - autogen-cronjob-restricted-volumes
+          - '*'
         - policyName: disallow-capabilities-strict
           ruleNames:
-          - require-drop-all
-          - adding-capabilities-strict
-          - autogen-require-drop-all
-          - autogen-cronjob-require-drop-all
-          - autogen-adding-capabilities-strict
-          - autogen-cronjob-adding-capabilities-strict
+          - '*'
+        - policyName: disallow-host-namespaces
+          ruleNames:
+          - '*'
+        - policyName: disallow-host-path
+          ruleNames:
+          - '*'
+        - policyName: disallow-host-ports
+          ruleNames:
+          - '*'
+        - policyName: disallow-host-process
+          ruleNames:
+          - '*'
+        - policyName: disallow-noisy-policy-contexts
+          ruleNames:
+          - '*'
+        - policyName: disallow-non-harbor-images
+          ruleNames:
+          - '*'
         - policyName: disallow-privilege-escalation
           ruleNames:
-          - privilege-escalation
-          - autogen-privilege-escalation
+          - '*'
+        - policyName: disallow-privilege-escalation-not-strict
+          ruleNames:
+          - '*'
+        - policyName: disallow-privileged-containers
+          ruleNames:
+          - '*'
+        - policyName: disallow-proc-mount
+          ruleNames:
+          - '*'
+        - policyName: disallow-selinux
+          ruleNames:
+          - '*'
+        - policyName: require-non-root-groups
+          ruleNames:
+          - '*'
+        - policyName: require-ro-rootfs
+          ruleNames:
+          - '*'
+        - policyName: require-run-as-non-root-user
+          ruleNames:
+          - '*'
+        - policyName: require-run-as-nonroot
+          ruleNames:
+          - '*'
+        - policyName: restrict-apparmor-profiles
+          ruleNames:
+          - '*'
+        - policyName: restrict-polex-namespaces
+          ruleNames:
+          - '*'
+        - policyName: restrict-policy-kind-wildcards
+          ruleNames:
+          - '*'
+        - policyName: restrict-seccomp
+          ruleNames:
+          - '*'
         - policyName: restrict-seccomp-strict
           ruleNames:
-          - check-seccomp-strict
-          - autogen-check-seccomp-strict
+          - '*'
+        - policyName: restrict-sysctls
+          ruleNames:
+          - '*'
+        - policyName: restrict-volume-types
+          ruleNames:
+          - '*'
         match:
           any:
           - resources:
