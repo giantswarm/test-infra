@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Make kyverno ignore cncf pods.
+
 ## [1.39.5] - 2024-01-19
 
 ### Fixed

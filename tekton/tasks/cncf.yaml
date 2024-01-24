@@ -20,14 +20,37 @@ spec:
     type: string
     description: "Path of kubeconfig file to access test management cluster"
   steps:
-  - name: create-pss-exception
+  - name: mute-kyverno
     image: quay.io/giantswarm/kubectl-gs:2.43.0
     env:
+      - name: MC_KUBECONFIG
+        value: $(params.MC_KUBECONFIG)
       - name: "WC_KUBECONFIG"
         value: $(workspaces.cluster.path)/kubeconfig
+      - name: CLUSTER_ID_PATH
+        value: $(workspaces.cluster.path)/cluster-id
     script: |
       #! /bin/sh
+      export WC_CLUSTER_ID="$(cat $CLUSTER_ID_PATH)"
       echo "WC Kubeconfig path: '${WC_KUBECONFIG}'"
+      echo "MC Kubeconfig path: '${MC_KUBECONFIG}'"
+      echo "WC cluster ID: '${WC_CLUSTER_ID}'"
+
+      val=$(cat <<-END
+      global:
+        podSecurityStandards:
+          enforced: true
+      kyverno:
+        config:
+          webhooks:
+          - namespaceSelector:
+              matchExpressions:
+              - key: e2e-run
+                operator: DoesNotExist
+      END
+      )
+      kubectl --kubeconfig "${MC_KUBECONFIG}" -n ${WC_CLUSTER_ID} delete cm kyverno-user-values
+      echo "$val" | kubectl --kubeconfig "${MC_KUBECONFIG}" -n ${WC_CLUSTER_ID} create cm kyverno-user-values --from-file=values=/dev/stdin
 
       PSS=$(cat <<-END
       apiVersion: kyverno.io/v2alpha1
@@ -130,6 +153,8 @@ spec:
               - StatefulSet
               - CronJob
               - DaemonSet
+              - Job
+              - ReplicationController
               namespaceSelector:
                 matchExpressions:
                 - key: e2e-run
