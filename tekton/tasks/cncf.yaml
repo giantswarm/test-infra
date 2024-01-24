@@ -29,6 +29,9 @@ spec:
         value: $(workspaces.cluster.path)/kubeconfig
       - name: CLUSTER_ID_PATH
         value: $(workspaces.cluster.path)/cluster-id
+    volumeMounts:
+      - mountPath: /etc/kubeconfig
+        name: kubeconfig
     script: |
       #! /bin/sh
       export WC_CLUSTER_ID="$(cat $CLUSTER_ID_PATH)"
@@ -187,3 +190,7 @@ spec:
       echo "WC Kubeconfig path: '${WC_KUBECONFIG}'"
 
       /sonobuoy run --kubeconfig "${WC_KUBECONFIG}" --mode=certified-conformance --wait
+  volumes:
+    - name: kubeconfig
+      secret:
+        secretName: sonobuoy-kubeconfig

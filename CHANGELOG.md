@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Added missing volume mount in cncf test task.
+
 ## [1.39.6] - 2024-01-24
 
 ### Fixed
