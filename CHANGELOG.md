@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.39.6] - 2024-01-24
+
 ### Fixed
 
 - Make kyverno ignore cncf pods.
@@ -417,7 +419,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.39.5...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.39.6...HEAD
+[1.39.6]: https://github.com/giantswarm/test-infra/compare/v1.39.5...v1.39.6
 [1.39.5]: https://github.com/giantswarm/test-infra/compare/v1.39.4...v1.39.5
 [1.39.4]: https://github.com/giantswarm/test-infra/compare/v1.39.3...v1.39.4
 [1.39.3]: https://github.com/giantswarm/test-infra/compare/v1.39.2...v1.39.3
