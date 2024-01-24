@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.39.7] - 2024-01-24
+
 ### Fixed
 
 - Added missing volume mount in cncf test task.
@@ -423,7 +425,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.39.6...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.39.7...HEAD
+[1.39.7]: https://github.com/giantswarm/test-infra/compare/v1.39.6...v1.39.7
 [1.39.6]: https://github.com/giantswarm/test-infra/compare/v1.39.5...v1.39.6
 [1.39.5]: https://github.com/giantswarm/test-infra/compare/v1.39.4...v1.39.5
 [1.39.4]: https://github.com/giantswarm/test-infra/compare/v1.39.3...v1.39.4
