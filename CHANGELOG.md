@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Add helm hook to policy exceptions.
+
 ## [1.41.4] - 2024-02-06
 
 ### Fixed

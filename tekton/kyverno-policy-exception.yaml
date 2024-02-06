@@ -3,6 +3,8 @@ kind: PolicyException
 metadata:
   name: test-infra
   namespace: policy-exceptions
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
 spec:
   background: true
   exceptions:
