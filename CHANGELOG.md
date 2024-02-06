@@ -455,8 +455,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.41.1...HEAD
-[1.41.1]: https://github.com/giantswarm/test-infra/compare/v1.41.1...v1.41.1
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.41.2...HEAD
+[1.41.2]: https://github.com/giantswarm/test-infra/compare/v1.41.1...v1.41.2
 [1.41.1]: https://github.com/giantswarm/test-infra/compare/v1.41.0...v1.41.1
 [1.41.0]: https://github.com/giantswarm/test-infra/compare/v1.40.0...v1.41.0
 [1.40.0]: https://github.com/giantswarm/test-infra/compare/v1.39.8...v1.40.0
