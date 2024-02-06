@@ -19,6 +19,11 @@ jobs:
           name: Kustomize helm charts
           command: |
             for i in prow tekton; do mkdir -p helm/test-infra/templates; ./kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
+      - run:
+          name: add CRDs
+          command: |
+            mkdir helm/test-infra/crds
+            cp crds/* helm/test-infra/crds
       - persist_to_workspace:
           root: .
           paths:
