@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.41.5] - 2024-02-06
+
 ### Fixed
 
 - Add helm hook to policy exceptions.
@@ -471,7 +473,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.41.4...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.41.5...HEAD
+[1.41.5]: https://github.com/giantswarm/test-infra/compare/v1.41.4...v1.41.5
 [1.41.4]: https://github.com/giantswarm/test-infra/compare/v1.41.3...v1.41.4
 [1.41.3]: https://github.com/giantswarm/test-infra/compare/v1.41.2...v1.41.3
 [1.41.2]: https://github.com/giantswarm/test-infra/compare/v1.41.1...v1.41.2
