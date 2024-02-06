@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.41.3] - 2024-02-06
+
 ### Fixed
 
 - Yet another attempt to fix helm chart.
@@ -459,7 +461,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.41.2...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.41.3...HEAD
+[1.41.3]: https://github.com/giantswarm/test-infra/compare/v1.41.2...v1.41.3
 [1.41.2]: https://github.com/giantswarm/test-infra/compare/v1.41.1...v1.41.2
 [1.41.1]: https://github.com/giantswarm/test-infra/compare/v1.41.0...v1.41.1
 [1.41.0]: https://github.com/giantswarm/test-infra/compare/v1.40.0...v1.41.0
