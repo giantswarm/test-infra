@@ -1336,7 +1336,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.35.1@sha256:28ec46b444338823e13f11b7907ea22bf15eda4aaa7a65a1f2e7a6de1bf46e10
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.56.0@sha256:99824836bb47c1d9e21efdeff56e02b9426fe2323a22625b7af4f66a4028a5b4
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
