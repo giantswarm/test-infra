@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.40.0] - 2024-02-06
+
 ### Changed
 
 - Move to giantswarm-operations-platform catalog.
@@ -435,7 +437,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.39.8...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.40.0...HEAD
+[1.40.0]: https://github.com/giantswarm/test-infra/compare/v1.39.8...v1.40.0
 [1.39.8]: https://github.com/giantswarm/test-infra/compare/v1.39.7...v1.39.8
 [1.39.7]: https://github.com/giantswarm/test-infra/compare/v1.39.6...v1.39.7
 [1.39.6]: https://github.com/giantswarm/test-infra/compare/v1.39.5...v1.39.6
