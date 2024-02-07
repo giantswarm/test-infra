@@ -32,7 +32,7 @@ spec:
   # 2) Specify your own storage class.
   # 3) If you are using GKE you can use the gce-ssd-retain storage class. It can be
   #    created with: `kubectl create -f config/prow/cluster/gce-ssd-retain_storageclass.yaml
-  storageClassName: gp2
+  storageClassName: gp3
 ---
 apiVersion: apps/v1
 kind: Deployment
