@@ -889,7 +889,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: tekton-triggers-controller
-          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller:v0.20.1@sha256:d55339c0970402a6049d7f629ae960451b86880099d2d28cc0bd148c755392e4"
+          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller:v0.26.0@sha256:b12fd00f697b861d2edeb39588df3d8038a1ed3c81f16ff0349512cd6da5dac1"
           args: ["-logtostderr", "-stderrthreshold", "INFO", "-el-image", "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink:v0.20.1@sha256:2d2444f334d38af93f65625eda6c6cec808b651c7424507fb7e2de7020a2a641", "-el-port", "8080", "-el-security-context=true", "-el-events", "disable", "-el-readtimeout", "5", "-el-writetimeout", "40", "-el-idletimeout", "120", "-el-timeouthandler", "30", "-el-httpclient-readtimeout", "30", "-el-httpclient-keep-alive", "30", "-el-httpclient-tlshandshaketimeout", "10", "-el-httpclient-responseheadertimeout", "10", "-el-httpclient-expectcontinuetimeout", "1", "-period-seconds", "10", "-failure-threshold", "1"]
           env:
             - name: SYSTEM_NAMESPACE
