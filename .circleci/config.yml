@@ -20,10 +20,14 @@ jobs:
           command: |
             for i in prow tekton; do mkdir -p helm/test-infra/templates; ./kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
       - run:
-          name: add CRDs
+          name: Add CRDs
           command: |
             mkdir helm/test-infra/crds
             cp crds/* helm/test-infra/crds
+      - run:
+          name: Add Secret Templates
+          command: |
+            cp secrets/* helm/test-infra/templates
       - persist_to_workspace:
           root: .
           paths:

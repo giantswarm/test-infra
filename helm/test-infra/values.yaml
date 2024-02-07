@@ -1,3 +1,10 @@
 registry:
   pullSecret:
     dockerConfigJSON: "Cg=="
+
+githubTokenSecret: ""
+hmacToken: ""
+oauthToken: ""
+sonobuoyKubeconfig: {}
+standupEndpointsConfig: ""
+standupKubeconfig: {}

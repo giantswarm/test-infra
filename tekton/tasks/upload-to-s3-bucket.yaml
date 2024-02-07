@@ -12,29 +12,11 @@ spec:
     description: ID of the prow job of this task
   - name: s3-bucket-name
     default: automated-test-results.giantswarm.io
-  - name: s3-bucket-credentials-secret
-    default: s3-bucket-credentials-secret
   - name: file-to-upload
     description: The path to the file that needs to get uploaded to the s3 bucket.
   steps:
   - name: upload-to-s3-bucket
     image: quay.io/giantswarm/awscli:2.7.35
-    env:
-      - name: "AWS_ACCESS_KEY_ID"
-        valueFrom:
-          secretKeyRef:
-            name: $(params.s3-bucket-credentials-secret)
-            key: access-key-id
-      - name: "AWS_DEFAULT_REGION"
-        valueFrom:
-          secretKeyRef:
-            name: $(params.s3-bucket-credentials-secret)
-            key: default-region
-      - name: "AWS_SECRET_ACCESS_KEY"
-        valueFrom:
-          secretKeyRef:
-            name: $(params.s3-bucket-credentials-secret)
-            key: secret-access-key
     script: |
       #! /bin/sh
       set -e

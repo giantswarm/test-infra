@@ -3,8 +3,9 @@ prow/hmac
 prow/oauth
 prow/cluster/*token.yaml
 scripts/resources/credentials
-secrets/standup-kubeconfig-secret.yaml
-secrets/sonobuoy-kubeconfig-secret.yaml
 .DS_Store
 .idea
 templated
+kustomize*
+helm/test-infra/crds
+helm/test-infra/templates
