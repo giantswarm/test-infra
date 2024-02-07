@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.42.1] - 2024-02-07
+
 ### Fixed
 
 - Change storageClass to gp3.
@@ -483,7 +485,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.42.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.42.1...HEAD
+[1.42.1]: https://github.com/giantswarm/test-infra/compare/v1.42.0...v1.42.1
 [1.42.0]: https://github.com/giantswarm/test-infra/compare/v1.41.5...v1.42.0
 [1.41.5]: https://github.com/giantswarm/test-infra/compare/v1.41.4...v1.41.5
 [1.41.4]: https://github.com/giantswarm/test-infra/compare/v1.41.3...v1.41.4
