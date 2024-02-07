@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Remove references to `rfjh2` from ingresses.
+
 ## [1.42.1] - 2024-02-07
 
 ### Fixed

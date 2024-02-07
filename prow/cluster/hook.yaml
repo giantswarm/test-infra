@@ -155,12 +155,10 @@ metadata:
   name: hook
   labels:
     app: hook
-  annotations:
-    kubernetes.io/tls-acme: "true"
 spec:
   ingressClassName: nginx
   rules:
-    - host: prow.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
+    - host: prow.giantswarm.io
       http:
         paths:
           - path: /hook
@@ -170,4 +168,8 @@ spec:
                 name: hook
                 port:
                   number: 8888
+  tls:
+    - hosts:
+        - prow.giantswarm.io
+      secretName: prow-deck
 ---

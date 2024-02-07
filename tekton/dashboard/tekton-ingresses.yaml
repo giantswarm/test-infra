@@ -13,6 +13,7 @@ metadata:
     app: tekton-dashboard
   annotations:
     kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-giantswarm
     nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start
     nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 spec:
@@ -28,20 +29,9 @@ spec:
                 name: tekton-dashboard
                 port:
                   number: 9097
-    - host: tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: tekton-dashboard
-                port:
-                  number: 9097
   tls:
     - hosts:
         - tekton.giantswarm.io
-        - tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       secretName: tekton-dashboard
 ---
 apiVersion: networking.k8s.io/v1
@@ -54,8 +44,6 @@ metadata:
   namespace: test-infra
   labels:
     app: tekton-dashboard
-  annotations:
-    kubernetes.io/tls-acme: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -69,18 +57,7 @@ spec:
                 name: g8s-oauth2-proxy
                 port:
                   number: 4180
-    - host: tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
-      http:
-        paths:
-          - path: /oauth2
-            pathType: Prefix
-            backend:
-              service:
-                name: g8s-oauth2-proxy
-                port:
-                  number: 4180
   tls:
     - hosts:
         - tekton.giantswarm.io
-        - tekton.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
       secretName: tekton-dashboard

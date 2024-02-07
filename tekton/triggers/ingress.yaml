@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-giantswarm
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   name: tekton-trigger
@@ -9,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: tekton-trigger.rfjh2.k8s.gorilla.eu-central-1.aws.gigantic.io
+    - host: tekton-trigger.aws.gigantic.io
       http:
         paths:
           - backend:
