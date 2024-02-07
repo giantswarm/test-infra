@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.42.0] - 2024-02-07
+
 ### Changed
 
 - Add secrets needed by tekton to helm chart.
@@ -477,7 +479,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.41.5...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.42.0...HEAD
+[1.42.0]: https://github.com/giantswarm/test-infra/compare/v1.41.5...v1.42.0
 [1.41.5]: https://github.com/giantswarm/test-infra/compare/v1.41.4...v1.41.5
 [1.41.4]: https://github.com/giantswarm/test-infra/compare/v1.41.3...v1.41.4
 [1.41.3]: https://github.com/giantswarm/test-infra/compare/v1.41.2...v1.41.3
