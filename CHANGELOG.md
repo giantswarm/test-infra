@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.43.0] - 2024-02-07
+
 ### Changed
 
 - Remove references to `rfjh2` from ingresses.
@@ -489,7 +491,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.42.1...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.43.0...HEAD
+[1.43.0]: https://github.com/giantswarm/test-infra/compare/v1.42.1...v1.43.0
 [1.42.1]: https://github.com/giantswarm/test-infra/compare/v1.42.0...v1.42.1
 [1.42.0]: https://github.com/giantswarm/test-infra/compare/v1.41.5...v1.42.0
 [1.41.5]: https://github.com/giantswarm/test-infra/compare/v1.41.4...v1.41.5
