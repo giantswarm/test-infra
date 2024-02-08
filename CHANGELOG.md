@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.43.0] - 2024-02-08
+
 ### Changed
 
 - Use custom service account for tekton tasks and setup IRSA to give s3 access.
@@ -496,6 +498,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release.
 
 [Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.43.0...HEAD
+[1.43.0]: https://github.com/giantswarm/test-infra/compare/v1.43.0...v1.43.0
 [1.43.0]: https://github.com/giantswarm/test-infra/compare/v1.42.1...v1.43.0
 [1.42.1]: https://github.com/giantswarm/test-infra/compare/v1.42.0...v1.42.1
 [1.42.0]: https://github.com/giantswarm/test-infra/compare/v1.41.5...v1.42.0
