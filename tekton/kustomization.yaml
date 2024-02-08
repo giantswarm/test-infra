@@ -6,5 +6,6 @@ resources:
   - pipelines
   - tasks
   - triggers
+  - serviceaccount.yaml
   - tekton.yaml
   - kyverno-policy-exception.yaml
