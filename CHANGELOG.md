@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use custom service account for tekton tasks and setup IRSA to give s3 access.
+
 ## [1.43.0] - 2024-02-07
 
 ### Changed
