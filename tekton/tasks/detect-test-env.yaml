@@ -36,7 +36,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: calculate-inputs
-    image: quay.io/giantswarm/kubectl-gs:2.43.0
+    image: quay.io/giantswarm/kubectl-gs:2.52.1
     env:
     - name: REGION
       value: $(params.REGION)
