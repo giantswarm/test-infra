@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Change the tekton-triggers hostname.
+
 ## [1.45.0] - 2024-02-08
 
 ### Fixed
