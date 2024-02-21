@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.46.0] - 2024-02-21
+
 ### Changed
 
 - Change the tekton-triggers hostname.
@@ -507,7 +509,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.45.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.46.0...HEAD
+[1.46.0]: https://github.com/giantswarm/test-infra/compare/v1.45.0...v1.46.0
 [1.45.0]: https://github.com/giantswarm/test-infra/compare/v1.44.0...v1.45.0
 [1.44.0]: https://github.com/giantswarm/test-infra/compare/v1.44.0...v1.43.0
 [1.43.0]: https://github.com/giantswarm/test-infra/compare/v1.42.1...v1.43.0
