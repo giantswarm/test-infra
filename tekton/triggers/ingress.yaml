@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: tekton-trigger.aws.gigantic.io
+    - host: tekton-trigger.giantswarm.io
       http:
         paths:
           - backend:
