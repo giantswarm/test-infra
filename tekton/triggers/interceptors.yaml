@@ -52,7 +52,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: tekton-triggers-core-interceptors
-          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors:v0.20.1@sha256:65a1dbc19056050b0ca1b1a59122e1d90d2c955222ccee5e3987389a76da16ba"
+          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors:v0.26.1@sha256:ffc13aab0d0e16836c98bdf15f516a7f9df4e3eed1184a64825193f6a2fa6753"
           ports:
             - containerPort: 8443
           args: ["-logtostderr", "-stderrthreshold", "INFO"]
