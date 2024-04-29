@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.46.1] - 2024-04-29
+
 ### Fixed
 
 - Use full CRD name when upgrading clusters to avoid naming clash.
@@ -513,7 +515,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.46.0...HEAD
+[Unreleased]: https://github.com/giantswarm/test-infra/compare/v1.46.1...HEAD
+[1.46.1]: https://github.com/giantswarm/test-infra/compare/v1.46.0...v1.46.1
 [1.46.0]: https://github.com/giantswarm/test-infra/compare/v1.45.0...v1.46.0
 [1.45.0]: https://github.com/giantswarm/test-infra/compare/v1.44.0...v1.45.0
 [1.44.0]: https://github.com/giantswarm/test-infra/compare/v1.44.0...v1.43.0
