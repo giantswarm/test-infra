@@ -42,7 +42,7 @@ spec:
 
       CLUSTER_ID="$(cat "${CLUSTER_ID_PATH}")"
 
-      CLUSTER_NAMESPACE=$(kubectl get clusters -A | grep ${CLUSTER_ID} | awk '{print $1}')
+      CLUSTER_NAMESPACE=$(kubectl get clusters.cluster.x-k8s.io -A | grep ${CLUSTER_ID} | awk '{print $1}')
 
       echo "$(date): Upgrading cluster ${CLUSTER_ID} to ${RELEASE}"
       # Remove initial "v" from RELEASE
@@ -68,7 +68,7 @@ spec:
       set +e
       for i in $(seq 1 10)
       do
-        kubectl -n${CLUSTER_NAMESPACE} patch cluster/${CLUSTER_ID} -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge && break
+        kubectl -n${CLUSTER_NAMESPACE} patch clusters.cluster.x-k8s.io/${CLUSTER_ID} -p "{\"metadata\":{\"labels\":{\"release.giantswarm.io/version\": \"${release}\"}}}" --type=merge && break
         echo "Error triggering the upgrade, retrying in 5 minutes"
         sleep 300
       done
