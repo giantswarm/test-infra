@@ -39,12 +39,12 @@ spec:
     - -R
     - 1000:1000
     - /workspace
-    image: quay.io/giantswarm/standup:3.4.2
+    image: gsoci.azurecr.io/giantswarm/standup:3.4.2
     securityContext:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: quay.io/giantswarm/kubectl-gs:2.43.0
+    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.43.0
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
