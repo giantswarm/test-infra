@@ -169,7 +169,7 @@ spec:
 
       echo "$PSS" | kubectl --kubeconfig "${WC_KUBECONFIG}" apply -f -
   - name: run-tests
-    image: gsoci.azurecr.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
+    image: gsoci.azurecr.io/giantswarm/sonobuoy:v0.57.1-alpine-giantswarm
     securityContext:
       runAsUser: 0
       runAsGroup: 0
