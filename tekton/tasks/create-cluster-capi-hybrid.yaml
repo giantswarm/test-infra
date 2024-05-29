@@ -35,7 +35,7 @@ spec:
     description: The ID of the created cluster.
   steps:
   - name: create-cluster
-    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.43.0
+    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.55.0
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
@@ -154,7 +154,7 @@ spec:
       retry_single /tmp/nodepool.yaml
 
   - name: legacy-get-kubeconfig
-    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.43.0
+    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.55.0
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
