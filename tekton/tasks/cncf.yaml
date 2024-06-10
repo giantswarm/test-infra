@@ -21,7 +21,7 @@ spec:
     description: "Path of kubeconfig file to access test management cluster"
   steps:
   - name: mute-kyverno
-    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.55.0
+    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.56.0
     env:
       - name: MC_KUBECONFIG
         value: $(params.MC_KUBECONFIG)
