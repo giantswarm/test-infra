@@ -44,7 +44,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: create-release
-    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.56.0
+    image: gsoci.azurecr.io/giantswarm/kubectl-gs:2.57.0
     env:
       - name: PROVIDER
         value: $(params.PROVIDER)
