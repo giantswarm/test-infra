@@ -21,7 +21,7 @@ spec:
     description: "Path of kubeconfig file to access test management cluster"
   steps:
   - name: mute-kyverno
-    image: quay.io/giantswarm/kubectl-gs:2.43.0
+    image: gsoci.azurecr.io/giantswarm/kubectl-gs:3.1.0
     env:
       - name: MC_KUBECONFIG
         value: $(params.MC_KUBECONFIG)
@@ -169,7 +169,7 @@ spec:
 
       echo "$PSS" | kubectl --kubeconfig "${WC_KUBECONFIG}" apply -f -
   - name: run-tests
-    image: quay.io/giantswarm/sonobuoy:v0.56.17-alpine-giantswarm
+    image: gsoci.azurecr.io/giantswarm/sonobuoy:v0.57.1-alpine-giantswarm
     securityContext:
       runAsUser: 0
       runAsGroup: 0
