@@ -6,52 +6,56 @@ orbs:
 jobs:
   build:
     docker:
-      - image: quay.io/giantswarm/architect:6.15.1
+    - image: quay.io/giantswarm/architect:6.15.1
     steps:
-      - checkout
-      - run:
-          name: Install kustomize
-          command: |
-            curl -s -O -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.8.4/kustomize_v3.8.4_linux_amd64.tar.gz
-            tar xzf ./kustomize_v*_*_amd64.tar.gz
-            ./kustomize version
-      - run:
-          name: Kustomize helm charts
-          command: |
-            for i in prow tekton; do mkdir -p helm/test-infra/templates; ./kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
-      - run:
-          name: Add CRDs
-          command: |
-            mkdir helm/test-infra/crds
-            cp crds/* helm/test-infra/crds
-      - run:
-          name: Add Secret Templates
-          command: |
-            cp secrets/* helm/test-infra/templates
-      - persist_to_workspace:
-          root: .
-          paths:
-            - helm
+    - checkout
+    - run:
+        name: Install kustomize
+        command: |
+          curl -s -O -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.8.4/kustomize_v3.8.4_linux_amd64.tar.gz
+          tar xzf ./kustomize_v*_*_amd64.tar.gz
+          ./kustomize version
+    - run:
+        name: Kustomize helm charts
+        command: |
+          for i in prow tekton; do mkdir -p helm/test-infra/templates; ./kustomize build ./$i > helm/test-infra/templates/$i.yaml; done
+    - run:
+        name: Add CRDs
+        command: |
+          mkdir helm/test-infra/crds
+          cp crds/* helm/test-infra/crds
+    - run:
+        name: Add Secret Templates
+        command: |
+          cp secrets/* helm/test-infra/templates
+    - persist_to_workspace:
+        root: .
+        paths:
+        - helm
 
 workflows:
   version: 2
   workflow:
     jobs:
-      - build:
-          filters:
+    - build:
+        filters:
             # Trigger job also on git tag.
-            tags:
-              only: /^v.*/
-      - architect/push-to-app-catalog:
-          context: architect
-          name: push-to-app-catalog
-          app_catalog: "giantswarm-operations-platform-catalog"
-          app_catalog_test: "giantswarm-operations-platform-test-catalog"
-          attach_workspace: true
-          chart: test-infra
-          requires:
-            - build
-          filters:
+          tags:
+            only: /^v.*/
+    - architect/push-to-app-catalog:
+        context: architect
+        name: push-to-app-catalog
+        app_catalog: giantswarm-operations-platform-catalog
+        app_catalog_test: giantswarm-operations-platform-test-catalog
+        attach_workspace: true
+        chart: test-infra
+        requires:
+        - build
+        filters:
             # Trigger job also on git tag.
-            tags:
-              only: /^v.*/
+          tags:
+            only: /^v.*/
+          branches:
+            ignore:
+            - main
+            - master
