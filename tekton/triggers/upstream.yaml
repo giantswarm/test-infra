@@ -1012,7 +1012,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook:v0.20.1@sha256:e343fc7394b971987b38bc0d3ec8001d1d5099b464e74e1de38b55ded4897efa"
+          image: "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook:v0.29.2@sha256:fef9e5026869a6758122beec29f5ce8501be7134d50615d08effb1151f353227"
           env:
             - name: SYSTEM_NAMESPACE
               valueFrom:
