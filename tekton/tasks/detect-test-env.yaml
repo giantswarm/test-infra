@@ -36,7 +36,7 @@ spec:
       runAsUser: 0
       runAsGroup: 0
   - name: calculate-inputs
-    image: gsoci.azurecr.io/giantswarm/kubectl-gs:3.1.0
+    image: gsoci.azurecr.io/giantswarm/kubectl-gs:3.2.0
     env:
     - name: REGION
       value: $(params.REGION)
